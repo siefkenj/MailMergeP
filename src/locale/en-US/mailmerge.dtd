@@ -1,0 +1,49 @@
+<!ENTITY mailmerge.about.developer "Developer:">
+<!ENTITY mailmerge.about.support "Support:">
+<!ENTITY mailmerge.about.license "License:">
+<!ENTITY mailmerge.about.donation "Donation:">
+<!ENTITY mailmerge.about.euro "Euro">
+
+<!ENTITY mailmerge.compose.current "Current:">
+<!ENTITY mailmerge.compose.total "Total:">
+<!ENTITY mailmerge.compose.time "Time:">
+<!ENTITY mailmerge.compose.progress "Progress:">
+<!ENTITY mailmerge.compose.status "Status:">
+
+<!ENTITY mailmerge.dialog.message "Message">
+<!ENTITY mailmerge.dialog.message.source "Source:">
+<!ENTITY mailmerge.dialog.message.delivermode "Deliver Mode:">
+<!ENTITY mailmerge.dialog.message.attachments "Attachments:">
+
+<!ENTITY mailmerge.dialog.cardbook "Cardbook">
+<!ENTITY mailmerge.dialog.cardbook.cardbook "Address Book:">
+
+<!ENTITY mailmerge.dialog.addressbook "Address Book">
+<!ENTITY mailmerge.dialog.addressbook.addressbook "Address Book:">
+
+<!ENTITY mailmerge.dialog.csv "CSV">
+<!ENTITY mailmerge.dialog.csv.file "File:">
+<!ENTITY mailmerge.dialog.csv.characterset "Character Set:">
+<!ENTITY mailmerge.dialog.csv.fielddelimiter "Field Delimiter:">
+<!ENTITY mailmerge.dialog.csv.textdelimiter "Text Delimiter:">
+<!ENTITY mailmerge.dialog.csv.browse "Browse">
+
+<!ENTITY mailmerge.dialog.batch "Batch">
+<!ENTITY mailmerge.dialog.batch.start "Start:">
+<!ENTITY mailmerge.dialog.batch.stop "Stop:">
+<!ENTITY mailmerge.dialog.batch.pause "Pause:">
+
+<!ENTITY mailmerge.dialog.sendlater "Send Later">
+<!ENTITY mailmerge.dialog.sendlater.at "At:">
+<!ENTITY mailmerge.dialog.sendlater.recur "Recur:">
+<!ENTITY mailmerge.dialog.sendlater.every "Every:">
+
+<!ENTITY mailmerge.dialog.options "Options">
+<!ENTITY mailmerge.dialog.options.debug "Debug">
+
+<!ENTITY mailmerge.options.options "Options">
+<!ENTITY mailmerge.options.options.recipientsreminder "Recipients Reminder:">
+<!ENTITY mailmerge.options.options.variablesreminder "Variables Reminder:">
+
+<!ENTITY mailmerge.overlay.sendnow "Send Now">
+<!ENTITY mailmerge.overlay.sendlater "Send Later">

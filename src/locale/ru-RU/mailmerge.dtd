@@ -1,0 +1,49 @@
+<!ENTITY mailmerge.about.developer "Разработчик:">
+<!ENTITY mailmerge.about.support "Поддержка:">
+<!ENTITY mailmerge.about.license "Лицензия:">
+<!ENTITY mailmerge.about.donation "Пожертвовать:">
+<!ENTITY mailmerge.about.euro "ЕВРО">
+
+<!ENTITY mailmerge.compose.current "Текущий:">
+<!ENTITY mailmerge.compose.total "Всего:">
+<!ENTITY mailmerge.compose.time "Всеря:">
+<!ENTITY mailmerge.compose.progress "Выполнение:">
+<!ENTITY mailmerge.compose.status "Состояние:">
+
+<!ENTITY mailmerge.dialog.message "Сообщение">
+<!ENTITY mailmerge.dialog.message.source "Исходник:">
+<!ENTITY mailmerge.dialog.message.delivermode "Режим доставки:">
+<!ENTITY mailmerge.dialog.message.attachments "Вложения:">
+
+<!ENTITY mailmerge.dialog.cardbook "Cardbook">
+<!ENTITY mailmerge.dialog.cardbook.cardbook "Адресная книга:">
+
+<!ENTITY mailmerge.dialog.addressbook "Адресная книга">
+<!ENTITY mailmerge.dialog.addressbook.addressbook "Адресная книга:">
+
+<!ENTITY mailmerge.dialog.csv "CSV">
+<!ENTITY mailmerge.dialog.csv.file "Файл:">
+<!ENTITY mailmerge.dialog.csv.characterset "Кодировка:">
+<!ENTITY mailmerge.dialog.csv.fielddelimiter "Разделитель полей:">
+<!ENTITY mailmerge.dialog.csv.textdelimiter "Разделитель текста:">
+<!ENTITY mailmerge.dialog.csv.browse "Просмотр">
+
+<!ENTITY mailmerge.dialog.batch "Пакетная обработка">
+<!ENTITY mailmerge.dialog.batch.start "Начало:">
+<!ENTITY mailmerge.dialog.batch.stop "Окончание:">
+<!ENTITY mailmerge.dialog.batch.pause "Пауза:">
+
+<!ENTITY mailmerge.dialog.sendlater "Send Later">
+<!ENTITY mailmerge.dialog.sendlater.at "В:">
+<!ENTITY mailmerge.dialog.sendlater.recur "Повтор:">
+<!ENTITY mailmerge.dialog.sendlater.every "Каждый:">
+
+<!ENTITY mailmerge.dialog.options "Настройки">
+<!ENTITY mailmerge.dialog.options.debug "Отладка">
+
+<!ENTITY mailmerge.options.options "Настройки">
+<!ENTITY mailmerge.options.options.recipientsreminder "Напоминание о получателе:">
+<!ENTITY mailmerge.options.options.variablesreminder "Напоминание о переменных:">
+
+<!ENTITY mailmerge.overlay.sendnow "Отправить сейчас">
+<!ENTITY mailmerge.overlay.sendlater "Отправить позже">

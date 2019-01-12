@@ -1,0 +1,49 @@
+<!ENTITY mailmerge.about.developer "Razvijalec:">
+<!ENTITY mailmerge.about.support "Podpora:">
+<!ENTITY mailmerge.about.license "Dovoljenje:">
+<!ENTITY mailmerge.about.donation "Prispevek:">
+<!ENTITY mailmerge.about.euro "Evro">
+
+<!ENTITY mailmerge.compose.current "Trenutno:">
+<!ENTITY mailmerge.compose.total "Skupno:">
+<!ENTITY mailmerge.compose.time "Čas:">
+<!ENTITY mailmerge.compose.progress "Napredek:">
+<!ENTITY mailmerge.compose.status "Stanje:">
+
+<!ENTITY mailmerge.dialog.message "Pošta">
+<!ENTITY mailmerge.dialog.message.source "Vir:">
+<!ENTITY mailmerge.dialog.message.delivermode "Način dostave:">
+<!ENTITY mailmerge.dialog.message.attachments "Priponke:">
+
+<!ENTITY mailmerge.dialog.cardbook "Cardbook">
+<!ENTITY mailmerge.dialog.cardbook.cardbook "Imenik:">
+
+<!ENTITY mailmerge.dialog.addressbook "Imenik">
+<!ENTITY mailmerge.dialog.addressbook.addressbook "Imenik:">
+
+<!ENTITY mailmerge.dialog.csv "CSV">
+<!ENTITY mailmerge.dialog.csv.file "Datoteka:">
+<!ENTITY mailmerge.dialog.csv.characterset "Nabor znakov:">
+<!ENTITY mailmerge.dialog.csv.fielddelimiter "Ločilo polj:">
+<!ENTITY mailmerge.dialog.csv.textdelimiter "Ločilo besedila:">
+<!ENTITY mailmerge.dialog.csv.browse "Brskaj">
+
+<!ENTITY mailmerge.dialog.batch "Paketno">
+<!ENTITY mailmerge.dialog.batch.start "Začetek:">
+<!ENTITY mailmerge.dialog.batch.stop "Konec:">
+<!ENTITY mailmerge.dialog.batch.pause "Premor:">
+
+<!ENTITY mailmerge.dialog.sendlater "Send Later">
+<!ENTITY mailmerge.dialog.sendlater.at "Ob:">
+<!ENTITY mailmerge.dialog.sendlater.recur "Ponavljaj:">
+<!ENTITY mailmerge.dialog.sendlater.every "Vsakih:">
+
+<!ENTITY mailmerge.dialog.options "Možnosti">
+<!ENTITY mailmerge.dialog.options.debug "Razhroščevanje">
+
+<!ENTITY mailmerge.options.options "Možnosti">
+<!ENTITY mailmerge.options.options.recipientsreminder "Opomnik za prejemnike:">
+<!ENTITY mailmerge.options.options.variablesreminder "Opomnik za spremenljivke:">
+
+<!ENTITY mailmerge.overlay.sendnow "Pošlji zdaj">
+<!ENTITY mailmerge.overlay.sendlater "Pošlji kasneje">

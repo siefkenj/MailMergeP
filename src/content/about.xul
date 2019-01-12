@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://mailmerge/locale/mailmerge.dtd">
+
+<dialog
+	id="mailmerge"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="Mail Merge"
+	buttons="accept"
+	ondialogaccept=""
+	ondialogcancel=""
+	ondialoghelp=""
+	onload="">
+	
+	<script type="application/x-javascript">
+		
+		function openURI(event) {
+			
+			event.preventDefault();
+			
+			var ioService = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+			var uri = ioService.newURI(event.originalTarget.href, null, null);
+			
+			var externalProtocolService = Components.classes["@mozilla.org/uriloader/external-protocol-service;1"].getService(Components.interfaces.nsIExternalProtocolService);
+			externalProtocolService.loadURI(uri, null);
+			
+		}
+		
+	</script>
+	
+	<hbox><label value="Mail Merge" style="font-size: 150%; font-weight: bold;" /></hbox>
+	<hbox><label value="Mass Mail and Personal Mail" /></hbox>
+	
+	<separator/>
+	
+	<hbox><label value="&mailmerge.about.developer;" style="font-weight: bold;" /></hbox>
+	<hbox><label value="Alexander Bergmann" /></hbox>
+	
+	<separator/>
+	
+	<hbox><label value="&mailmerge.about.support;" style="font-weight: bold;" /></hbox>
+	<hbox><label value="https://addons.mozilla.org/addon/mail-merge/" href="https://addons.mozilla.org/addon/mail-merge/" class="text-link" onclick="openURI(event)" /></hbox>
+	<hbox><label value="myaddons@gmx.de" href="mailto:myaddons@gmx.de" class="text-link" onclick="openURI(event)" /></hbox>
+	
+	<separator/>
+	
+	<hbox><label value="&mailmerge.about.license;" style="font-weight: bold;" /></hbox>
+	<hbox><label value="GNU General Public License, Version 3.0" href="https://www.gnu.org/licenses/gpl-3.0.html" class="text-link" onclick="openURI(event)" /></hbox>
+	
+	<separator/>
+	
+	<hbox><label value="&mailmerge.about.donation;" style="font-weight: bold;" /><label value="(PayPal)" /></hbox>
+	<hbox><label value="5 &mailmerge.about.euro;" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge&amp;amount=5&amp;currency_code=EUR" class="text-link" onclick="openURI(event)" /><label value="10 &mailmerge.about.euro;" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge&amp;amount=10&amp;currency_code=EUR" class="text-link" onclick="openURI(event)" /><label value="15 &mailmerge.about.euro;" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge&amp;amount=15&amp;currency_code=EUR" class="text-link" onclick="openURI(event)" /><label value="25 &mailmerge.about.euro;" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge&amp;amount=25&amp;currency_code=EUR" class="text-link" onclick="openURI(event)" /></hbox>
+	
+</dialog>

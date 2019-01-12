@@ -1,0 +1,49 @@
+<!ENTITY mailmerge.about.developer "Fejlesztő:">
+<!ENTITY mailmerge.about.support "Támogatás:">
+<!ENTITY mailmerge.about.license "Licenc:">
+<!ENTITY mailmerge.about.donation "Támogatás:">
+<!ENTITY mailmerge.about.euro "Euró">
+
+<!ENTITY mailmerge.compose.current "Jelenlegi:">
+<!ENTITY mailmerge.compose.total "Összes:">
+<!ENTITY mailmerge.compose.time "Idő:">
+<!ENTITY mailmerge.compose.progress "Folyamat:">
+<!ENTITY mailmerge.compose.status "Státusz:">
+
+<!ENTITY mailmerge.dialog.message "Üzenet">
+<!ENTITY mailmerge.dialog.message.source "Forrás:">
+<!ENTITY mailmerge.dialog.message.delivermode "Kézbesítési mód:">
+<!ENTITY mailmerge.dialog.message.attachments "Mellékletek:">
+
+<!ENTITY mailmerge.dialog.cardbook "Cardbook">
+<!ENTITY mailmerge.dialog.cardbook.cardbook "Címjegyzék:">
+
+<!ENTITY mailmerge.dialog.addressbook "Címjegyzék">
+<!ENTITY mailmerge.dialog.addressbook.addressbook "Címjegyzék:">
+
+<!ENTITY mailmerge.dialog.csv "CSV">
+<!ENTITY mailmerge.dialog.csv.file "Fájl:">
+<!ENTITY mailmerge.dialog.csv.characterset "Karakterkészlet:">
+<!ENTITY mailmerge.dialog.csv.fielddelimiter "Mezőelválasztó:">
+<!ENTITY mailmerge.dialog.csv.textdelimiter "Szöveghatároló:">
+<!ENTITY mailmerge.dialog.csv.browse "Tallózás">
+
+<!ENTITY mailmerge.dialog.batch "Kötegelés">
+<!ENTITY mailmerge.dialog.batch.start "Első:">
+<!ENTITY mailmerge.dialog.batch.stop "Utolsó:">
+<!ENTITY mailmerge.dialog.batch.pause "Szünet:">
+
+<!ENTITY mailmerge.dialog.sendlater "Send Later">
+<!ENTITY mailmerge.dialog.sendlater.at "Ekkor:">
+<!ENTITY mailmerge.dialog.sendlater.recur "Ismétlődés:">
+<!ENTITY mailmerge.dialog.sendlater.every "Minden egyes:">
+
+<!ENTITY mailmerge.dialog.options "Beállítások">
+<!ENTITY mailmerge.dialog.options.debug "Hibakeresés">
+
+<!ENTITY mailmerge.options.options "Beállítások">
+<!ENTITY mailmerge.options.options.recipientsreminder "Emlékeztető a címzettekre:">
+<!ENTITY mailmerge.options.options.variablesreminder "Emlékeztető a változókra:">
+
+<!ENTITY mailmerge.overlay.sendnow "Küldés azonnal">
+<!ENTITY mailmerge.overlay.sendlater "Küldés később">

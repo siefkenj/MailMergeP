@@ -1,0 +1,49 @@
+<!ENTITY mailmerge.about.developer "Ontwikkelaar:">
+<!ENTITY mailmerge.about.support "Ondersteuning:">
+<!ENTITY mailmerge.about.license "Licentie:">
+<!ENTITY mailmerge.about.donation "Donatie:">
+<!ENTITY mailmerge.about.euro "Euro">
+
+<!ENTITY mailmerge.compose.current "Huidig:">
+<!ENTITY mailmerge.compose.total "Totaal:">
+<!ENTITY mailmerge.compose.time "Tijd:">
+<!ENTITY mailmerge.compose.progress "Voortgang:">
+<!ENTITY mailmerge.compose.status "Status:">
+
+<!ENTITY mailmerge.dialog.message "Bericht">
+<!ENTITY mailmerge.dialog.message.source "Bron:">
+<!ENTITY mailmerge.dialog.message.delivermode "Verzendmodus:">
+<!ENTITY mailmerge.dialog.message.attachments "Bijlagen:">
+
+<!ENTITY mailmerge.dialog.cardbook "Cardbook">
+<!ENTITY mailmerge.dialog.cardbook.cardbook "Adresboek:">
+
+<!ENTITY mailmerge.dialog.addressbook "Adresboek">
+<!ENTITY mailmerge.dialog.addressbook.addressbook "Adresboek:">
+
+<!ENTITY mailmerge.dialog.csv "CSV">
+<!ENTITY mailmerge.dialog.csv.file "Bestand:">
+<!ENTITY mailmerge.dialog.csv.characterset "Tekenset:">
+<!ENTITY mailmerge.dialog.csv.fielddelimiter "Veldscheidingsteken:">
+<!ENTITY mailmerge.dialog.csv.textdelimiter "Tekstscheidingsteken:">
+<!ENTITY mailmerge.dialog.csv.browse "Bladeren">
+
+<!ENTITY mailmerge.dialog.batch "Batch">
+<!ENTITY mailmerge.dialog.batch.start "Start:">
+<!ENTITY mailmerge.dialog.batch.stop "Stop:">
+<!ENTITY mailmerge.dialog.batch.pause "Pauze:">
+
+<!ENTITY mailmerge.dialog.sendlater "Send Later">
+<!ENTITY mailmerge.dialog.sendlater.at "Op:">
+<!ENTITY mailmerge.dialog.sendlater.recur "Herhalen:">
+<!ENTITY mailmerge.dialog.sendlater.every "Elke:">
+
+<!ENTITY mailmerge.dialog.options "Opties">
+<!ENTITY mailmerge.dialog.options.debug "Debug">
+
+<!ENTITY mailmerge.options.options "Opties">
+<!ENTITY mailmerge.options.options.recipientsreminder "Ontvangersherinnering:">
+<!ENTITY mailmerge.options.options.variablesreminder "Variabelenherinnering:">
+
+<!ENTITY mailmerge.overlay.sendnow "Nu verzenden">
+<!ENTITY mailmerge.overlay.sendlater "Later verzenden">

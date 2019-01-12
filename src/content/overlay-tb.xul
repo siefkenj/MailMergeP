@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://mailmerge/locale/mailmerge.dtd">
+
+<overlay
+	id="mailmerge"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script type="application/x-javascript" src="chrome://mailmerge/content/overlay.js" />
+	
+	<stringbundleset>
+		<stringbundle id="mailmerge-stringbundle" src="chrome://mailmerge/locale/mailmerge.properties" />
+	</stringbundleset>
+	
+	<menupopup id="menu_FilePopup">
+		<menuitem
+			id="mailmerge-menu"
+			label="Mail Merge"
+			oncommand="mailmerge.init(event)"
+			insertbefore="menu-item-send-now" />
+		<menuseparator
+			insertbefore="menu-item-send-now" />
+	</menupopup>
+	
+	<!--
+	<toolbarpalette id="MsgComposeToolbarPalette">
+		<toolbarbutton
+			id="mailmerge-toolbar"
+			label="Mail Merge"
+			oncommand="mailmerge.init(event)"
+			class="toolbarbutton-1" />
+	</toolbarpalette>
+	-->
+	
+	<toolbarbutton id="button-send" type="menu-button">
+		<menupopup>
+			<menuitem
+				id="mailmerge-sendnow"
+				label="&mailmerge.overlay.sendnow;"
+				command="cmd_sendNow"
+				class="menuitem-iconic" />
+			<menuitem
+				id="mailmerge-sendlater"
+				label="&mailmerge.overlay.sendlater;"
+				command="cmd_sendLater"
+				class="menuitem-iconic" />
+			<menuseparator />
+			<menuitem
+				id="mailmerge-toolbar"
+				label="Mail Merge"
+				oncommand="mailmerge.init(event)"
+				class="menuitem-iconic" />
+		</menupopup>
+	</toolbarbutton>
+	
+</overlay>

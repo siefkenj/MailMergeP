@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://mailmerge/locale/mailmerge.dtd">
+
+<dialog
+	id="mailmerge"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="Mail Merge"
+	buttons="accept,cancel,help"
+	ondialogaccept="mailmerge.accept()"
+	ondialogcancel=""
+	ondialoghelp="mailmerge.help()"
+	onload="mailmerge.init()">
+	
+	<script type="application/x-javascript" src="chrome://mailmerge/content/options.js" />
+	
+	<stringbundleset>
+		<stringbundle id="mailmerge-stringbundle" src="chrome://mailmerge/locale/mailmerge.properties" />
+	</stringbundleset>
+	
+	<groupbox id="mailmerge-options">
+		
+		<caption label="&mailmerge.options.options;" />
+		
+		<grid>
+			<columns>
+				<column style="width: 150px;" />
+				<column style="width: 250px;" />
+			</columns>
+			<rows>
+				<row>
+					<label control="mailmerge-options-recipientsreminder" value="&mailmerge.options.options.recipientsreminder;" />
+					<checkbox id="mailmerge-options-recipientsreminder" />
+				</row>
+				<row>
+					<label control="mailmerge-options-variablesreminder" value="&mailmerge.options.options.variablesreminder;" />
+					<checkbox id="mailmerge-options-variablesreminder" />
+				</row>
+			</rows>
+		</grid>
+		
+	</groupbox>
+	
+</dialog>

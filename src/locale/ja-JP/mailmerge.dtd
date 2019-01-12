@@ -1,0 +1,49 @@
+<!ENTITY mailmerge.about.developer "開発者:">
+<!ENTITY mailmerge.about.support "サポート:">
+<!ENTITY mailmerge.about.license "ライセンス:">
+<!ENTITY mailmerge.about.donation "寄付:">
+<!ENTITY mailmerge.about.euro "ユーロ">
+
+<!ENTITY mailmerge.compose.current "現在:">
+<!ENTITY mailmerge.compose.total "合計:">
+<!ENTITY mailmerge.compose.time "時間:">
+<!ENTITY mailmerge.compose.progress "進捗:">
+<!ENTITY mailmerge.compose.status "ステータス:">
+
+<!ENTITY mailmerge.dialog.message "メッセージ">
+<!ENTITY mailmerge.dialog.message.source "ソース:">
+<!ENTITY mailmerge.dialog.message.delivermode "配信モード:">
+<!ENTITY mailmerge.dialog.message.attachments "添付:">
+
+<!ENTITY mailmerge.dialog.cardbook "Cardbook">
+<!ENTITY mailmerge.dialog.cardbook.cardbook "アドレス帳:">
+
+<!ENTITY mailmerge.dialog.addressbook "アドレス帳">
+<!ENTITY mailmerge.dialog.addressbook.addressbook "アドレス帳:">
+
+<!ENTITY mailmerge.dialog.csv "CSV">
+<!ENTITY mailmerge.dialog.csv.file "ファイル:">
+<!ENTITY mailmerge.dialog.csv.characterset "文字コード:">
+<!ENTITY mailmerge.dialog.csv.fielddelimiter "フィールド区切り:">
+<!ENTITY mailmerge.dialog.csv.textdelimiter "テキスト区切り:">
+<!ENTITY mailmerge.dialog.csv.browse "参照">
+
+<!ENTITY mailmerge.dialog.batch "バッチ処理">
+<!ENTITY mailmerge.dialog.batch.start "開始:">
+<!ENTITY mailmerge.dialog.batch.stop "終了:">
+<!ENTITY mailmerge.dialog.batch.pause "処理間隔:">
+
+<!ENTITY mailmerge.dialog.sendlater "Send Later">
+<!ENTITY mailmerge.dialog.sendlater.at "送信時刻指定:">
+<!ENTITY mailmerge.dialog.sendlater.recur "繰り返し:">
+<!ENTITY mailmerge.dialog.sendlater.every "間隔:">
+
+<!ENTITY mailmerge.dialog.options "オプション">
+<!ENTITY mailmerge.dialog.options.debug "デバッグ">
+
+<!ENTITY mailmerge.options.options "オプション">
+<!ENTITY mailmerge.options.options.recipientsreminder "注意！(宛先):">
+<!ENTITY mailmerge.options.options.variablesreminder "注意！(変数):">
+
+<!ENTITY mailmerge.overlay.sendnow "今すぐ送信">
+<!ENTITY mailmerge.overlay.sendlater "後で送信">

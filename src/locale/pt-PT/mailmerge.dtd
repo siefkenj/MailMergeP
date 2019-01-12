@@ -1,0 +1,49 @@
+<!ENTITY mailmerge.about.developer "Desenvolvedor:">
+<!ENTITY mailmerge.about.support "Soporte:">
+<!ENTITY mailmerge.about.license "Licença:">
+<!ENTITY mailmerge.about.donation "Doação:">
+<!ENTITY mailmerge.about.euro "Euro">
+
+<!ENTITY mailmerge.compose.current "Atual:">
+<!ENTITY mailmerge.compose.total "Total:">
+<!ENTITY mailmerge.compose.time "Tempo:">
+<!ENTITY mailmerge.compose.progress "Progresso:">
+<!ENTITY mailmerge.compose.status "Estado:">
+
+<!ENTITY mailmerge.dialog.message "Mensagem">
+<!ENTITY mailmerge.dialog.message.source "Fonte:">
+<!ENTITY mailmerge.dialog.message.delivermode "Modo de entrega:">
+<!ENTITY mailmerge.dialog.message.attachments "Anexos:">
+
+<!ENTITY mailmerge.dialog.cardbook "Cardbook">
+<!ENTITY mailmerge.dialog.cardbook.cardbook "Livro de endereços:">
+
+<!ENTITY mailmerge.dialog.addressbook "Livro de endereços">
+<!ENTITY mailmerge.dialog.addressbook.addressbook "Livro de endereços:">
+
+<!ENTITY mailmerge.dialog.csv "CSV">
+<!ENTITY mailmerge.dialog.csv.file "Ficheiro:">
+<!ENTITY mailmerge.dialog.csv.characterset "Conjunto de caracteres:">
+<!ENTITY mailmerge.dialog.csv.fielddelimiter "Delimitador de campo:">
+<!ENTITY mailmerge.dialog.csv.textdelimiter "Delimitador de texto:">
+<!ENTITY mailmerge.dialog.csv.browse "Procurar">
+
+<!ENTITY mailmerge.dialog.batch "Lote">
+<!ENTITY mailmerge.dialog.batch.start "Iniciar:">
+<!ENTITY mailmerge.dialog.batch.stop "Parar:">
+<!ENTITY mailmerge.dialog.batch.pause "Pausa:">
+
+<!ENTITY mailmerge.dialog.sendlater "Send Later">
+<!ENTITY mailmerge.dialog.sendlater.at "Às:">
+<!ENTITY mailmerge.dialog.sendlater.recur "Repetir:">
+<!ENTITY mailmerge.dialog.sendlater.every "Cada:">
+
+<!ENTITY mailmerge.dialog.options "Opções">
+<!ENTITY mailmerge.dialog.options.debug "Depurar">
+
+<!ENTITY mailmerge.options.options "Opções">
+<!ENTITY mailmerge.options.options.recipientsreminder "Lembrete de destinatários:">
+<!ENTITY mailmerge.options.options.variablesreminder "Lembrete de variáveis:">
+
+<!ENTITY mailmerge.overlay.sendnow "Enviar agora">
+<!ENTITY mailmerge.overlay.sendlater "Enviar depois">

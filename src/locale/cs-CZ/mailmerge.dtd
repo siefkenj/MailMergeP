@@ -1,0 +1,49 @@
+<!ENTITY mailmerge.about.developer "Vývojář:">
+<!ENTITY mailmerge.about.support "Podpora:">
+<!ENTITY mailmerge.about.license "Licence:">
+<!ENTITY mailmerge.about.donation "Příspěvek:">
+<!ENTITY mailmerge.about.euro "Euro">
+
+<!ENTITY mailmerge.compose.current "Aktuální:">
+<!ENTITY mailmerge.compose.total "Celkem:">
+<!ENTITY mailmerge.compose.time "Čas:">
+<!ENTITY mailmerge.compose.progress "Průběh:">
+<!ENTITY mailmerge.compose.status "Stav:">
+
+<!ENTITY mailmerge.dialog.message "Zpráva">
+<!ENTITY mailmerge.dialog.message.source "Zdroj:">
+<!ENTITY mailmerge.dialog.message.delivermode "Režim doručení:">
+<!ENTITY mailmerge.dialog.message.attachments "Přílohy:">
+
+<!ENTITY mailmerge.dialog.cardbook "Cardbook">
+<!ENTITY mailmerge.dialog.cardbook.cardbook "Adresář:">
+
+<!ENTITY mailmerge.dialog.addressbook "Adresář">
+<!ENTITY mailmerge.dialog.addressbook.addressbook "Adresář:">
+
+<!ENTITY mailmerge.dialog.csv "CSV">
+<!ENTITY mailmerge.dialog.csv.file "Soubor:">
+<!ENTITY mailmerge.dialog.csv.characterset "Kódování znaků:">
+<!ENTITY mailmerge.dialog.csv.fielddelimiter "Oddělovač polí:">
+<!ENTITY mailmerge.dialog.csv.textdelimiter "Oddělovač textu:">
+<!ENTITY mailmerge.dialog.csv.browse "Procházet">
+
+<!ENTITY mailmerge.dialog.batch "Dávka">
+<!ENTITY mailmerge.dialog.batch.start "Začátek:">
+<!ENTITY mailmerge.dialog.batch.stop "Konec:">
+<!ENTITY mailmerge.dialog.batch.pause "Pozastavit:">
+
+<!ENTITY mailmerge.dialog.sendlater "Send Later">
+<!ENTITY mailmerge.dialog.sendlater.at "V:">
+<!ENTITY mailmerge.dialog.sendlater.recur "Opakovat:">
+<!ENTITY mailmerge.dialog.sendlater.every "Každý:">
+
+<!ENTITY mailmerge.dialog.options "Možnosti">
+<!ENTITY mailmerge.dialog.options.debug "Ladění">
+
+<!ENTITY mailmerge.options.options "Možnosti">
+<!ENTITY mailmerge.options.options.recipientsreminder "Připomenutí příjemců:">
+<!ENTITY mailmerge.options.options.variablesreminder "Připomenutí proměnných:">
+
+<!ENTITY mailmerge.overlay.sendnow "Odeslat nyní">
+<!ENTITY mailmerge.overlay.sendlater "Odeslat později">

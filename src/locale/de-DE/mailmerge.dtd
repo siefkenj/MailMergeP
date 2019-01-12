@@ -1,0 +1,49 @@
+<!ENTITY mailmerge.about.developer "Entwickler:">
+<!ENTITY mailmerge.about.support "Unterstützung:">
+<!ENTITY mailmerge.about.license "Lizenz:">
+<!ENTITY mailmerge.about.donation "Spende:">
+<!ENTITY mailmerge.about.euro "Euro">
+
+<!ENTITY mailmerge.compose.current "Aktuell:">
+<!ENTITY mailmerge.compose.total "Gesamt:">
+<!ENTITY mailmerge.compose.time "Zeit:">
+<!ENTITY mailmerge.compose.progress "Fortschritt:">
+<!ENTITY mailmerge.compose.status "Status:">
+
+<!ENTITY mailmerge.dialog.message "Nachricht">
+<!ENTITY mailmerge.dialog.message.source "Quelle:">
+<!ENTITY mailmerge.dialog.message.delivermode "Versandmodus:">
+<!ENTITY mailmerge.dialog.message.attachments "Anhänge:">
+
+<!ENTITY mailmerge.dialog.cardbook "Cardbook">
+<!ENTITY mailmerge.dialog.cardbook.cardbook "Adressbuch:">
+
+<!ENTITY mailmerge.dialog.addressbook "Adressbuch">
+<!ENTITY mailmerge.dialog.addressbook.addressbook "Adressbuch:">
+
+<!ENTITY mailmerge.dialog.csv "CSV">
+<!ENTITY mailmerge.dialog.csv.file "Datei:">
+<!ENTITY mailmerge.dialog.csv.characterset "Zeichensatz:">
+<!ENTITY mailmerge.dialog.csv.fielddelimiter "Feldtrennzeichen:">
+<!ENTITY mailmerge.dialog.csv.textdelimiter "Texttrennzeichen:">
+<!ENTITY mailmerge.dialog.csv.browse "Durchsuchen">
+
+<!ENTITY mailmerge.dialog.batch "Batch">
+<!ENTITY mailmerge.dialog.batch.start "Start:">
+<!ENTITY mailmerge.dialog.batch.stop "Stop:">
+<!ENTITY mailmerge.dialog.batch.pause "Pause:">
+
+<!ENTITY mailmerge.dialog.sendlater "Send Later">
+<!ENTITY mailmerge.dialog.sendlater.at "Am:">
+<!ENTITY mailmerge.dialog.sendlater.recur "Wiederholen:">
+<!ENTITY mailmerge.dialog.sendlater.every "Jede:">
+
+<!ENTITY mailmerge.dialog.options "Optionen">
+<!ENTITY mailmerge.dialog.options.debug "Debuggen">
+
+<!ENTITY mailmerge.options.options "Optionen">
+<!ENTITY mailmerge.options.options.recipientsreminder "Empfänger-Erinnerung:">
+<!ENTITY mailmerge.options.options.variablesreminder "Variablen-Erinnerung:">
+
+<!ENTITY mailmerge.overlay.sendnow "Jetzt senden">
+<!ENTITY mailmerge.overlay.sendlater "Später senden">
