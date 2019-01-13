@@ -3,8 +3,8 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 <Description about="urn:mozilla:install-manifest">
 	
-	<em:id>mailmerge@example.net</em:id>
-	<em:name>Mail Merge</em:name>
+	<em:id>mailmerge2@example.net</em:id>
+	<em:name>Mail Merge 2</em:name>
 	<em:version>4.12.0</em:version>
 	<em:description>Mass Mail and Personal Mail</em:description>
 	<em:creator>Alexander Bergmann</em:creator>
