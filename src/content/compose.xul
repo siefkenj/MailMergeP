@@ -13,6 +13,10 @@
 	ondialoghelp=""
 	onload="mailmerge.init()">
 	
+        <script type="application/x-javascript" src="chrome://mailmerge/content/libs/jszip.js" />
+        <script type="application/x-javascript" src="chrome://mailmerge/content/libs/xlsx.js" />
+
+        <script type="application/x-javascript" src="chrome://mailmerge/content/libs/utils.js" />
 	<script type="application/x-javascript" src="chrome://mailmerge/content/compose.js" />
 	
 	<stringbundleset>
