@@ -2,6 +2,7 @@
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("resource:///modules/jsmime.jsm");
 Components.utils.import("resource:///modules/mailServices.js");
+Components.utils.import("resource://gre/modules/osfile.jsm");
 
 var gMsgCompose = window.opener.gMsgCompose;
 gMsgCompose.compFields.body = window.opener.mailmerge.editor;
@@ -102,11 +103,23 @@ var mailmerge = {
 				mailmerge.csv();
 				break;
 				
+			case "XLSX":
+
+				mailmerge.xlsx().then( x => {
+					mailmerge.doCompose();
+				});
+				return;
+
 			default:;
 			
 		}
 		/* source end */
 		
+		mailmerge.doCompose();
+
+	},
+
+	doCompose: function() {
 		/* batch start */
 		mailmerge.start = (mailmerge.prefs.start == "") ? 1 : Math.max(1, Math.min(mailmerge.to.length - 1, parseInt(mailmerge.prefs.start)));
 		mailmerge.stop = (mailmerge.prefs.stop == "") ? mailmerge.to.length - 1 : Math.max(1, Math.min(mailmerge.to.length - 1, parseInt(mailmerge.prefs.stop)));
@@ -124,7 +137,6 @@ var mailmerge = {
 		/* time end */
 		
 		window.setTimeout(function() { mailmerge.compose(); }, 50);
-		
 	},
 	
 	prefs: function() {
@@ -451,6 +463,56 @@ var mailmerge = {
 		
 	},
 	
+	xlsx: function() {
+
+		mailmerge.to = [""];
+		mailmerge.object = [""];
+
+		/* file start */
+		let promise = OS.File.read(mailmerge.prefs.fileXlsx).then( arr => {
+			let parsed = XLSX.read(arr, {type: "array"});
+			let sheet = parsed.Sheets[parsed.SheetNames[0]];
+			return XLSX.utils.sheet_to_json(sheet, {header: 1});
+		})
+		/* file end */
+
+		promise.then( file => {
+		    mailmerge.debug("Mail Merge: File" + "\n" + file);
+
+		    /* array start */
+		    for(var row = 1; row < file.length; row++) {
+
+			    /* object start */
+			    var object = {};
+			    for(var column = 0; column < file[0].length; column++) {
+
+				    if(file[0][column] == "") { continue; }
+				    object[file[0][column]] = (file[row][column] || "");
+
+			    }
+			    /* object end */
+
+			    /* to start */
+			    var to = gMsgCompose.compFields.to;
+			    to = jsmime.headerparser.decodeRFC2047Words(to);
+			    to = mailmerge.substitute(to, object);
+			    /* to end */
+
+			    if(to.includes("@")) {
+
+				    mailmerge.to.push(to);
+				    mailmerge.object.push(object);
+
+			    }
+
+		    }
+		    /* array end */
+		});
+
+		return promise;
+
+	},
+
 	compose: function() {
 		
 		if(mailmerge.connections == mailmerge.prefs.connections) { window.setTimeout(function() { mailmerge.compose(); }, 50); return; }

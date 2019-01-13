@@ -27,6 +27,7 @@ var mailmergeUtils = {
 			mailmerge.prefs.cardbook = prefs.getComplexValue("cardbook", Components.interfaces.nsISupportsString).data;
 			mailmerge.prefs.addressbook = prefs.getComplexValue("addressbook", Components.interfaces.nsISupportsString).data;
 			mailmerge.prefs.file = prefs.getComplexValue("file", Components.interfaces.nsISupportsString).data;
+			mailmerge.prefs.fileXlsx = prefs.getComplexValue("file-xlsx", Components.interfaces.nsISupportsString).data;
 			
 		} catch(e) {}
 		
@@ -36,6 +37,7 @@ var mailmergeUtils = {
 			mailmerge.prefs.cardbook = prefs.getStringPref("cardbook");
 			mailmerge.prefs.addressbook = prefs.getStringPref("addressbook");
 			mailmerge.prefs.file = prefs.getStringPref("file");
+			mailmerge.prefs.fileXlsx = prefs.getStringPref("file-xlsx");
 			
 		} catch(e) {}
 		
@@ -328,7 +330,7 @@ var mailmergeUtils = {
 			
 		}
 		
-		if(mailmerge.prefs.source == "CSV" && object) {
+		if((mailmerge.prefs.source == "CSV" || mailmerge.prefs.source == "XLSX") && object) {
 			
 			var file = object;
 			

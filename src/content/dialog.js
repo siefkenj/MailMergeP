@@ -11,6 +11,7 @@ var mailmerge = {
 		if(window.opener.cardbookRepository) { document.getElementById("mailmerge-message-source").appendItem(stringbundle.getString("mailmerge.dialog.source.cardbook"), "Cardbook"); }
 		document.getElementById("mailmerge-message-source").appendItem(stringbundle.getString("mailmerge.dialog.source.addressbook"), "AddressBook");
 		document.getElementById("mailmerge-message-source").appendItem(stringbundle.getString("mailmerge.dialog.source.csv"), "CSV");
+		document.getElementById("mailmerge-message-source").appendItem(stringbundle.getString("mailmerge.dialog.source.xlsx"), "XLSX");
 		document.getElementById("mailmerge-message-source").selectedIndex = 0;
 		
 		document.getElementById("mailmerge-message-delivermode").appendItem(stringbundle.getString("mailmerge.dialog.delivermode.saveasdraft"), "SaveAsDraft");
@@ -68,6 +69,7 @@ var mailmerge = {
 			document.getElementById("mailmerge-cardbook-cardbook").value = prefs.getComplexValue("cardbook", Components.interfaces.nsISupportsString).data;
 			document.getElementById("mailmerge-addressbook-addressbook").value = prefs.getComplexValue("addressbook", Components.interfaces.nsISupportsString).data;
 			document.getElementById("mailmerge-csv-file").value = prefs.getComplexValue("file", Components.interfaces.nsISupportsString).data;
+			document.getElementById("mailmerge-xlsx-file").value = prefs.getComplexValue("file-xlsx", Components.interfaces.nsISupportsString).data;
 			
 		} catch(e) {}
 		
@@ -77,6 +79,7 @@ var mailmerge = {
 			document.getElementById("mailmerge-cardbook-cardbook").value = prefs.getStringPref("cardbook");
 			document.getElementById("mailmerge-addressbook-addressbook").value = prefs.getStringPref("addressbook");
 			document.getElementById("mailmerge-csv-file").value = prefs.getStringPref("file");
+			document.getElementById("mailmerge-xlsx-file").value = prefs.getStringPref("file-xlsx");
 			
 		} catch(e) {}
 		
@@ -116,6 +119,9 @@ var mailmerge = {
 			string.data = document.getElementById("mailmerge-csv-file").value;
 			prefs.setComplexValue("file", Components.interfaces.nsISupportsString, string);
 			
+			string.data = document.getElementById("mailmerge-xlsx-file").value;
+			prefs.setComplexValue("file-xlsx", Components.interfaces.nsISupportsString, string);
+			
 		} catch(e) {}
 		
 		try {
@@ -124,6 +130,7 @@ var mailmerge = {
 			prefs.setStringPref("cardbook", document.getElementById("mailmerge-cardbook-cardbook").value);
 			prefs.setStringPref("addressbook", document.getElementById("mailmerge-addressbook-addressbook").value);
 			prefs.setStringPref("file", document.getElementById("mailmerge-csv-file").value);
+			prefs.setStringPref("file-xlsx", document.getElementById("mailmerge-xlsx-file").value);
 			
 		} catch(e) {}
 		
@@ -177,17 +184,31 @@ var mailmerge = {
 		
 	},
 	
-	browse: function() {
-		
+	browse: function(browseTarget) {
+		browseTarget = browseTarget || "CSV";
+
 		var filePicker = Components.classes["@mozilla.org/filepicker;1"].createInstance(Components.interfaces.nsIFilePicker);
 		filePicker.init(window, "Mail Merge", Components.interfaces.nsIFilePicker.modeOpen);
-		filePicker.appendFilter("CSV", "*.csv");
-		filePicker.appendFilter("*", "*.*");
+		switch (browseTarget) {
+			case "XLSX":
+				filePicker.appendFilter("Spreadsheet", "*.xlsx; *.xls; *.xlsb; *.ods; *.csv");
+				filePicker.appendFilter("Excel 2007+", "*.xlsx");
+				filePicker.appendFilter("OpenDocument Sreadsheet", "*.ods");
+			case "CSV":
+				filePicker.appendFilter("CSV", "*.csv");
+			default:
+				filePicker.appendFilter("*", "*.*");
+		}
 		
 		filePicker.open(rv => {
 			
 			if(rv == Components.interfaces.nsIFilePicker.returnOK) {
-				document.getElementById("mailmerge-csv-file").value = filePicker.file.path;
+				if (browseTarget === "CSV") {
+					document.getElementById("mailmerge-csv-file").value = filePicker.file.path;
+				}
+				if (browseTarget === "XLSX") {
+					document.getElementById("mailmerge-xlsx-file").value = filePicker.file.path;
+				}
 			}
 			
 		});
@@ -199,6 +220,7 @@ var mailmerge = {
 		document.getElementById("mailmerge-cardbook").hidden = !(document.getElementById("mailmerge-message-source").value == "Cardbook");
 		document.getElementById("mailmerge-addressbook").hidden = !(document.getElementById("mailmerge-message-source").value == "AddressBook");
 		document.getElementById("mailmerge-csv").hidden = !(document.getElementById("mailmerge-message-source").value == "CSV");
+		document.getElementById("mailmerge-xlsx").hidden = !(document.getElementById("mailmerge-message-source").value == "XLSX");
 		document.getElementById("mailmerge-sendlater").hidden = !(document.getElementById("mailmerge-message-delivermode").value == "SaveAsDraft" && window.opener.Sendlater3Util);
 		window.sizeToContent();
 		

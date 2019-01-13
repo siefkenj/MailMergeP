@@ -28,6 +28,10 @@
 <!ENTITY mailmerge.dialog.csv.textdelimiter "Text Delimiter:">
 <!ENTITY mailmerge.dialog.csv.browse "Browse">
 
+<!ENTITY mailmerge.dialog.xlsx "Spreadsheet (XLSX, ODS, CSV, ...)">
+<!ENTITY mailmerge.dialog.xlsx.file "File:">
+<!ENTITY mailmerge.dialog.xlsx.browse "Browse">
+
 <!ENTITY mailmerge.dialog.batch "Batch">
 <!ENTITY mailmerge.dialog.batch.start "Start:">
 <!ENTITY mailmerge.dialog.batch.stop "Stop:">

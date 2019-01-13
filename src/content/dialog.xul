@@ -119,6 +119,25 @@
 		
 	</groupbox>
 	
+	<groupbox id="mailmerge-xlsx">
+		
+		<caption label="&mailmerge.dialog.xlsx;" />
+		
+		<grid>
+			<columns>
+				<column style="width: 150px;" />
+				<column style="width: 250px;" />
+			</columns>
+			<rows>
+				<row>
+					<label control="mailmerge-xlsx-file" value="&mailmerge.dialog.xlsx.file;" />
+					<hbox><textbox id="mailmerge-xlsx-file" flex="1" /><button label="&mailmerge.dialog.xlsx.browse;" oncommand="mailmerge.browse('XLSX')" /></hbox>
+				</row>
+			</rows>
+		</grid>
+		
+	</groupbox>
+	
 	<groupbox id="mailmerge-batch">
 		
 		<caption label="&mailmerge.dialog.batch;" />
