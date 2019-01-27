@@ -5,7 +5,7 @@ cache:
   directories:
   - react-version/node_modules
 script:
-  - cd react-version && npm install && npm run build
+  - cd react-version && npm install && yarn run build
 after_failure: cat /home/travis/.npm/_logs/*-debug.log
 deploy:
   provider: pages
