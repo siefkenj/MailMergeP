@@ -6,7 +6,7 @@ cache:
   - react-version/node_modules
 script:
   - cd react-version && npm install && npm run build
-after_failure: "cat /home/travis/.npm/*-debug.log"
+after_failure: cat /home/travis/.npm/*-debug.log
 deploy:
   provider: pages
   skip_cleanup: true
