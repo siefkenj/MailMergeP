@@ -36,6 +36,10 @@ export default {
         updateSpreadsheetData: (state, payload) => {
             return { ...state, spreadsheetData: payload };
         },
+        spreadsheetHasManuallyUpdated: false,
+        updateSpreadsheetHasManuallyUpdated: (state, payload) => {
+            return { ...state, spreadsheetHasManuallyUpdated: payload };
+        },
         template: {},
         updateTemplate: (state, payload) => {
             return { ...state, template: { ...payload } };
@@ -72,8 +76,12 @@ export default {
         const state = getState();
         const { fileContents } = state.prefs;
 
-        let sheetArray = parseSpreadsheet(fileContents);
-        await dispatch.data.updateSpreadsheetData(sheetArray);
+        // if we have manually updated spreadsheet data, don't override
+        // the spreadsheet contents with the file's contents
+        if (!state.data.spreadsheetHasManuallyUpdated) {
+            let sheetArray = parseSpreadsheet(fileContents);
+            await dispatch.data.updateSpreadsheetData(sheetArray);
+        }
     }),
     renderEmails: effect(async (dispatch, payload, { getState }) => {
         await dispatch.data.fetchTemplate();

@@ -13,12 +13,16 @@ function DataTab() {
     const updatePref = useAction(actions => actions.prefs.updatePref);
     const data = useStore(state => state.data);
     const updateData = useAction(actions => actions.data.updateSpreadsheetData);
+    const updateSpreadsheetHasManuallyUpdated = useAction(actions => actions.data.updateSpreadsheetHasManuallyUpdated);
 
     const parseSpreadsheet = useAction(actions => actions.parseSpreadsheet);
 
+
     useEffect(() => {
         parseSpreadsheet();
-    }, [prefs.fileContents]);
+        console.log("using effect!")
+    }, [prefs.fileName]);
+
 
     async function fileChanged({ name, data }) {
         name = name || "";
@@ -27,6 +31,9 @@ function DataTab() {
         // it to a regular array
         let datAsArray = Array.from(data);
         updatePref({ fileName: name, fileContents: datAsArray });
+        // If we've loaded a file, we want to forget any manual changes
+        // we made to the spreadsheet data
+        updateSpreadsheetHasManuallyUpdated(false)
     }
 
     function spreadsheetChanged(changes, source) {
@@ -36,6 +43,9 @@ function DataTab() {
         }
         const sheetArray = tableRef.current.hotInstance.getData();
         updateData(sheetArray);
+        // If we changed data manually, we don't want to reload it from
+        // the file buffer
+        updateSpreadsheetHasManuallyUpdated(true);
     }
 
     return (
