@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+  - react-version/node_modules
+script:
+  - cd react-version && npm run build
