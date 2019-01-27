@@ -5,4 +5,4 @@ cache:
   directories:
   - react-version/node_modules
 script:
-  - cd react-version && npm run build
+  - cd react-version && npm install && npm run build
