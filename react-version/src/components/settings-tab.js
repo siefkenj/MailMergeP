@@ -6,6 +6,7 @@ import { ClearableInput } from "./common.js";
 
 function SettingsTab() {
     const prefs = useStore(state => state.prefs);
+    const strings = useStore(state => state.locale.strings);
     const updatePref = useAction(actions => actions.prefs.updatePref);
     function generatePrefUpdate(pref) {
         return e => {
@@ -24,22 +25,22 @@ function SettingsTab() {
     return (
         <div className="browser-style settings-panel">
             <label htmlFor="pref-sendmode" className="settings-label">
-                Send mode:
+                {strings.sendMode}
             </label>
             <select
                 className="browser-style settings-input"
                 id="pref-sendmode"
                 value={prefs.sendmode}
                 onChange={generatePrefUpdate("sendmode")}
-                title="Set how messages will be delivered. Send Later will leave messages in the Drafts folder."
+                title={strings.sendModeDesc}
             >
-                <option value="draft">Save as Draft</option>
-                <option value="now">Send Now</option>
-                <option value="later">Send Later</option>
+                <option value="draft">{strings.sendModeDraft}</option>
+                <option value="now">{strings.sendModeNow}</option>
+                <option value="later">{strings.sendModeLater}</option>
             </select>
 
             <label htmlFor="pref-delay" className="settings-label">
-                Message Delay:
+                {strings.messageDelay}
             </label>
             <input
                 id="pref-delay"
@@ -47,11 +48,11 @@ function SettingsTab() {
                 value={prefs.delay}
                 onChange={generatePrefUpdate("delay")}
                 className="browser-style settings-input"
-                title="Dealy, in seconds, between sending messages."
+                title={strings.messageDelayDesc}
             />
 
             <label htmlFor="pref-range" className="settings-label">
-                Send Message Range:
+                {strings.sendMessageRange}
             </label>
             <ClearableInput
                 value={prefs.range}
@@ -62,21 +63,21 @@ function SettingsTab() {
                 })}
                 onChange={generatePrefUpdate("range")}
                 placeholder="3,4,9-14"
-                title="Send only specific messages as specified by this range."
+                title={strings.sendMessageRangeDesc}
             />
 
             <label htmlFor="pref-parser" className="settings-label">
-                Parser:
+                {strings.parser}
             </label>
             <select
                 className="browser-style settings-input"
                 id="pref-parser"
                 value={prefs.parser}
                 onChange={generatePrefUpdate("parser")}
-                title="Select the parser that will be used to substitute variables into the email template."
+                title={strings.parserDesc}
             >
                 <option value="nunjucks">Nunjucks</option>
-                <option value="legacy">Legacy</option>
+                <option value="legacy">{strings.parserLegacy}</option>
             </select>
         </div>
     );

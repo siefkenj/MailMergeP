@@ -7,6 +7,7 @@ import { ClearableFileInput } from "./common.js";
 
 function DataTab() {
     const tableRef = useRef();
+    const strings = useStore(state => state.locale.strings);
     const prefs = useStore(state => state.prefs);
     const updatePref = useAction(actions => actions.prefs.updatePref);
     const data = useStore(state => state.data);
@@ -47,18 +48,16 @@ function DataTab() {
 
     return (
         <div style={{ width: "100%" }}>
-            <p>
-                Open a spreadsheet file (.csv, .xlsx, .ods, etc.) or
-                copy-and-paste data into the spreadsheet below.
-            </p>
+            <p>{strings.dataInfo}</p>
             <div>
                 <ClearableFileInput
                     accept=".csv,.xlsx,.ods"
                     onChange={fileChanged}
                     filename={prefs.fileName}
+                    placeholder={strings.openAFile}
                 />
             </div>
-            <div className="captioned-separator">Data</div>
+            <div className="captioned-separator">{strings.data}</div>
             <div style={{ width: "100%" }}>
                 <HotTable
                     ref={tableRef}

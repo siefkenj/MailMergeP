@@ -129,6 +129,40 @@ function getTemplate() {
         return defaultTemplate;
     }
 }
+function getLocalizedStrings() {
+    return {
+        next: "Next",
+        previous: "Previous",
+        cancel: "Cancel",
+        send: "Send",
+        data: "Data",
+        dataInfo: "Open a spreadsheet file (.csv, .xlsx, .ods, etc.) or copy-and-paste data into the spreadsheet below.",
+        openAFile: "Open a file...",
+        settings: "Settings",
+        preview: "Preview",
+        sendMode: "Send mode:",
+        sendModeDesc: "Set how messages will be delivered. Send Later will leave messages in the Drafts folder.",
+        sendModeNow: "Send Now",
+        sendModeLater: "Send Later",
+        sendModeDraft: "Save as Draft",
+        messageDelay: "Message delay:",
+        messageDelayDesc: "Dealy, in seconds, between sending messages.",
+        sendMessageRange: "Send Message Range:",
+        sendMessageRangeDesc: "Send only specific messages as specified by this range.",
+        parser: "Parser:",
+        parserDesc: "Select the parser that will be used to substitute variables into the email template.",
+        parserLegacy: "Legacy",
+        previewEmpty: "No emails to preview. Try loading data in the {0} tab.",
+        previewPreviewing: "Previewing {0} of {1}",
+        about: "About",
+        developers: "Developers",
+        support: "Support",
+        license: "License",
+        donate: "Donate",
+        euro: "{0} €",
+        dollar: "$ {0}"
+    };
+}
 function sendEmails(emails) {
     for (let email of emails) {
         console.log(
@@ -169,8 +203,11 @@ window.addEventListener("message", e => {
         case "GET_TEMPLATE":
             messageChild({ type, id, template: getTemplate() });
             break;
+        case "GET_LOCALIZED_STRINGS":
+            messageChild({ type, id, strings: getLocalizedStrings() });
+            break;
         case "SEND_EMAILS":
-            //sendMessages(data.emails);
+            sendEmails(data.emails);
             break;
         default:
             console.warn("Unknown message type", type);

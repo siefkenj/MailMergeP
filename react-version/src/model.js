@@ -3,6 +3,12 @@ import { messageParent } from "./service.js";
 import { fillTemplate, parseSpreadsheet } from "./utils.js";
 
 export default {
+    locale: {
+        strings: {},
+        updateStrings: (state, payload) => {
+            return { ...state, strings: {...payload} };
+        }
+    },
     prefs: {
         delay: 0,
         sendmode: "now",
@@ -69,6 +75,8 @@ export default {
     // effects
     initialise: effect(async dispatch => {
         await dispatch.prefs.fetchPrefs();
+        const { strings } = await messageParent({ type: "GET_LOCALIZED_STRINGS" });
+        dispatch.locale.updateStrings(strings);
     }),
     cancel: effect(async dispatch => {
         await messageParent({ type: "CANCEL" });

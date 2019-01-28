@@ -3,7 +3,11 @@ import { useStore, useAction } from "easy-peasy";
 import classNames from "classnames";
 import { ClearableInput } from "./common.js";
 
+import LocalizedStrings from 'react-localization';
+const formatString = LocalizedStrings.prototype.formatString;
+
 function PreviewTab() {
+    const strings = useStore(state => state.locale.strings);
     const data = useStore(state => state.data);
     const prefs = useStore(state => state.prefs);
     const [previewItem, setPreviewItem] = useState(0);
@@ -26,8 +30,7 @@ function PreviewTab() {
         return (
             <div className="email-preview-wrapper">
                 <div className="email-preview-stats">
-                    No emails to preview. Try loading data in the <i>Data</i>{" "}
-                    tab.
+                    {formatString(strings.previewEmpty, <i>{strings.data}</i>)}
                 </div>
             </div>
         );
@@ -36,7 +39,7 @@ function PreviewTab() {
     return (
         <div className="email-preview-wrapper">
             <div className="email-preview-stats">
-                Previewing {previewItem + 1} of {numEmails}
+                {formatString(strings.previewPreviewing, previewItem + 1, numEmails)}
             </div>
             <div className="email-preview">
                 <button

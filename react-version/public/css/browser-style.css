@@ -688,3 +688,16 @@ input[type="text"].form-control-prefix {
     grid-column: 1 / 2;
     align-self: center;
 }
+
+.about-panel {
+    width: 100%;
+}
+
+.about-panel ul {
+    list-style-type: none;
+}
+
+.about-panel a {
+    text-decoration: none;
+    margin-right: 1em;
+}

@@ -168,7 +168,6 @@ function ClearableFileInput(props) {
                 onKeyDown={inputKeyDown}
                 onClick={inputClicked}
                 ref={inputRef}
-                placeholder="Open a file..."
                 {...otherProps}
             />
             {filename && (

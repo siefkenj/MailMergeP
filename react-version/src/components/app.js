@@ -4,9 +4,12 @@ import { TabStrip, Tab } from "./common.js";
 import { DataTab } from "./data-tab.js";
 import { SettingsTab } from "./settings-tab.js";
 import { PreviewTab } from "./preview-tab.js";
+import { AboutTab } from "./about-tab.js";
 import "font-awesome/css/font-awesome.min.css";
 
 export default function App() {
+    const strings = useStore(state => state.locale.strings);
+
     const initialise = useAction(actions => actions.initialise);
     useEffect(() => {
         initialise();
@@ -37,7 +40,7 @@ export default function App() {
                 <Tab
                     label={
                         <>
-                            <i className="fas fa-table fa-fw" /> Data
+                            <i className="fas fa-table fa-fw" /> {strings.data}
                         </>
                     }
                 >
@@ -46,7 +49,8 @@ export default function App() {
                 <Tab
                     label={
                         <>
-                            <i className="fas fa-cogs fa-fw" /> Settings
+                            <i className="fas fa-cogs fa-fw" />{" "}
+                            {strings.settings}
                         </>
                     }
                 >
@@ -55,18 +59,31 @@ export default function App() {
                 <Tab
                     label={
                         <>
-                            <i className="fas fa-address-card fa-fw" /> Preview
+                            <i className="fas fa-address-card fa-fw" />{" "}
+                            {strings.preview}
                         </>
                     }
                 >
                     <PreviewTab />
                 </Tab>
+                <Tab
+                    label={
+                        <>
+                            <i className="fas fa-question-circle fa-fw" />{" "}
+                            {strings.about}
+                        </>
+                    }
+                >
+                    <AboutTab />
+                </Tab>
             </TabStrip>
             <div style={{ height: "100px" }} />
             <footer className="panel-section panel-section-footer">
-                <button className="panel-section-footer-button browser-style"
-                    onClick={cancel}>
-                    Cancel <i className="far fa-times-circle fa-fw" />
+                <button
+                    className="panel-section-footer-button browser-style"
+                    onClick={cancel}
+                >
+                    {strings.cancel} <i className="far fa-times-circle fa-fw" />
                 </button>
                 <div className="panel-section-footer-spacer" />
                 <button
@@ -75,7 +92,7 @@ export default function App() {
                     style={{ opacity: currTab === 0 ? 0 : 1 }}
                     tabIndex={currTab === 0 ? -1 : undefined}
                 >
-                    <i className="fas fa-arrow-left fa-fw" /> Previous
+                    <i className="fas fa-arrow-left fa-fw" /> {strings.previous}
                 </button>
                 <div className="panel-section-footer-separator" />
                 {currTab < maxTab && (
@@ -83,13 +100,17 @@ export default function App() {
                         className="panel-section-footer-button default browser-style"
                         onClick={nextTab}
                     >
-                        Next <i className="fas fa-arrow-right fa-fw" />
+                        {strings.next}{" "}
+                        <i className="fas fa-arrow-right fa-fw" />
                     </button>
                 )}
                 {currTab === maxTab && (
-                    <button className="panel-section-footer-button default browser-style"
-                        onClick={sendEmails}>
-                        Send <i className="far fa-paper-plane fa-fw" />
+                    <button
+                        className="panel-section-footer-button default browser-style"
+                        onClick={sendEmails}
+                    >
+                        {strings.send}{" "}
+                        <i className="far fa-paper-plane fa-fw" />
                     </button>
                 )}
             </footer>
