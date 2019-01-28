@@ -96,9 +96,9 @@ export default {
     }),
     renderEmails: effect(async (dispatch, payload, { getState }) => {
         await dispatch.data.fetchTemplate();
-        const { data } = getState();
+        const { data, prefs } = getState();
 
-        let emails = fillTemplate(data.template, data.spreadsheetData);
+        let emails = fillTemplate(data.template, data.spreadsheetData, prefs.parser);
         dispatch.data.updateEmails(emails);
     }),
     sendEmails: effect(async (dispatch, payload, { getState }) => {
