@@ -16,6 +16,8 @@ export default function App() {
     const prevTab = useAction(actions => actions.tabs.prevTab);
     const currTab = useStore(state => state.tabs.currTab);
     const setTab = useAction(actions => actions.tabs.setTab);
+    const cancel = useAction(actions => actions.cancel);
+    const sendEmails = useAction(actions => actions.sendEmails);
 
     return (
         <>
@@ -62,7 +64,8 @@ export default function App() {
             </TabStrip>
             <div style={{ height: "100px" }} />
             <footer className="panel-section panel-section-footer">
-                <button className="panel-section-footer-button browser-style">
+                <button className="panel-section-footer-button browser-style"
+                    onClick={cancel}>
                     Cancel <i className="far fa-times-circle fa-fw" />
                 </button>
                 <div className="panel-section-footer-spacer" />
@@ -84,7 +87,8 @@ export default function App() {
                     </button>
                 )}
                 {currTab === maxTab && (
-                    <button className="panel-section-footer-button default browser-style">
+                    <button className="panel-section-footer-button default browser-style"
+                        onClick={sendEmails}>
                         Send <i className="far fa-paper-plane fa-fw" />
                     </button>
                 )}

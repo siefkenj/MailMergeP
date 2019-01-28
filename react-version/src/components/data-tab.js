@@ -1,11 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useStore, useAction } from "easy-peasy";
 import { HotTable } from "@handsontable/react";
 import Handsontable from "handsontable";
 import "handsontable/dist/handsontable.full.css";
-import classNames from "classnames";
 import { ClearableFileInput } from "./common.js";
-import { fillTemplate } from "../utils.js";
 
 function DataTab() {
     const tableRef = useRef();
@@ -20,7 +18,6 @@ function DataTab() {
 
     useEffect(() => {
         parseSpreadsheet();
-        console.log("using effect!")
     }, [prefs.fileName]);
 
 

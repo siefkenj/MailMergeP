@@ -81,6 +81,17 @@
                 margin: 4px;
                 color: blue;
             }
+            #processing-log .hidden {
+                display: none;
+            }
+            #processing-log .has-hidden-contents::after {
+                content: "...";
+                display: block;
+                margin-left: 10px;
+            }
+            #processing-log .log-item {
+                cursor: pointer;
+            }
         </style>
         <title>Mail Merge Testing Frame</title>
     </head>

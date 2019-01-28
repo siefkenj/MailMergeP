@@ -70,6 +70,9 @@ export default {
     initialise: effect(async dispatch => {
         await dispatch.prefs.fetchPrefs();
     }),
+    cancel: effect(async dispatch => {
+        await messageParent({ type: "CANCEL" });
+    }),
     parseSpreadsheet: effect(async (dispatch, payload, { getState }) => {
         // presuming raw data has been loaded into .prefs,
         // prase with XLSX.js
@@ -89,5 +92,10 @@ export default {
 
         let emails = fillTemplate(data.template, data.spreadsheetData);
         dispatch.data.updateEmails(emails);
+    }),
+    sendEmails: effect(async (dispatch, payload, { getState }) => {
+        const { data } = getState();
+
+        await messageParent({ type: "SEND_EMAILS", emails: data.emails });
     })
 };

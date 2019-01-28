@@ -10,11 +10,30 @@ let iframe = null;
 function log(message) {
     let { type, direction, ...rest } = message;
     let li = document.createElement("li");
-    let text = document.createTextNode(
-        type + "\n" + JSON.stringify(rest, false, 4)
-    );
-    li.appendChild(text);
+    let div1 = document.createElement("div");
+    let div2 = document.createElement("div");
+    div1.appendChild(document.createTextNode(type));
+    div2.appendChild(document.createTextNode(JSON.stringify(rest, false, 4)));
+
+    li.appendChild(div1);
+    li.appendChild(div2);
     li.classList.add(direction);
+    div1.classList.add("log-item");
+
+    // set it up so clicking on an item in the log with shrink or exapnd its contents
+    let hidden = false;
+    function hideLogContents() {
+        hidden = !hidden;
+        if (hidden) {
+            div2.classList.add("hidden");
+            div1.classList.add("has-hidden-contents");
+        } else {
+            div2.classList.remove("hidden");
+            div1.classList.remove("has-hidden-contents");
+        }
+    }
+    div1.addEventListener("click", hideLogContents);
+    hideLogContents();
 
     let logElm = document.getElementById("processing-log");
     if (logElm) {
@@ -151,7 +170,7 @@ window.addEventListener("message", e => {
             messageChild({ type, id, template: getTemplate() });
             break;
         case "SEND_EMAILS":
-            sendMessages(data.emails);
+            //sendMessages(data.emails);
             break;
         default:
             console.warn("Unknown message type", type);
