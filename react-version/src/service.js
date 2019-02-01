@@ -2,13 +2,6 @@
  * This is the interface between the iframe mailMerge UI and
  * the outside world (which has permission to send mail) */
 
-// this will hold a reference to our parent so we can send messages
-let _parentWindow = null,
-    _resolveParentWindow;
-// this promise will resolve when we've gotten word of who our parent is
-const parentWindow = new Promise((resolve, reject) => {
-    _resolveParentWindow = resolve;
-});
 let _messageId = 0;
 function getUniqueMessageId() {
     return _messageId++;
@@ -26,7 +19,6 @@ async function messageParent(payload) {
         data: data
     };
 
-    const pWindow = await parentWindow;
     return new Promise((resolve, reject) => {
         // construct a listener that resolves the promise when
         // getting back a reply, then removes itself from
@@ -42,7 +34,7 @@ async function messageParent(payload) {
             resolve(data.data);
         };
         window.addEventListener("message", listener);
-        pWindow.postMessage(message, "*");
+        window.postMessage(message, "*");
     });
 }
 
@@ -56,8 +48,6 @@ window.addEventListener("message", e => {
             data,
             e.source
         );
-        _parentWindow = e.source;
-        _resolveParentWindow(_parentWindow);
     }
 });
 

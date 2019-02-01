@@ -25,7 +25,7 @@ function PreviewTab() {
     function previousPreview() {
         setPreviewItem(previewItem - 1);
     }
-
+    
     if (numEmails === 0) {
         return (
             <div className="email-preview-wrapper">
