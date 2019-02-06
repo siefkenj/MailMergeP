@@ -1,0 +1,5 @@
+<!ENTITY mailmergep.compose.current "Current:">
+<!ENTITY mailmergep.compose.total "Total:">
+<!ENTITY mailmergep.compose.time "Time:">
+<!ENTITY mailmergep.compose.progress "Progress:">
+<!ENTITY mailmergep.compose.status "Status:">
