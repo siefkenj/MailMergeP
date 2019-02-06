@@ -5,7 +5,7 @@ cache:
   directories:
   - html-src/node_modules
 script:
-  - cd react-version && npm install && npm run build
+  - cd html-src && npm install && npm run build
 after_failure: cat /home/travis/.npm/_logs/*-debug.log
 warnings_are_errors: false
 env:
