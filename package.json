@@ -11,7 +11,6 @@
     "font-awesome": "^4.7.0",
     "handsontable": "^6.2.2",
     "nunjucks": "^3.1.7",
-    "parse-numeric-range": "0.0.2",
     "react": "16.8.0-alpha.0",
     "react-dom": "16.8.0-alpha.0",
     "react-localization": "^1.0.13",

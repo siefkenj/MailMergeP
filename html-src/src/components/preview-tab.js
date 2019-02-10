@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useStore, useAction } from "easy-peasy";
-import classNames from "classnames";
-import { ClearableInput } from "./common.js";
+import { parseRange } from "../utils.js";
 
 import LocalizedStrings from 'react-localization';
 const formatString = LocalizedStrings.prototype.formatString;
@@ -20,7 +19,7 @@ function PreviewTab() {
 
     const renderEmails = useAction(actions => actions.renderEmails);
     useEffect(() => {
-        renderEmails();
+        renderEmails(parseRange(prefs.range, 1, data.spreadsheetData.length - 1));
     }, [data.spreadsheetData, prefs.parser]);
 
     function nextPreview() {

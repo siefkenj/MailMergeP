@@ -1,8 +1,8 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { useStore, useAction } from "easy-peasy";
 import classNames from "classnames";
-import rangeParser from "parse-numeric-range";
 import { ClearableInput } from "./common.js";
+import { parseRange } from "../utils.js";
 
 function SettingsTab() {
     const prefs = useStore(state => state.prefs);
@@ -17,11 +17,12 @@ function SettingsTab() {
             }
         };
     }
-    // a range is invalid if it is non-empty and rangeParser.parse parses it
+    // a range is invalid if it is non-empty and parseRange parses it
     // to an empty array
     const rangeValid =
         prefs.range.trim().length === 0 ||
-        rangeParser.parse(prefs.range).length > 0;
+        parseRange(prefs.range).length > 0;
+
     return (
         <div className="browser-style settings-panel">
             <label htmlFor="pref-sendmode" className="settings-label">

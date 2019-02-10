@@ -103,7 +103,19 @@ export default {
         await dispatch.data.fetchTemplate();
         const { data, prefs } = getState();
 
-        let emails = fillTemplate(data.template, data.spreadsheetData, prefs.parser);
+        let spreadsheetData = [data.spreadsheetData[0]]
+        // if a non-empty range was specified in the payload, filter out only those
+        // rows from the spreadsheet. Note, the range starts at "1".
+        if (!payload || payload.length === 0) {
+            spreadsheetData = data.spreadsheetData;
+        } else {
+            for (let i of payload) {
+                if (data.spreadsheetData[i]) {
+                    spreadsheetData.push(data.spreadsheetData[i])
+                }
+            }
+        }
+        let emails = fillTemplate(data.template, spreadsheetData, prefs.parser);
         dispatch.data.updateEmails(emails);
     }),
     sendEmails: effect(async (dispatch, payload, { getState }) => {
