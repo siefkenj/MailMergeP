@@ -23,7 +23,7 @@
     "react-scripts-plugin-no-minify": "^0.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cd html-src && react-scripts start",
     "build": "cd html-src && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
