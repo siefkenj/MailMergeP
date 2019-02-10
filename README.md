@@ -1,7 +1,25 @@
+[![Build Status](https://travis-ci.com/siefkenj/MailMerge.svg?branch=master)](https://travis-ci.com/siefkenj/MailMerge)
+
 ## Mail Merge P
 
 Mail Merge P (_Mail Merge with Preview_) 
 is a Thunderbird add-on to send bulk emails based off information provided in a spreadsheet. 
+
+Mail Merge P uses the [nunjucks](https://mozilla.github.io/nunjucks/) templating engine to 
+fill email templates based on data provided by a spreadsheet.
+
+## Usage
+
+Prepare a spreadsheet with a single header row.
+Any templating variable you wish to be filled, wrap in `{{..}}`. For example, if your 
+spreadsheet has headers `name` and `email`, you can use `{{name}}` and `{{email}}` in 
+the body/subject/to/cc/bcc fields of your email. Mail Merge P will then substitute data from
+the spreadsheet into these fields.
+
+You can use the full power of the _nunjucks_ templating engine, but be aware that all data
+from a spreadsheet is interpreted as a string.
+
+## Install
 
 You can play around with the main ui-component in the browser: https://siefkenj.github.io/MailMerge/browser-iframe-server.html
 
