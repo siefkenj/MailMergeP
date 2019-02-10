@@ -80,6 +80,9 @@ const iframeService = {
             case "SEND_EMAILS":
                 iframeService.commands.sendEmails(data.emails);
                 break;
+            case "OPEN_URL":
+                iframeService.commands.openUrl(data.url);
+                break;
             case "CANCEL":
                 iframeService.commands.cancel();
                 break;
@@ -131,6 +134,9 @@ const iframeService = {
             console.warn("Function not implimented");
         },
         cancel: () => {
+            console.warn("Function not implimented");
+        },
+        openUrl: () => {
             console.warn("Function not implimented");
         }
     }

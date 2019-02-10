@@ -147,6 +147,10 @@ if (typeof iframeService === "undefined") {
         alert("Cancel pressed")
     }
 
+    function openUrl(url) {
+        window.open(url, "_blank");
+    }
+
     // attach all our function calls to the iframeService
     iframeService.log = log;
     Object.assign(iframeService.commands, {
@@ -156,6 +160,7 @@ if (typeof iframeService === "undefined") {
         getTemplate,
         setPreferences,
         sendEmails,
+        openUrl,
         cancel
     });
 })();

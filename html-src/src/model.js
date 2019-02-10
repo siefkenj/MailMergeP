@@ -110,5 +110,8 @@ export default {
         const { data } = getState();
 
         await messageParent({ type: "SEND_EMAILS", emails: data.emails });
+    }),
+    openUrl: effect(async (dispatch, payload) => {
+        await messageParent({ type: "OPEN_URL", url: payload });
     })
 };

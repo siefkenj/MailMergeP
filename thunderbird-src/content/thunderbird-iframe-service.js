@@ -247,6 +247,22 @@ function init() {
         window.close()
     }
 
+    // from https://stackoverflow.com/questions/21701365/open-a-browser-window-from-an-xul-application
+    function openUrl(uri)
+    {
+        if(typeof uri == 'string')
+        {
+            var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
+                .getService(Components.interfaces.nsIIOService);
+            uri = ioservice.newURI(uri, null, null);
+        }
+
+        // Open URL in user's default browser.
+        var extps = Components.classes["@mozilla.org/uriloader/external-protocol-service;1"]
+            .getService(Components.interfaces.nsIExternalProtocolService);
+        extps.loadURI(uri, null);
+    }
+
     function cancel() {
         window.close();
     }
@@ -260,6 +276,7 @@ function init() {
         getTemplate,
         setPreferences,
         sendEmails,
+        openUrl,
         cancel
     });
 })(window.opener.mailmergeGlobals.gMsgCompose);
