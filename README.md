@@ -48,6 +48,12 @@ component in an iframe and uses message passing to communicate with the iframe.
 This split means that the bulk of Mail Merge P can be developed in the browser without
 Thunderbird.
 
+To run thunderbird and force a reload of all extension content, do
+
+```
+thunderbird -purgecaches
+```
+
 ### Developing the HTML UI
 
 A browser-based simulation of the Mail Merge P Thunderbird API is provided by `browser-iframe-server.html`.
