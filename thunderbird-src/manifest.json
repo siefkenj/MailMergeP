@@ -1,0 +1,33 @@
+{
+	
+	"name": "Mail Merge P",
+	"version": "1.1.0",
+	"description": "Mail Merge with Preview, an enhanced version of Mail Merge by Alexander Bergmann",
+	"author": "Jason Siefken",
+	
+	"applications": {
+		"gecko": {
+			"id": "mailmerge@example.net",
+			"strict_min_version": "68.0a1",
+			"strict_max_version": "68.*"
+		}
+	},
+	
+	"icons": {
+		"16": "skin/icon16.png",
+		"24": "skin/icon24.png",
+		"32": "skin/icon32.png",
+		"48": "skin/icon48.png",
+		"64": "skin/icon64.png"
+	},
+	
+	"legacy": {
+		"options": {
+			"page": "chrome://mailmerge/content/options.xul",
+			"open_in_tab": false
+		}
+	},
+	
+	"manifest_version": 2
+	
+}

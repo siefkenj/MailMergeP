@@ -12,9 +12,10 @@
     "handsontable": "^6.2.2",
     "nunjucks": "^3.1.7",
     "react": "^16.8.0",
+    "react-app-rewired": "^2.1.5",
     "react-dom": "^16.8.0",
     "react-localization": "^1.0.13",
-    "react-scripts": "^2.1.3",
+    "react-scripts": "^3.3.0",
     "xlsx": "^0.14.1"
   },
   "devDependencies": {
@@ -23,7 +24,7 @@
   },
   "scripts": {
     "start": "cd html-src && react-scripts start",
-    "build": "cd html-src && react-scripts build",
+    "build": "cd html-src && react-app-rewired build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "build-addon": "rm -rf addon && cp -rL thunderbird-src addon && cd addon && rm content/iframe-content/static/js/*.map && bestzip ../addon.zip *",
