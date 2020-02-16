@@ -59,6 +59,7 @@ if (typeof iframeService === "undefined") {
             fileContents: []
         };
     }
+    
     function getPreferences() {
         let prefs = getDefaultPreferences();
         try {
@@ -68,10 +69,12 @@ if (typeof iframeService === "undefined") {
         }
         return prefs;
     }
+
     function setPreferences(prefs) {
         let newPrefs = { ...getPreferences(), ...prefs };
         window.localStorage.setItem("prefs", JSON.stringify(newPrefs));
     }
+
     function getTemplate() {
         // return a dummy template
         const defaultTemplate = {
@@ -95,6 +98,7 @@ if (typeof iframeService === "undefined") {
             return defaultTemplate;
         }
     }
+
     function getLocalizedStrings() {
         return {
             next: "Next",
@@ -131,9 +135,17 @@ if (typeof iframeService === "undefined") {
             license: "License",
             donate: "Donate",
             euro: "{0} €",
-            dollar: "$ {0}"
+            dollar: "$ {0}",
+            current: "Current:",
+            total: "Total:",
+            time: "Time:",
+            progress: "Progress:",
+            status: "Status:",
+            sending: "Sending...",
+            waiting: "Waiting..."
         };
     }
+
     function sendEmails(emails) {
         for (let email of emails) {
             console.log(
@@ -143,8 +155,17 @@ if (typeof iframeService === "undefined") {
             );
         }
     }
+
+    function sendEmail(email, sendmode) {
+        console.log(
+            "%c Sending Email",
+            "background: purple; color: white;",
+            email
+        );
+    }
+
     function cancel() {
-        alert("Cancel pressed")
+        alert("Cancel pressed");
     }
 
     function openUrl(url) {
@@ -160,6 +181,7 @@ if (typeof iframeService === "undefined") {
         getTemplate,
         setPreferences,
         sendEmails,
+        sendEmail,
         openUrl,
         cancel
     });

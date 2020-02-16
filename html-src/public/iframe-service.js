@@ -24,11 +24,10 @@ const iframeService = {
             };
         }
     },
-    onmessage: function(e) {
+    onmessage: async function(e) {
         const payload = e.data || {};
         const { type, id, source, data } = payload;
 
-        //console.log("parent window got", payload, e);
         if (source !== "CHILD") {
             // We got a message that wasn't from our child iframe.
             // It should be handled by a different event listener.
@@ -45,40 +44,48 @@ const iframeService = {
                 iframeService.messageChild({
                     type,
                     id,
-                    prefs: iframeService.commands.getDefaultPreferences()
+                    prefs: await iframeService.commands.getDefaultPreferences()
                 });
                 break;
             case "GET_PREFERENCES":
                 iframeService.messageChild({
                     type,
                     id,
-                    prefs: iframeService.commands.getPreferences()
+                    prefs: await iframeService.commands.getPreferences()
                 });
                 break;
             case "SET_PREFERENCES":
-                iframeService.commands.setPreferences(data.prefs);
+                await iframeService.commands.setPreferences(data.prefs);
                 iframeService.messageChild({
                     type,
                     id,
-                    prefs: iframeService.commands.getPreferences()
+                    prefs: await iframeService.commands.getPreferences()
                 });
                 break;
             case "GET_TEMPLATE":
                 iframeService.messageChild({
                     type,
                     id,
-                    template: iframeService.commands.getTemplate()
+                    template: await iframeService.commands.getTemplate()
                 });
                 break;
             case "GET_LOCALIZED_STRINGS":
                 iframeService.messageChild({
                     type,
                     id,
-                    strings: iframeService.commands.getLocalizedStrings()
+                    strings: await iframeService.commands.getLocalizedStrings()
                 });
                 break;
             case "SEND_EMAILS":
-                iframeService.commands.sendEmails(data.emails);
+                await iframeService.commands.sendEmails(data.emails);
+                iframeService.messageChild({ type, id });
+                break;
+            case "SEND_EMAIL":
+                await iframeService.commands.sendEmail(
+                    data.email,
+                    data.sendmode
+                );
+                iframeService.messageChild({ type, id });
                 break;
             case "OPEN_URL":
                 iframeService.commands.openUrl(data.url);
@@ -116,28 +123,31 @@ const iframeService = {
     },
     commands: {
         getDefaultPreferences: () => {
-            console.warn("Function not implimented");
+            console.warn("Function not implemented");
         },
         getPreferences: () => {
-            console.warn("Function not implimented");
+            console.warn("Function not implemented");
         },
         getLocalizedStrings: () => {
-            console.warn("Function not implimented");
+            console.warn("Function not implemented");
         },
         getTemplate: () => {
-            console.warn("Function not implimented");
+            console.warn("Function not implemented");
         },
         setPreferences: () => {
-            console.warn("Function not implimented");
+            console.warn("Function not implemented");
         },
         sendEmails: () => {
-            console.warn("Function not implimented");
+            console.warn("Function not implemented");
+        },
+        sendEmail: () => {
+            console.warn("Function not implemented");
         },
         cancel: () => {
-            console.warn("Function not implimented");
+            console.warn("Function not implemented");
         },
         openUrl: () => {
-            console.warn("Function not implimented");
+            console.warn("Function not implemented");
         }
     }
 };

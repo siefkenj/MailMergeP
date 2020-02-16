@@ -1,0 +1,57 @@
+{
+    "extensionDescription": {
+        "message": "Send customized bulk messages"
+    },
+    "extensionName": {
+        "message": "Mail Merge P"
+    },
+    "next": { "message": "Next" },
+    "previous": { "message": "Previous" },
+    "cancel": { "message": "Cancel" },
+    "send": { "message": "Send" },
+    "data": { "message": "Data" },
+    "dataInfo": {
+        "message": "Open a spreadsheet file (.csv, .xlsx, .ods, etc.) or copy-and-paste data into the spreadsheet below."
+    },
+    "openAFile": { "message": "Open a file..." },
+    "settings": { "message": "Settings" },
+    "preview": { "message": "Preview" },
+    "sendMode": { "message": "Send mode:" },
+    "sendModeDesc": {
+        "message": "Set how messages will be delivered. Send Later will leave messages in the Drafts folder."
+    },
+    "sendModeNow": { "message": "Send Now" },
+    "sendModeLater": { "message": "Send Later" },
+    "sendModeDraft": { "message": "Save as Draft" },
+    "messageDelay": { "message": "Message delay:" },
+    "messageDelayDesc": {
+        "message": "Dealy, in seconds, between sending messages."
+    },
+    "sendMessageRange": { "message": "Send Message Range:" },
+    "sendMessageRangeDesc": {
+        "message": "Send only specific messages as specified by this range."
+    },
+    "parser": { "message": "Parser:" },
+    "parserDesc": {
+        "message": "Select the parser that will be used to substitute variables into the email template."
+    },
+    "parserLegacy": { "message": "Legacy" },
+    "previewEmpty": {
+        "message": "No emails to preview. Try loading data in the {0} tab."
+    },
+    "previewPreviewing": { "message": "Previewing {0} of {1}" },
+    "about": { "message": "About" },
+    "developers": { "message": "Developers" },
+    "support": { "message": "Support" },
+    "license": { "message": "License" },
+    "donate": { "message": "Donate" },
+    "euro": { "message": "{0} €" },
+    "dollar": { "message": "$ {0}" },
+    "current": { "message": "Current:" },
+    "total": { "message": "Total:" },
+    "time": { "message": "Time:" },
+    "progress": { "message": "Progress:" },
+    "status": { "message": "Status:" },
+    "sending": { "message": "Sending..." },
+    "waiting": { "message": "Waiting..." }
+}

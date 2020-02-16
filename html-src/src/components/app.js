@@ -1,26 +1,27 @@
 import React, { useEffect } from "react";
-import { useAction, useStore } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import { TabStrip, Tab } from "./common.js";
 import { DataTab } from "./data-tab.js";
 import { SettingsTab } from "./settings-tab.js";
 import { PreviewTab } from "./preview-tab.js";
 import { AboutTab } from "./about-tab.js";
 import "font-awesome/css/font-awesome.min.css";
+import { SendDialog } from "./send-dialog.js";
 
 export default function App() {
-    const strings = useStore(state => state.locale.strings);
+    const strings = useStoreState(state => state.locale.strings);
 
-    const initialise = useAction(actions => actions.initialise);
+    const initialise = useStoreActions(actions => actions.initialise);
     useEffect(() => {
         initialise();
-    });
+    }, [initialise]);
     const maxTab = 2;
-    const nextTab = useAction(actions => actions.tabs.nextTab);
-    const prevTab = useAction(actions => actions.tabs.prevTab);
-    const currTab = useStore(state => state.tabs.currTab);
-    const setTab = useAction(actions => actions.tabs.setTab);
-    const cancel = useAction(actions => actions.cancel);
-    const sendEmails = useAction(actions => actions.sendEmails);
+    const nextTab = useStoreActions(actions => actions.tabs.nextTab);
+    const prevTab = useStoreActions(actions => actions.tabs.prevTab);
+    const currTab = useStoreState(state => state.tabs.currTab);
+    const setTab = useStoreActions(actions => actions.tabs.setTab);
+    const cancel = useStoreActions(actions => actions.cancel);
+    const sendEmails = useStoreActions(actions => actions.sendEmails);
 
     return (
         <>
@@ -77,18 +78,19 @@ export default function App() {
                     <AboutTab />
                 </Tab>
             </TabStrip>
+            <SendDialog />
             <div style={{ height: "100px" }} />
             <footer className="panel-section panel-section-footer">
                 <button
                     className="panel-section-footer-button browser-style"
-                    onClick={cancel}
+                    onClick={() => cancel()}
                 >
                     {strings.cancel} <i className="far fa-times-circle fa-fw" />
                 </button>
                 <div className="panel-section-footer-spacer" />
                 <button
                     className="panel-section-footer-button browser-style"
-                    onClick={prevTab}
+                    onClick={() => prevTab()}
                     style={{ opacity: currTab === 0 ? 0 : 1 }}
                     tabIndex={currTab === 0 ? -1 : undefined}
                 >
@@ -98,7 +100,7 @@ export default function App() {
                 {currTab < maxTab && (
                     <button
                         className="panel-section-footer-button default browser-style"
-                        onClick={nextTab}
+                        onClick={() => nextTab()}
                     >
                         {strings.next}{" "}
                         <i className="fas fa-arrow-right fa-fw" />
@@ -107,7 +109,7 @@ export default function App() {
                 {currTab === maxTab && (
                     <button
                         className="panel-section-footer-button default browser-style"
-                        onClick={sendEmails}
+                        onClick={() => sendEmails()}
                     >
                         {strings.send}{" "}
                         <i className="far fa-paper-plane fa-fw" />

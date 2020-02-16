@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { useStore, useAction } from "easy-peasy";
+import { useStoreState, useStoreActions } from "easy-peasy";
 import { HotTable } from "@handsontable/react";
 import Handsontable from "handsontable";
 import "handsontable/dist/handsontable.full.css";
@@ -7,20 +7,24 @@ import { ClearableFileInput } from "./common.js";
 
 function DataTab() {
     const tableRef = useRef();
-    const strings = useStore(state => state.locale.strings);
-    const prefs = useStore(state => state.prefs);
-    const updatePref = useAction(actions => actions.prefs.updatePref);
-    const data = useStore(state => state.data);
-    const updateData = useAction(actions => actions.data.updateSpreadsheetData);
-    const updateSpreadsheetHasManuallyUpdated = useAction(actions => actions.data.updateSpreadsheetHasManuallyUpdated);
+    const strings = useStoreState(state => state.locale.strings);
+    const prefs = useStoreState(state => state.prefs);
+    const updatePref = useStoreActions(actions => actions.prefs.updatePref);
+    const data = useStoreState(state => state.data);
+    const updateData = useStoreActions(
+        actions => actions.data.updateSpreadsheetData
+    );
+    const updateSpreadsheetHasManuallyUpdated = useStoreActions(
+        actions => actions.data.updateSpreadsheetHasManuallyUpdated
+    );
 
-    const parseSpreadsheet = useAction(actions => actions.parseSpreadsheet);
-
+    const parseSpreadsheet = useStoreActions(
+        actions => actions.parseSpreadsheet
+    );
 
     useEffect(() => {
         parseSpreadsheet();
-    }, [prefs.fileName]);
-
+    }, [prefs.fileName, parseSpreadsheet]);
 
     async function fileChanged({ name, data }) {
         name = name || "";
@@ -31,7 +35,7 @@ function DataTab() {
         updatePref({ fileName: name, fileContents: datAsArray });
         // If we've loaded a file, we want to forget any manual changes
         // we made to the spreadsheet data
-        updateSpreadsheetHasManuallyUpdated(false)
+        updateSpreadsheetHasManuallyUpdated(false);
     }
 
     function spreadsheetChanged(changes, source) {

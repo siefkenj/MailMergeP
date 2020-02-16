@@ -179,4 +179,15 @@ function ClearableFileInput(props) {
     );
 }
 
-export { TabStrip, Tab, ClearableInput, ClearableFileInput };
+function ProgressBar(props) {
+    const { min = 0, max = 1, progress: _progress } = props;
+    const range = max - min;
+    if (_progress == null) {
+        // If we passed in a null progress, use the default "waiting" bar
+        return <progress />;
+    }
+    const progress = +_progress;
+    return <progress max={100 * range} value={100 * (progress - min)} />;
+}
+
+export { TabStrip, Tab, ClearableInput, ClearableFileInput, ProgressBar };

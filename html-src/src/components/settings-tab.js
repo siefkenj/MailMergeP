@@ -1,13 +1,13 @@
 import React from "react";
-import { useStore, useAction } from "easy-peasy";
+import { useStoreState, useStoreActions } from "easy-peasy";
 import classNames from "classnames";
 import { ClearableInput } from "./common.js";
 import { parseRange } from "../utils.js";
 
 function SettingsTab() {
-    const prefs = useStore(state => state.prefs);
-    const strings = useStore(state => state.locale.strings);
-    const updatePref = useAction(actions => actions.prefs.updatePref);
+    const prefs = useStoreState(state => state.prefs);
+    const strings = useStoreState(state => state.locale.strings);
+    const updatePref = useStoreActions(actions => actions.prefs.updatePref);
     function generatePrefUpdate(pref) {
         return e => {
             if (e.target) {
@@ -20,8 +20,7 @@ function SettingsTab() {
     // a range is invalid if it is non-empty and parseRange parses it
     // to an empty array
     const rangeValid =
-        prefs.range.trim().length === 0 ||
-        parseRange(prefs.range).length > 0;
+        prefs.range.trim().length === 0 || parseRange(prefs.range).length > 0;
 
     return (
         <div className="browser-style settings-panel">

@@ -279,7 +279,7 @@ function fillTemplateLegacy(template, subsArray) {
  *
  * Based off of https://github.com/euank/node-parse-numeric-range
  */
-function parseRange(str, minVal=0, maxVal=100) {
+function parseRange(str, minVal = 0, maxVal = 100) {
     function parsePart(str) {
         // just a number
         if (/^-?\d+$/.test(str)) {
@@ -332,4 +332,44 @@ function parseRange(str, minVal=0, maxVal=100) {
     });
 }
 
-export { fillTemplate, parseSpreadsheet, parseRange };
+/**
+ * Returns a promise that delays for number of milliseconds
+ *
+ * @param {number} duration
+ * @param {function} abortFunction - called repeatedly to test if the promise should be aborted
+ * @returns {Promise}
+ */
+function delay(duration, abortFunction = () => false) {
+    // ms to poll before testing if we should abort
+    const POLLING_DURATION = 100;
+
+    return new Promise((resolve, reject) => {
+        const startTime = new Date();
+        const intervalHandle = window.setInterval(function() {
+            if (new Date() - startTime >= duration || abortFunction()) {
+                resolve();
+                window.clearTimeout(intervalHandle);
+            }
+        }, POLLING_DURATION);
+    });
+}
+
+/**
+ * Returns an "HH:mm:ss" formatted string
+ *
+ * @param {number} time
+ * @returns {string} - formatted as "HH:mm:ss"
+ */
+function formatTime(time) {
+    function pad(x) {
+        return ("" + x).padStart(2, "0");
+    }
+
+    let seconds = Math.floor(time / 1000) % 60;
+    let minutes = Math.floor(time / (60 * 1000)) % 60;
+    let hours = Math.floor(time / (60 * 60 * 1000));
+
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
+
+export { fillTemplate, parseSpreadsheet, parseRange, delay, formatTime };

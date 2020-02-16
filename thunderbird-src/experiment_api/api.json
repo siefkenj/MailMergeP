@@ -1,0 +1,100 @@
+[
+    {
+        "namespace": "mailmergep",
+        "functions": [
+            {
+                "name": "sendMail",
+                "description": "Send an email",
+                "type": "function",
+                "async": true,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "object",
+                        "properties": {
+                            "from": {
+                                "type": "string"
+                            },
+                            "to": {
+                                "type": "string"
+                            },
+                            "cc": {
+                                "type": "string"
+                            },
+                            "bcc": {
+                                "type": "string"
+                            },
+                            "replyTo": {
+                                "type": "string"
+                            },
+                            "attachment": {
+                                "type": "string",
+                                "optional": true
+                            },
+                            "subject": {
+                                "type": "string"
+                            },
+                            "body": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "name": "windowId",
+                        "optional": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "prefs",
+                        "description": "Send Preferences",
+                        "optional": true,
+                        "type": "object",
+                        "properties": {
+                            "delay": { "type": "string", "optional": true },
+                            "sendmode": { "type": "string", "optional": true }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "getComposedMessage",
+                "description": "Returns the template specified by the requested window (or the most recent window)",
+                "type": "function",
+                "async": true,
+                "parameters": [
+                    {
+                        "name": "windowId",
+                        "optional": true,
+                        "type": "integer"
+                    }
+                ]
+            }
+        ],
+        "events": [
+            {
+                "name": "onClick",
+                "description": "Event fired when MailMerge P should be opened",
+                "type": "function",
+                "parameters": [
+                    {
+                        "name": "windowId",
+                        "description": "The Id of the window from which the event was fired",
+                        "type": "integer"
+                    }
+                ]
+            },
+            {
+                "name": "templateChange",
+                "description": "Triggered whenever an email template changes",
+                "type": "function",
+                "parameters": [
+                    {
+                        "name": "windowId",
+                        "description": "The Id of the window from which the event was fired",
+                        "type": "integer"
+                    }
+                ]
+            }
+        ]
+    }
+]

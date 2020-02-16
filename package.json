@@ -1,36 +1,36 @@
 {
-  "name": "thunderbird-mail-merge",
-  "version": "1.0.0",
-  "description": "A Mail Merge extension for Thunderbird",
-  "homepage": ".",
-  "main": "src/index.js",
-  "dependencies": {
-    "@handsontable/react": "^2.1.0",
-    "classnames": "^2.2.6",
-    "easy-peasy": "^1.14.0",
-    "font-awesome": "^4.7.0",
-    "handsontable": "^6.2.2",
-    "nunjucks": "^3.1.7",
-    "react": "^16.8.0",
-    "react-app-rewired": "^2.1.5",
-    "react-dom": "^16.8.0",
-    "react-localization": "^1.0.13",
-    "react-scripts": "^3.3.0",
-    "xlsx": "^0.14.1"
-  },
-  "devDependencies": {
-    "bestzip": "^2.1.2",
-    "react-scripts-plugin-no-minify": "^0.3.2"
-  },
-  "scripts": {
-    "start": "cd html-src && react-scripts start",
-    "build": "cd html-src && react-app-rewired build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "build-addon": "rm -rf addon && cp -rL thunderbird-src addon && cd addon && rm content/iframe-content/static/js/*.map && bestzip ../addon.zip *",
-    "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi && cp *xpi html-src/build/"
-  },
-  "browserslist": [
-    "firefox >= 68"
-  ]
+    "name": "thunderbird-mail-merge",
+    "version": "2.0.0",
+    "description": "A Mail Merge extension for Thunderbird",
+    "homepage": ".",
+    "main": "src/index.js",
+    "dependencies": {
+        "@handsontable/react": "^2.1.0",
+        "classnames": "^2.2.6",
+        "easy-peasy": "^3.3.0",
+        "font-awesome": "^4.7.0",
+        "handsontable": "^6.2.2",
+        "nunjucks": "^3.2.0",
+        "react": "^16.12.0",
+        "react-app-rewired": "^2.1.5",
+        "react-dom": "^16.12.0",
+        "react-localization": "^1.0.15",
+        "react-scripts": "^3.3.1",
+        "xlsx": "^0.14.5"
+    },
+    "devDependencies": {
+        "bestzip": "^2.1.5",
+        "react-scripts-plugin-no-minify": "^0.3.2"
+    },
+    "scripts": {
+        "start": "cd html-src && react-scripts start",
+        "build": "cd html-src && react-app-rewired build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject",
+        "build-addon": "rm -rf addon && cp -rL thunderbird-src addon && cd addon && rm -f content/iframe-content/static/js/*.map && bestzip ../addon.zip *",
+        "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi && cp *xpi html-src/build/"
+    },
+    "browserslist": [
+        "firefox >= 68"
+    ]
 }

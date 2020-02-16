@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useStore, useAction } from "easy-peasy";
+import { useStoreState, useStoreActions } from "easy-peasy";
 import { parseRange } from "../utils.js";
 
-import LocalizedStrings from 'react-localization';
+import LocalizedStrings from "react-localization";
 const formatString = LocalizedStrings.prototype.formatString;
 
 function PreviewTab() {
-    const strings = useStore(state => state.locale.strings);
-    const data = useStore(state => state.data);
-    const prefs = useStore(state => state.prefs);
+    const strings = useStoreState(state => state.locale.strings);
+    const data = useStoreState(state => state.data);
+    const prefs = useStoreState(state => state.prefs);
     const [previewItem, setPreviewItem] = useState(0);
     const email = data.emails[previewItem] || {};
     const numEmails = data.emails.length;
 
     // The email.body contains full HTML, including the <html> and <body> tags.
     // Parse it so we can grab just the body.
-    const emailBody = (new DOMParser()).parseFromString(email.body, "text/html").body.innerHTML
+    const emailBody = new DOMParser().parseFromString(email.body, "text/html")
+        .body.innerHTML;
 
-    const renderEmails = useAction(actions => actions.renderEmails);
+    const renderEmails = useStoreActions(actions => actions.renderEmails);
     useEffect(() => {
-        renderEmails(parseRange(prefs.range, 1, data.spreadsheetData.length - 1));
-    }, [data.spreadsheetData, prefs.parser]);
+        renderEmails(
+            parseRange(prefs.range, 1, data.spreadsheetData.length - 1)
+        );
+    }, [data.spreadsheetData, prefs.parser, prefs.range, renderEmails]);
 
     function nextPreview() {
         setPreviewItem(previewItem + 1);
@@ -28,7 +31,7 @@ function PreviewTab() {
     function previousPreview() {
         setPreviewItem(previewItem - 1);
     }
-    
+
     if (numEmails === 0) {
         return (
             <div className="email-preview-wrapper">
@@ -42,7 +45,11 @@ function PreviewTab() {
     return (
         <div className="email-preview-wrapper">
             <div className="email-preview-stats">
-                {formatString(strings.previewPreviewing, previewItem + 1, numEmails)}
+                {formatString(
+                    strings.previewPreviewing,
+                    previewItem + 1,
+                    numEmails
+                )}
             </div>
             <div className="email-preview">
                 <button
