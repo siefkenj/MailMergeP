@@ -35,9 +35,11 @@ module.exports = function override(config, env) {
             // do nothing if the plugin is null
             continue;
         }
+        /*
         if (plugin.constructor.name === "TerserPlugin") {
             Object.assign(plugin.options, { include: /\.min\.js$/ });
         }
+        */
         if (plugin.constructor.name === "OptimizeCssAssetsWebpackPlugin") {
             Object.assign(plugin.options, { assetNameRegExp: /\.min\.css$/ });
         }
