@@ -8,15 +8,15 @@ if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
 }
 
-(function() {
+(function () {
     // Set up some internal globals
-    let composeWindowId = null;
+    let composeTabId = null;
     // background.js will let us know what the id of the current compose window
     // is with a message.
-    browser.runtime.onMessage.addListener(function(message, sender) {
-        if (sender.id === "MailMergeP@example.net") {
-            if (message.activeWindowId != null) {
-                composeWindowId = message.activeWindowId;
+    browser.runtime.onMessage.addListener(function (message, sender) {
+        if (sender.id.toLowerCase() === "mailmergep@example.net") {
+            if (message.activeTabId != null) {
+                composeTabId = message.activeTabId;
             }
         }
     });
@@ -25,6 +25,42 @@ if (typeof iframeService === "undefined") {
     // because there is no other way for background.js to know that we're
     // loaded.
     browser.runtime.sendMessage({ status: "loaded" });
+
+    /**
+     * Find the sender's email given a `composeDetails` object as
+     * returned by the Thunderbird API.
+     *
+     * @param {*} composeDetails
+     */
+    async function getSenderFromComposeDetails(composeDetails) {
+        const activeIdentityId = composeDetails.identityId;
+        const accounts = await browser.accounts.list();
+        const activeAccount = accounts.find((account) =>
+            account.identities.some((ident) => ident.id === activeIdentityId)
+        );
+        if (activeAccount == null) {
+            console.warn(
+                "Could not find the active account for a message with composeDetails:",
+                composeDetails
+            );
+            return "";
+        }
+
+        const identity = activeAccount.identities.find(
+            (ident) => ident.id === activeIdentityId
+        );
+        if (identity == null) {
+            console.warn(
+                "Could not find identity",
+                activeIdentityId,
+                "in account",
+                activeAccount
+            );
+            return "";
+        }
+
+        return identity.email;
+    }
 
     /*
      * Functions to simulate the mailmerge commands
@@ -36,9 +72,10 @@ if (typeof iframeService === "undefined") {
             range: "",
             parser: "nunjucks",
             fileName: "",
-            fileContents: []
+            fileContents: [],
         };
     }
+
     async function getPreferences() {
         let prefs = getDefaultPreferences();
         try {
@@ -51,16 +88,28 @@ if (typeof iframeService === "undefined") {
         }
         return prefs;
     }
+
     async function setPreferences(prefs) {
         let newPrefs = { ...(await getPreferences()), ...prefs };
         await browser.storage.local.set({ prefs: newPrefs });
     }
+
     async function getTemplate() {
-        if (composeWindowId != null) {
-            const template = await browser.mailmergep.getComposedMessage(
-                composeWindowId
+        if (composeTabId != null) {
+            const composeDetails = await browser.compose.getComposeDetails(
+                composeTabId
             );
-            return template;
+
+            return {
+                from: await getSenderFromComposeDetails(composeDetails),
+                to: composeDetails.to.join(", "),
+                cc: composeDetails.cc.join(", "),
+                bcc: composeDetails.bcc.join(", "),
+                replyTo: composeDetails.replyTo.join(", "),
+                attachment: "",
+                subject: composeDetails.subject,
+                body: composeDetails.body,
+            };
         }
 
         // return a dummy template
@@ -72,7 +121,7 @@ if (typeof iframeService === "undefined") {
             replyTo: "",
             attachment: "",
             subject: "Error processing template; this is a default template",
-            body: "Hi {{name}}.\n\nPlease ask me about our special offer."
+            body: "Hi {{name}}.\n\nPlease ask me about our special offer.",
         };
 
         let textarea = document.querySelector("#template-textarea");
@@ -123,7 +172,7 @@ if (typeof iframeService === "undefined") {
             "progress",
             "status",
             "sending",
-            "waiting"
+            "waiting",
         ];
         const ret = {};
         for (const name of stringNames) {
@@ -131,11 +180,13 @@ if (typeof iframeService === "undefined") {
         }
         return ret;
     }
+
     async function sendEmail(email, sendmode) {
-        await browser.mailmergep.sendMail(email, composeWindowId, {
-            sendmode
+        await browser.mailmergep.sendMail(email, composeTabId, {
+            sendmode,
         });
     }
+
     function cancel() {
         // If the cancel button was clicked, close the window
         browser.runtime.sendMessage({ action: "close" });
@@ -146,7 +197,7 @@ if (typeof iframeService === "undefined") {
     }
 
     // attach all our function calls to the iframeService
-    iframeService.log = function() {}; // Comment out if you want to see debug messages
+    iframeService.log = function () {}; // Comment out if you want to see debug messages
     Object.assign(iframeService.commands, {
         getDefaultPreferences,
         getPreferences,
@@ -155,7 +206,7 @@ if (typeof iframeService === "undefined") {
         setPreferences,
         sendEmail,
         openUrl,
-        cancel
+        cancel,
     });
 })();
 

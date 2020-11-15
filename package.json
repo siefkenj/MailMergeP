@@ -31,6 +31,6 @@
         "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi && cp *xpi html-src/build/"
     },
     "browserslist": [
-        "firefox >= 68"
+        "firefox >= 78"
     ]
 }

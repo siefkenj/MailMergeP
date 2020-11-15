@@ -1,5 +1,5 @@
 function log(...args) {
-    console.log("[MailMerge P]:", ...args)
+    console.log("[MailMerge P]:", ...args);
 }
 
 log("Extension loaded...");
@@ -12,7 +12,7 @@ class MailmergeWindow {
 
         // If we get a message, it means that the window has finished loading.
         // In that case, we are free to send messages to the window
-        browser.runtime.onMessage.addListener(message => {
+        browser.runtime.onMessage.addListener((message) => {
             log("background.js got", message);
             if ((message || {}).status === "loaded") {
                 this._onWindowOpened();
@@ -34,10 +34,10 @@ class MailmergeWindow {
         } catch (e) {
             ret = await browser.windows.create({
                 url: "content/thunderbird-iframe-server.html",
-                type: "normal",
+                type: "popup",
                 allowScriptsToClose: true,
                 height: 800,
-                width: 600
+                width: 600,
             });
             this.openWindowId = ret.id;
         }
@@ -67,7 +67,7 @@ class MailmergeWindow {
             this.isReady = false;
         } catch (e) {
             // Already closed
-            log(e)
+            log(e);
         }
     }
 }
@@ -75,22 +75,13 @@ const mailmergeWindow = new MailmergeWindow();
 
 // Listen for when the "MailMerge P" button is pressed in the compose
 // window.
-browser.composeAction.onClicked.addListener(async () => {
+browser.composeAction.onClicked.addListener(async (tabInfo) => {
+    mailmergeWindow.sendMessage({ activeTabId: tabInfo.id });
     const openedWindow = await mailmergeWindow.ensureWindowOpened();
 });
 
-// We don't actually get information about the compose window when
-// the `composeAction` is triggered. As a hack, another on-click
-// method is listening to the title-bar area and will retrieve a windowId
-// for the clicked compose window. This window id needs to be saved
-// so that we can get the "email template" from the compose window when
-// needed.
-browser.mailmergep.onClick.addListener(async function(windowId) {
-    mailmergeWindow.sendMessage({ activeWindowId: windowId });
-});
-
 // We are responsible for closing the MailMerge P window if asked.
-browser.runtime.onMessage.addListener(async message => {
+browser.runtime.onMessage.addListener(async (message) => {
     if ((message || {}).action === "close") {
         await mailmergeWindow.close();
     }

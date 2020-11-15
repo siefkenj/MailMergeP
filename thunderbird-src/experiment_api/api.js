@@ -65,68 +65,25 @@ var mailmergep = class extends ExtensionCommon.ExtensionAPI {
         return {
             // Again, this key must have the same name.
             mailmergep: {
-                async getComposedMessage(windowId) {
-                    const gMsgCompose = composeWindows.get(windowId)
-                        .gMsgCompose;
-                    if (!gMsgCompose) {
-                        console.warn(
-                            `Tried to get a compose template for window with id=${windowId} but there was no "gMsgCompose" attribute`
-                        );
-                    }
-                    return utils.getEmailTemplate(gMsgCompose);
-                },
+                async sendMail(data, tabId, prefs) {
+                    // We need to grab the actual window corresponding to `tabId`
+                    // so we can retrieve the gMsgCompose object from it.
+                    const { extension } = context;
+                    const composeWindow = extension.tabManager.get(
+                        tabId,
+                        context
+                    ).nativeTab;
 
-                async sendMail(data, windowId, prefs) {
-                    const gMsgCompose = composeWindows.get(windowId)
-                        .gMsgCompose;
+                    const gMsgCompose = composeWindow.gMsgCompose;
                     if (!gMsgCompose) {
                         console.warn(
-                            `Found window with id=${windowId} but there was no "gMsgCompose" attribute`
+                            `Found window with id=${tabId} but there was no "gMsgCompose" attribute`
                         );
                         return;
                     }
                     utils.sendEmail(data, prefs, gMsgCompose);
                 },
-
-                // The events
-                onClick: new ExtensionCommon.EventManager({
-                    context,
-                    name: "mailmergep.onClick",
-                    // In this function we add listeners for any events we want to listen to, and return a
-                    // function that removes those listeners. To have the event fire in your extension,
-                    // call fire.async.
-                    register(fire) {
-                        function callback(event, windowId) {
-                            return fire.async(windowId);
-                        }
-
-                        windowListener.add(callback);
-                        return function() {
-                            windowListener.remove(callback);
-                        };
-                    }
-                }).api(),
-                onTemplateChange: new ExtensionCommon.EventManager({
-                    context,
-                    name: "mailmergep.onTemplateChange",
-                    // In this function we add listeners for any events we want to listen to, and return a
-                    // function that removes those listeners. To have the event fire in your extension,
-                    // call fire.async.
-                    register(fire) {
-                        return function() {};
-                        /*
-                        function callback(event, windowId) {
-                            return fire.async(windowId);
-                        }
-
-                        windowListener.add(callback);
-                        return function() {
-                            windowListener.remove(callback);
-                        };
-                        */
-                    }
-                }).api()
-            }
+            },
         };
     }
 };
@@ -137,96 +94,7 @@ var { ExtensionSupport } = ChromeUtils.import(
     "resource:///modules/ExtensionSupport.jsm"
 );
 
-// This object is just what we're using to listen for toolbar clicks. The implementation isn't
-// what this example is about, but you might be interested as it's a common pattern. We count the
-// number of callbacks waiting for events so that we're only listening if we need to be.
-var windowListener = new (class extends ExtensionCommon.EventEmitter {
-    constructor() {
-        super();
-        this.callbackCount = 0;
-        this.listeners = [];
-    }
-
-    handleEvent(event, window) {
-        const windowId = composeWindows.add(window);
-        windowListener.emit("toolbar-clicked", windowId);
-        //utils.openDialogPromise("apis.html", composeWindows.getCurrent().domWindow);
-    }
-
-    add(callback) {
-        this.on("toolbar-clicked", callback);
-        this.callbackCount++;
-
-        if (this.callbackCount == 1) {
-            ExtensionSupport.registerWindowListener("windowListener", {
-                chromeURLs: [
-                    "chrome://messenger/content/messengercompose/messengercompose.xul"
-                ],
-                onLoadWindow: win => {
-                    // Save the compose window for later
-                    const composeWindowId = composeWindows.add(win);
-
-                    let toolbox = win.document.getElementById(
-                        "compose-toolbox"
-                    );
-                    const callback = event => {
-                        composeWindows.setCurrent(composeWindowId);
-                        windowListener.handleEvent(
-                            event,
-                            composeWindows.getCurrent()
-                        );
-                    };
-                    try {
-                        this.listeners.push(callback);
-                    } catch (e) {
-                        console.warn(e);
-                    }
-                    toolbox.addEventListener("click", callback);
-                }
-            });
-        }
-    }
-
-    remove(callback) {
-        this.off("toolbar-clicked", callback);
-        this.callbackCount--;
-
-        if (this.callbackCount == 0) {
-            for (let window of ExtensionSupport.openWindows) {
-                if (
-                    window.location.href ==
-                    "chrome://messenger/content/messengercompose/messengercompose.xul"
-                ) {
-                    let toolbox = window.document.getElementById(
-                        "compose-toolbox"
-                    );
-                    for (const callback of this.listeners) {
-                        toolbox.removeEventListener("click", callback);
-                    }
-                }
-            }
-            ExtensionSupport.unregisterWindowListener("windowListener");
-        }
-    }
-})();
-
 const utils = {
-    getEmailTemplate(gMsgCompose) {
-        // make sure the to/cc/bcc/from fields are populated
-        gMsgCompose.domWindow.Recipients2CompFields(gMsgCompose.compFields);
-        let template = {
-            from: gMsgCompose.compFields.from,
-            to: gMsgCompose.compFields.to,
-            cc: gMsgCompose.compFields.cc,
-            bcc: gMsgCompose.compFields.bcc,
-            replyTo: gMsgCompose.compFields.replyTo,
-            body: gMsgCompose.editor.outputToString("text/html", 4),
-            subject: gMsgCompose.domWindow.GetMsgSubjectElement().value
-        };
-
-        return template;
-    },
-
     async sendEmail(email, prefs = { delay: 0 }, gMsgCompose) {
         const msgWin = gMsgCompose.domWindow;
 
@@ -269,6 +137,18 @@ const utils = {
                 console.warn("Unknown sendmode", prefs.sendmode);
         }
 
+        // Save a copy of what's currently in the compose window so we can
+        // restore it later.
+        const origEmail = {
+            from: gMsgCompose.compFields.from,
+            to: gMsgCompose.compFields.to,
+            cc: gMsgCompose.compFields.cc,
+            bcc: gMsgCompose.compFields.bcc,
+            replyTo: gMsgCompose.compFields.replyTo,
+            subject: gMsgCompose.compFields.subject,
+            body: gMsgCompose.editor.outputToString("text/html", 4),
+        };
+
         let prepped = utils.prepareEmail(email, gMsgCompose);
 
         // set the message and wait for a "Copy complete." status.
@@ -293,6 +173,10 @@ const utils = {
                 null,
                 { onStatusChange }
             );
+
+            // Now that we've sent the email, restore the original content of the editor.
+            // We do this by "prepping" an email with saved values
+            utils.prepareEmail(origEmail, gMsgCompose);
         });
     },
 
@@ -317,7 +201,7 @@ const utils = {
                 emptyTo: true,
                 emptySubject: true,
                 missingAttachment: true,
-                spellcheck: true
+                spellcheck: true,
             },
             promptFor
         );
@@ -327,7 +211,7 @@ const utils = {
             gMsgCompose,
             GetMsgSubjectElement,
             gManualAttachmentReminder,
-            SetMsgBodyFrameFocus
+            SetMsgBodyFrameFocus,
         } = editorWindow;
         const editorDocument = editorWindow.document;
 
@@ -439,33 +323,6 @@ const utils = {
     },
 
     /*
-     * Returns a promise that resolves when the opened dialog is ready.
-     */
-    openDialogPromise: function openDialogPromise(dialogUrl, window) {
-        return new Promise((resolve, reject) => {
-            let numWaits = 0;
-            let dgl = window.open(
-                dialogUrl,
-                "_blank",
-                "chrome,dialog,centerscreen,alwaysRaised,height=600,width=500"
-            );
-            function testAndWait() {
-                if (dgl.document.readyState === "complete") {
-                    resolve(dgl);
-                    return;
-                }
-                if (numWaits > 10) {
-                    reject("Waited too many times");
-                    return;
-                }
-                numWaits += 1;
-                window.setTimeout(testAndWait, 50);
-            }
-            testAndWait();
-        });
-    },
-
-    /*
      * Prepare an email for sending
      */
     prepareEmail: function prepareEmail(fields, gMsgCompose) {
@@ -479,7 +336,7 @@ const utils = {
             body,
             attachments,
             at,
-            customheaders
+            customheaders,
         } = fields;
 
         /* compfields start */
@@ -620,7 +477,7 @@ const utils = {
         return {
             compose,
             currentIdentity: gMsgCompose.domWindow.getCurrentIdentity(),
-            currentAccountKey: gMsgCompose.domWindow.getCurrentAccountKey()
+            currentAccountKey: gMsgCompose.domWindow.getCurrentAccountKey(),
         };
-    }
+    },
 };
