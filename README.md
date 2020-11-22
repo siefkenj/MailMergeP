@@ -36,7 +36,7 @@ Build the entire extension with
     npm run build-addon
     npm run package-addon
 
-The extension will then be located at `html-src/build/mailmergep@example.net-latest.xpi`.
+The extension will be located in the current director and called `mailmergep@example.net-latest.xpi`.
 
 ## Development
 
