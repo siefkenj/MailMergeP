@@ -5,7 +5,7 @@
     "homepage": ".",
     "main": "src/index.js",
     "dependencies": {
-        "@handsontable/react": "^.1.0",
+        "@handsontable/react": "2.1.0",
         "classnames": "2.2.6",
         "easy-peasy": "3.3.0",
         "font-awesome": "4.7.0",
