@@ -5,18 +5,18 @@
     "homepage": ".",
     "main": "src/index.js",
     "dependencies": {
-        "@handsontable/react": "^2.1.0",
-        "classnames": "^2.2.6",
-        "easy-peasy": "^3.3.0",
-        "font-awesome": "^4.7.0",
-        "handsontable": "^6.2.2",
-        "nunjucks": "^3.2.2",
-        "react": "^16.12.0",
-        "react-app-rewired": "^2.1.5",
-        "react-dom": "^16.12.0",
-        "react-localization": "^1.0.15",
-        "react-scripts": "^4.0.0",
-        "xlsx": "^0.14.5"
+        "@handsontable/react": "^.1.0",
+        "classnames": "2.2.6",
+        "easy-peasy": "3.3.0",
+        "font-awesome": "4.7.0",
+        "handsontable": "6.2.2",
+        "nunjucks": "3.2.2",
+        "react": "16.12.0",
+        "react-app-rewired": "2.1.5",
+        "react-dom": "16.12.0",
+        "react-localization": "1.0.15",
+        "react-scripts": "4.0.0",
+        "xlsx": "0.14.5"
     },
     "devDependencies": {
         "bestzip": "^2.1.7",
@@ -28,7 +28,7 @@
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",
         "build-addon": "rm -rf addon && cp -rL thunderbird-src addon && cd addon && rm -f content/iframe-content/static/js/*.map && bestzip ../addon.zip *",
-        "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi && cp *xpi html-src/build/"
+        "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi"
     },
     "browserslist": [
         "firefox >= 78"
