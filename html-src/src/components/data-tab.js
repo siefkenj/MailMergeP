@@ -55,7 +55,7 @@ function DataTab() {
             <p>{strings.dataInfo}</p>
             <div>
                 <ClearableFileInput
-                    accept=".csv,.xlsx,.ods"
+                    accept=".csv,.xlsx,.ods,.xls"
                     onChange={fileChanged}
                     filename={prefs.fileName}
                     placeholder={strings.openAFile}
