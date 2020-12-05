@@ -13,7 +13,7 @@
     "dataInfo": {
         "message": "Open a spreadsheet file (.csv, .xlsx, .ods, etc.) or copy-and-paste data into the spreadsheet below."
     },
-    "openAFile": { "message": "Open a file..." },
+    "openAFile": { "message": "Open a file…" },
     "settings": { "message": "Settings" },
     "preview": { "message": "Preview" },
     "sendMode": { "message": "Send mode:" },
@@ -25,7 +25,7 @@
     "sendModeDraft": { "message": "Save as Draft" },
     "messageDelay": { "message": "Message delay:" },
     "messageDelayDesc": {
-        "message": "Dealy, in seconds, between sending messages."
+        "message": "Delay, in seconds, between sending messages."
     },
     "sendMessageRange": { "message": "Send Message Range:" },
     "sendMessageRangeDesc": {
@@ -52,6 +52,6 @@
     "time": { "message": "Time:" },
     "progress": { "message": "Progress:" },
     "status": { "message": "Status:" },
-    "sending": { "message": "Sending..." },
-    "waiting": { "message": "Waiting..." }
+    "sending": { "message": "Sending…" },
+    "waiting": { "message": "Waiting…" }
 }
