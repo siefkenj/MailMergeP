@@ -1,0 +1,57 @@
+{
+    "extensionDescription": {
+        "message": "Küldjön testreszabott tömeges üzeneteket"
+    },
+    "extensionName": {
+        "message": "Levél egyesítése előnézettel (Mail Merge P)"
+    },
+    "next": { "message": "Következő" },
+    "previous": { "message": "Előző" },
+    "cancel": { "message": "Mégse" },
+    "send": { "message": "Küldés" },
+    "data": { "message": "Adatok" },
+    "dataInfo": {
+        "message": "Nyissa meg a táblázatfájlt (fájlkiterjesztés: csv, xlsx, ods, stb.) az adatok másolásához és beillesztéséhez az alábbi táblázatba."
+    },
+    "openAFile": { "message": "Fájl megnyitása…" },
+    "settings": { "message": "Beállítások" },
+    "preview": { "message": "Előnézet" },
+    "sendMode": { "message": "Küldési mód:" },
+    "sendModeDesc": {
+        "message": "Állítsa be az üzenetek kézbesítési módját. A küldés később lehetőséggel üzeneteket hagy a piszkozatok mappában."
+    },
+    "sendModeNow": { "message": "Azonnali küldés" },
+    "sendModeLater": { "message": "Küldés később" },
+    "sendModeDraft": { "message": "Mentés piszkozatként" },
+    "messageDelay": { "message": "Üzenet késleltetése:" },
+    "messageDelayDesc": {
+        "message": "Késleltetés, másodpercek alatt, az üzenetek küldése között."
+    },
+    "sendMessageRange": { "message": "Üzenet küldési tartomány:" },
+    "sendMessageRangeDesc": {
+        "message": "Csak meghatározott üzeneteket küldjön a tartomány által meghatározott módon."
+    },
+    "parser": { "message": "Elemző:" },
+    "parserDesc": {
+        "message": "Válassza ki azt az elemzőt, amelyet a változók helyettesítésére használnak az e-mail sablonban."
+    },
+    "parserLegacy": { "message": "Örökölt" },
+    "previewEmpty": {
+        "message": "Nincs megtekinthető e-mail. Próbálja meg betölteni az adatokat a(z) {0} lapra."
+    },
+    "previewPreviewing": { "message": "{0}/{1} előnézete" },
+    "about": { "message": "Névjegy" },
+    "developers": { "message": "Fejlesztők" },
+    "support": { "message": "Támogatás" },
+    "license": { "message": "Jogosítvány" },
+    "donate": { "message": "Adományozás" },
+    "euro": { "message": "{0} €" },
+    "dollar": { "message": "$ {0}" },
+    "current": { "message": "Jelenlegi:" },
+    "total": { "message": "Összes:" },
+    "time": { "message": "Idő:" },
+    "progress": { "message": "Feldolgozás:" },
+    "status": { "message": "Állapot:" },
+    "sending": { "message": "Küldés folyamatban…" },
+    "waiting": { "message": "Várakozás…" }
+}
