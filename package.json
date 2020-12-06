@@ -27,7 +27,7 @@
         "build": "cd html-src && react-app-rewired build",
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",
-        "build-addon": "rm -rf addon && cp -rL thunderbird-src addon && cd addon && rm -f content/iframe-content/static/js/*.map && bestzip ../addon.zip *",
+        "build-addon": "rm -rf addon && cp -rL thunderbird-src addon && cd addon && rm -f content/iframe-content/static/js/*.map content/iframe-content/browser-iframe-service.* content/iframe-content/asset-manifest.json content/iframe-content/static/css/*.map && bestzip ../addon.zip *",
         "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi"
     },
     "browserslist": [
