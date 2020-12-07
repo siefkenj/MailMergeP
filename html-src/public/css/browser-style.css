@@ -381,6 +381,7 @@ textarea.browser-style:focus:hover {
 
 .panel-section-body {
     padding: 1em;
+    overflow: auto;
 }
 
 /* Panel Section - List */
@@ -486,6 +487,7 @@ textarea.browser-style:focus:hover {
     display: flex;
     flex-direction: row;
     height: 41px;
+    min-height: 41px;
     margin-top: -1px;
     padding: 0;
 }

@@ -79,7 +79,6 @@ export default function App() {
                 </Tab>
             </TabStrip>
             <SendDialog />
-            <div style={{ height: "100px" }} />
             <footer className="panel-section panel-section-footer">
                 <button
                     className="panel-section-footer-button browser-style"
