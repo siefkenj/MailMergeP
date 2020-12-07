@@ -2,7 +2,7 @@ import nunjucks from "nunjucks";
 import XLSX from "xlsx";
 
 function zip(a, b) {
-    return a.map(function(_, i) {
+    return a.map(function (_, i) {
         return [a[i], b[i]];
     });
 }
@@ -27,11 +27,11 @@ function fillTemplate(template, spreadsheet, method = "nunjucks") {
     // create an array of substitutions
     let [header, ...rows] = spreadsheet;
     let subsArray = rows
-        .filter(row => {
+        .filter((row) => {
             // no blank rows
-            return !row.every(x => !x);
+            return !row.every((x) => !x);
         })
-        .map(row => {
+        .map((row) => {
             let subs = {};
             for (let [key, val] of zip(header, row)) {
                 // skip over non-string (likely null) headers
@@ -65,11 +65,13 @@ function fillTemplate(template, spreadsheet, method = "nunjucks") {
 function fillTemplateNunjucks(template, subsArray) {
     let ret = [];
     let compiled = {};
+    // If autoescaping is turned on, then emails with `<...>` will become `&lt;...&gt;`
+    const env = nunjucks.configure({ autoescape: false });
 
     // pre-compile the template for efficiency
     for (let [key, val] of Object.entries(template)) {
         try {
-            compiled[key] = nunjucks.compile(val);
+            compiled[key] = nunjucks.compile(val, env);
         } catch (e) {
             console.warn("Failed to compile template", { [key]: val }, e);
         }
@@ -314,7 +316,7 @@ function parseRange(str, minVal = 0, maxVal = 100) {
     }
     var parts = str.split(",");
 
-    var toFlatten = parts.map(function(el) {
+    var toFlatten = parts.map(function (el) {
         return parsePart(el.trim());
     });
 
@@ -325,7 +327,7 @@ function parseRange(str, minVal = 0, maxVal = 100) {
         return toFlatten;
     }
 
-    return toFlatten.reduce(function(lhs, rhs) {
+    return toFlatten.reduce(function (lhs, rhs) {
         if (!Array.isArray(lhs)) lhs = [lhs];
         if (!Array.isArray(rhs)) rhs = [rhs];
         return lhs.concat(rhs);
@@ -345,7 +347,7 @@ function delay(duration, abortFunction = () => false) {
 
     return new Promise((resolve, reject) => {
         const startTime = new Date();
-        const intervalHandle = window.setInterval(function() {
+        const intervalHandle = window.setInterval(function () {
             if (new Date() - startTime >= duration || abortFunction()) {
                 resolve();
                 window.clearTimeout(intervalHandle);

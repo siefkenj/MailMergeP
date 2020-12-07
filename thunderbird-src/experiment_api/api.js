@@ -7,57 +7,6 @@ const { ExtensionCommon } = ChromeUtils.import(
 
 const { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-/**
- * Store and lookup windows by Id. A `WeakMap` is used
- * internally to prevent memory leaks.
- *
- * @class ComposeWindows
- */
-class ComposeWindows {
-    constructor() {
-        this._currentId = null;
-        this._nextUnusedId = 1;
-        this._weakMap = new WeakMap();
-    }
-    add(window, setCurrent = true) {
-        if (!window) {
-            console.warn("Value of window cannot be null");
-            return;
-        }
-        if (this._weakMap.has(window)) {
-            const id = this._weakMap.get(window);
-            if (setCurrent) {
-                this._currentId = id;
-            }
-            return id;
-        }
-        // We haven't been added to the window list yet, so get
-        // a new ID and add ourselves
-        const newId = this._nextUnusedId;
-        this._nextUnusedId++;
-        this._weakMap.set(window, newId);
-        if (setCurrent) {
-            this._currentId = newId;
-        }
-        return newId;
-    }
-    setCurrent(id) {
-        this._currentId = id;
-    }
-    get(id = this._currentId) {
-        for (const window of Services.ww.getWindowEnumerator(null)) {
-            const winId = this._weakMap.get(window);
-            if (winId === id) {
-                return window;
-            }
-        }
-    }
-    getCurrent() {
-        return this.get(this._currentId);
-    }
-}
-const composeWindows = new ComposeWindows();
-
 // Implement the functions and events defined in api.json.
 // The variable must have the same we use in the schema.
 var mailmergep = class extends ExtensionCommon.ExtensionAPI {

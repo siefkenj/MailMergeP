@@ -77,7 +77,7 @@ const mailmergeWindow = new MailmergeWindow();
 // window.
 browser.composeAction.onClicked.addListener(async (tabInfo) => {
     mailmergeWindow.sendMessage({ activeTabId: tabInfo.id });
-    const openedWindow = await mailmergeWindow.ensureWindowOpened();
+    await mailmergeWindow.ensureWindowOpened();
 });
 
 // We are responsible for closing the MailMerge P window if asked.

@@ -102,10 +102,12 @@ if (typeof iframeService === "undefined") {
 
             return {
                 from: await getSenderFromComposeDetails(composeDetails),
-                to: composeDetails.to.join(", "),
-                cc: composeDetails.cc.join(", "),
-                bcc: composeDetails.bcc.join(", "),
-                replyTo: composeDetails.replyTo.join(", "),
+                to: composeDetails.to.map(cleanupTemplateAddress).join(", "),
+                cc: composeDetails.cc.map(cleanupTemplateAddress).join(", "),
+                bcc: composeDetails.bcc.map(cleanupTemplateAddress).join(", "),
+                replyTo: composeDetails.replyTo
+                    .map(cleanupTemplateAddress)
+                    .join(", "),
                 attachment: "",
                 subject: composeDetails.subject,
                 body: composeDetails.body,
@@ -208,6 +210,17 @@ if (typeof iframeService === "undefined") {
         openUrl,
         cancel,
     });
+
+    /**
+     * When `{{email}}` is specified, since it's invalid, TB 78 will change
+     * it to `{{email}} <>`. We want to strip the extra `<>` away.
+     *
+     * @param {string} str
+     * @returns
+     */
+    function cleanupTemplateAddress(str) {
+        return str.replace("<>", "").trim();
+    }
 })();
 
 window.onload = () => {
