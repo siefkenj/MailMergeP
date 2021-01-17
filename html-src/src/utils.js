@@ -2,6 +2,13 @@ import nunjucks from "nunjucks";
 import XLSX from "xlsx";
 
 function zip(a, b) {
+    // If `a` has a blank slot (e.g. a == [1,,2]), then
+    // `.map` will skip it over. We don't want that, so detect
+    // a blank slot and create a dense array.
+    // https://stackoverflow.com/questions/36622064/check-the-array-has-empty-element-or-not/36622150
+    if (a.includes(undefined)) {
+        a = Array.from(a);
+    }
     return a.map(function (_, i) {
         return [a[i], b[i]];
     });
