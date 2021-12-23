@@ -81,3 +81,9 @@ you can manually open dialogs with the `window.open` command. For example,
 will open and run `iframe-wrapper.xul`, which is the main UI component of Mail Merge P.
 You can then poke around `dgl` for variables and functions
 stored in the extension's scope.
+
+To access the APIs available to the browser extension, you must go to the extensions
+tab and click the gear icon and enable "Debug Mode". Then you can open a console
+in the context of mailmergep and the `browser.*` apis will be available. To manipulate
+a particular tab, you can use `browser.tabs.query({})` to get a list of all tabs and
+use the `id` of the tab you want.

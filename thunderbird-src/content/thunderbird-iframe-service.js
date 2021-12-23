@@ -184,8 +184,43 @@ if (typeof iframeService === "undefined") {
     }
 
     async function sendEmail(email, sendmode) {
-        await browser.mailmergep.sendMail(email, composeTabId, {
-            sendmode,
+        // XXX Blocked until https://bugzilla.mozilla.org/show_bug.cgi?id=1545930 is resolved.
+        // We create a new compose window, set the contents, and then use the send API to send it.
+        // That way we don't need to an experiments API.
+
+        // Create a compose window that more-or-less duplicates the active compose window
+        let previousDetails = await browser.compose.getComposeDetails(
+            composeTabId
+        );
+        // Needed because of https://bugzilla.mozilla.org/show_bug.cgi?id=1747408
+        if (previousDetails.isPlainText) {
+            delete previousDetails.body;
+        } else {
+            delete previousDetails.plainTextBody;
+        }
+        const { body, attachment, ...rest } = email;
+        Object.assign(previousDetails, rest);
+        if (previousDetails.isPlainText) {
+            previousDetails.plainTextBody = body;
+        } else {
+            previousDetails.body = body;
+        }
+        // Copy the attachments from the old message
+        const attachments = await Promise.all(
+            (
+                await browser.compose.listAttachments(composeTabId)
+            ).map(async (attachment) => ({
+                file: await attachment.getFile(),
+            }))
+        );
+        previousDetails.attachments = attachments;
+
+        // Duplicate the message in a new compose window and then send it.
+        const newWin = await browser.compose.beginNew(null, previousDetails);
+        // There are theoretically more send options, but https://bugzilla.mozilla.org/show_bug.cgi?id=1747456
+        // is the blocker.
+        await browser.compose.sendMessage(newWin.id, {
+            mode: sendmode === "now" ? "sendNow" : "sendLater",
         });
     }
 
