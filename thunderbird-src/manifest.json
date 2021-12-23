@@ -1,11 +1,11 @@
 {
     "name": "__MSG_extensionName__",
     "description": "__MSG_extensionDescription__",
-    "version": "2.3",
+    "version": "2.4",
     "applications": {
         "gecko": {
             "id": "mailmergep@example.net",
-            "strict_min_version": "78.0"
+            "strict_min_version": "91.0"
         }
     },
     "icons": {
@@ -19,7 +19,13 @@
         "scripts": ["content/background.js"]
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
-    "permissions": ["storage", "compose", "tabs", "accountsRead"],
+    "permissions": [
+        "storage",
+        "compose",
+        "compose.send",
+        "tabs",
+        "accountsRead"
+    ],
     "compose_action": {
         "default_title": "__MSG_extensionName__",
         "default_icon": {
@@ -31,15 +37,5 @@
         }
     },
     "default_locale": "en",
-    "experiment_apis": {
-        "mailmergep": {
-            "schema": "experiment_api/api.json",
-            "parent": {
-                "scopes": ["addon_parent"],
-                "paths": [["mailmergep"]],
-                "script": "experiment_api/api.js"
-            }
-        }
-    },
     "manifest_version": 2
 }

@@ -5,11 +5,11 @@ import { ClearableInput } from "./common.js";
 import { parseRange } from "../utils.js";
 
 function SettingsTab() {
-    const prefs = useStoreState(state => state.prefs);
-    const strings = useStoreState(state => state.locale.strings);
-    const updatePref = useStoreActions(actions => actions.prefs.updatePref);
+    const prefs = useStoreState((state) => state.prefs);
+    const strings = useStoreState((state) => state.locale.strings);
+    const updatePref = useStoreActions((actions) => actions.prefs.updatePref);
     function generatePrefUpdate(pref) {
-        return e => {
+        return (e) => {
             if (e.target) {
                 updatePref({ [pref]: e.target.value });
             } else {
@@ -34,7 +34,10 @@ function SettingsTab() {
                 onChange={generatePrefUpdate("sendmode")}
                 title={strings.sendModeDesc}
             >
+                {/*
+                // XXX Cannot be used until https://bugzilla.mozilla.org/show_bug.cgi?id=1747456 is fixed
                 <option value="draft">{strings.sendModeDraft}</option>
+                */}
                 <option value="now">{strings.sendModeNow}</option>
                 <option value="later">{strings.sendModeLater}</option>
             </select>
@@ -59,7 +62,7 @@ function SettingsTab() {
                 id="pref-range"
                 className={classNames({
                     invalid: !rangeValid,
-                    "settings-input": true
+                    "settings-input": true,
                 })}
                 onChange={generatePrefUpdate("range")}
                 placeholder="3,4,9-14"

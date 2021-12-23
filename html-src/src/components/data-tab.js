@@ -7,19 +7,19 @@ import { ClearableFileInput } from "./common.js";
 
 function DataTab() {
     const tableRef = useRef();
-    const strings = useStoreState(state => state.locale.strings);
-    const prefs = useStoreState(state => state.prefs);
-    const updatePref = useStoreActions(actions => actions.prefs.updatePref);
-    const data = useStoreState(state => state.data);
+    const strings = useStoreState((state) => state.locale.strings);
+    const prefs = useStoreState((state) => state.prefs);
+    const updatePref = useStoreActions((actions) => actions.prefs.updatePref);
+    const data = useStoreState((state) => state.data);
     const updateData = useStoreActions(
-        actions => actions.data.updateSpreadsheetData
+        (actions) => actions.data.updateSpreadsheetData
     );
     const updateSpreadsheetHasManuallyUpdated = useStoreActions(
-        actions => actions.data.updateSpreadsheetHasManuallyUpdated
+        (actions) => actions.data.updateSpreadsheetHasManuallyUpdated
     );
 
     const parseSpreadsheet = useStoreActions(
-        actions => actions.parseSpreadsheet
+        (actions) => actions.parseSpreadsheet
     );
 
     useEffect(() => {
@@ -64,11 +64,12 @@ function DataTab() {
             <div className="captioned-separator">{strings.data}</div>
             <div style={{ width: "100%" }}>
                 <HotTable
+                    licenseKey="non-commercial-and-evaluation"
                     ref={tableRef}
                     data={data.spreadsheetData}
                     afterChange={spreadsheetChanged}
                     settings={{
-                        rowHeaders: index => (index === 0 ? "Vars:" : index),
+                        rowHeaders: (index) => (index === 0 ? "Vars:" : index),
                         fixedRowsTop: 1,
                         stretchH: "last",
                         minSpareRows: 3,
@@ -77,7 +78,7 @@ function DataTab() {
                         cells: (row, col) => {
                             let cellProperties = {};
                             if (row === 0) {
-                                cellProperties.renderer = function(
+                                cellProperties.renderer = function (
                                     instance,
                                     td,
                                     row,
@@ -94,7 +95,7 @@ function DataTab() {
                                 };
                             }
                             return cellProperties;
-                        }
+                        },
                     }}
                     height="300"
                     width="100%"
