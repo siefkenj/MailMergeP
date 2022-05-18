@@ -1,6 +1,6 @@
 {
     "name": "thunderbird-mail-merge",
-    "version": "2.1.0",
+    "version": "2.5.0",
     "description": "A Mail Merge extension for Thunderbird",
     "homepage": ".",
     "main": "src/index.js",
@@ -11,6 +11,7 @@
         "font-awesome": "4.7.0",
         "handsontable": "10.0.0",
         "nunjucks": "3.2.2",
+        "prettier": "^2.6.2",
         "react": "16.12.0",
         "react-app-rewired": "2.1.5",
         "react-dom": "16.12.0",

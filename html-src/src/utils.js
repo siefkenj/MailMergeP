@@ -21,12 +21,40 @@ function parseSpreadsheet(data) {
         return [[]];
     }
 
-    // use xlsx.js to parse the spreadsheet data
-    let parsed = XLSX.read(data, { type: "array" });
-    let sheet = parsed.Sheets[parsed.SheetNames[0]];
-    let sheetArray = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    try {
+        // use xlsx.js to parse the spreadsheet data
+        let parsed = XLSX.read(data, {
+            type: "array",
+            dateNF: true,
+            cellDates: true,
+        });
+        let sheet = parsed.Sheets[parsed.SheetNames[0]];
+        let sheetArray = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-    return sheetArray;
+        return sheetArray;
+    } catch (e) {
+        console.warn("Error when parsing spreading; using fallback", e);
+    }
+    // CSV parsing may fail when trying to process date cells, so we fall
+    // back to not processing the date cells.
+    try {
+        let parsed = XLSX.read(data, {
+            type: "array",
+        });
+        let sheet = parsed.Sheets[parsed.SheetNames[0]];
+        let sheetArray = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        return sheetArray;
+    } catch (e) {
+        console.warn("Error when parsing spreading; no fallback available", e);
+    }
+
+    return [
+        ["!! Error parsing spreadsheet !!"],
+        [
+            "Try saving your spreadsheet in a different format (e.g. .xlsx or .ods)",
+        ],
+    ];
 }
 
 // Fill every item in template with data from spreadsheet
@@ -44,6 +72,12 @@ function fillTemplate(template, spreadsheet, method = "nunjucks") {
                 // skip over non-string (likely null) headers
                 if (typeof key !== "string") {
                     continue;
+                }
+                if (typeof val === "number") {
+                    val = String(val);
+                }
+                if (val instanceof Date) {
+                    val = val.toLocaleDateString();
                 }
                 // assume non-string values are just ""
                 if (typeof val !== "string") {
@@ -72,7 +106,7 @@ function fillTemplate(template, spreadsheet, method = "nunjucks") {
 function fillTemplateNunjucks(template, subsArray) {
     let ret = [];
     let compiled = {};
-    // If autoescaping is turned on, then emails with `<...>` will become `&lt;...&gt;`
+    // If auto-escaping is turned on, then emails with `<...>` will become `&lt;...&gt;`
     const env = nunjucks.configure({ autoescape: false });
 
     // pre-compile the template for efficiency
