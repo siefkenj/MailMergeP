@@ -22,7 +22,7 @@ function parseSpreadsheet(data) {
     }
 
     // use xlsx.js to parse the spreadsheet data
-    let parsed = XLSX.read(data, { type: "array" });
+    let parsed = XLSX.read(data, { type: "array", dateNF: true, cellDates: true });
     let sheet = parsed.Sheets[parsed.SheetNames[0]];
     let sheetArray = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
@@ -44,6 +44,12 @@ function fillTemplate(template, spreadsheet, method = "nunjucks") {
                 // skip over non-string (likely null) headers
                 if (typeof key !== "string") {
                     continue;
+                }
+                if (typeof val === "number") {
+                    val = String(val);
+                }
+                if (val instanceof Date) {
+                    val = val.toLocaleDateString();
                 }
                 // assume non-string values are just ""
                 if (typeof val !== "string") {
@@ -72,7 +78,7 @@ function fillTemplate(template, spreadsheet, method = "nunjucks") {
 function fillTemplateNunjucks(template, subsArray) {
     let ret = [];
     let compiled = {};
-    // If autoescaping is turned on, then emails with `<...>` will become `&lt;...&gt;`
+    // If auto-escaping is turned on, then emails with `<...>` will become `&lt;...&gt;`
     const env = nunjucks.configure({ autoescape: false });
 
     // pre-compile the template for efficiency
