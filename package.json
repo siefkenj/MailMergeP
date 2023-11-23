@@ -17,6 +17,7 @@
         "react-dom": "16.12.0",
         "react-localization": "1.0.15",
         "react-scripts": "^5.0.0",
+        "vite": "^5.0.2",
         "xlsx": "0.17.0"
     },
     "devDependencies": {

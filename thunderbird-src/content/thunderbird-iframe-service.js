@@ -1,8 +1,8 @@
+import { iframeService } from "./iframe-content/iframe-service.js";
 /*
  * provide a messaging api equivalent to what is supplied by Thunderbird when
  * running as an extension
  */
-"use strict";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
