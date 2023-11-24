@@ -2,13 +2,13 @@
  * provide a messaging api equivalent to what is supplied by Thunderbird when
  * running as an extension
  */
-"use strict";
+import { iframeService } from "./iframe-service.js";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
 }
 
-(function() {
+(function () {
     // Log a message to #processing-log
     function log(message) {
         let { type, direction, ...rest } = message;
@@ -56,10 +56,10 @@ if (typeof iframeService === "undefined") {
             range: "",
             parser: "nunjucks",
             fileName: "",
-            fileContents: []
+            fileContents: [],
         };
     }
-    
+
     function getPreferences() {
         let prefs = getDefaultPreferences();
         try {
@@ -85,7 +85,7 @@ if (typeof iframeService === "undefined") {
             replyTo: "",
             attachment: "",
             subject: "Error processing template; this is a default template",
-            body: "Hi {{name}}.\n\nPlease ask me about our special offer."
+            body: "Hi {{name}}.\n\nPlease ask me about our special offer.",
         };
 
         let textarea = document.querySelector("#template-textarea");
@@ -142,7 +142,7 @@ if (typeof iframeService === "undefined") {
             progress: "Progress:",
             status: "Status:",
             sending: "Sending...",
-            waiting: "Waiting..."
+            waiting: "Waiting...",
         };
     }
 
@@ -183,7 +183,7 @@ if (typeof iframeService === "undefined") {
         sendEmails,
         sendEmail,
         openUrl,
-        cancel
+        cancel,
     });
 })();
 

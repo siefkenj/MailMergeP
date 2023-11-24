@@ -7,5 +7,15 @@ import svgrPlugin from "vite-plugin-svgr";
 export default defineConfig({
     base: "./",
     plugins: [react(), viteTsconfigPaths(), svgrPlugin()],
-    build: { sourcemap: true, minify: false },
+    build: {
+        sourcemap: true,
+        minify: true,
+        rollupOptions: {
+            output: {
+                entryFileNames: `assets/[name].js`,
+                chunkFileNames: `assets/[name].js`,
+                assetFileNames: `assets/[name].[ext]`,
+            },
+        },
+    },
 });

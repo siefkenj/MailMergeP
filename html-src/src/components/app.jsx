@@ -5,7 +5,6 @@ import { DataTab } from "./data-tab";
 import { SettingsTab } from "./settings-tab";
 import { PreviewTab } from "./preview-tab";
 import { AboutTab } from "./about-tab";
-import "font-awesome/css/font-awesome.min.css";
 import { SendDialog } from "./send-dialog";
 
 export default function App() {

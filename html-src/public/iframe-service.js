@@ -2,9 +2,7 @@
  * provide a messaging api equivalent to what is supplied by Thunderbird when
  * running as an extension
  */
-"use strict";
-
-const iframeService = {
+export const iframeService = {
     iframe: null,
     log: function log(message) {
         console.log(message);
@@ -151,3 +149,5 @@ const iframeService = {
         }
     }
 };
+
+window.iframeService = iframeService;
