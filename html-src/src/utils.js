@@ -1,5 +1,5 @@
 import nunjucks from "nunjucks";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 
 function zip(a, b) {
     // If `a` has a blank slot (e.g. a == [1,,2]), then
