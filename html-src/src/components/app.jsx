@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useStoreActions, useStoreState } from "easy-peasy";
-import { TabStrip, Tab } from "./common.js";
-import { DataTab } from "./data-tab.js";
-import { SettingsTab } from "./settings-tab.js";
-import { PreviewTab } from "./preview-tab.js";
-import { AboutTab } from "./about-tab.js";
+import { TabStrip, Tab } from "./common";
+import { DataTab } from "./data-tab";
+import { SettingsTab } from "./settings-tab";
+import { PreviewTab } from "./preview-tab";
+import { AboutTab } from "./about-tab";
 import "font-awesome/css/font-awesome.min.css";
-import { SendDialog } from "./send-dialog.js";
+import { SendDialog } from "./send-dialog";
 
 export default function App() {
     const strings = useStoreState(state => state.locale.strings);

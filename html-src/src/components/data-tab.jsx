@@ -3,7 +3,7 @@ import { useStoreState, useStoreActions } from "easy-peasy";
 import { HotTable } from "@handsontable/react";
 import Handsontable from "handsontable";
 import "handsontable/dist/handsontable.full.css";
-import { ClearableFileInput } from "./common.js";
+import { ClearableFileInput } from "./common";
 
 function DataTab() {
     const tableRef = useRef();
