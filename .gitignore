@@ -2,4 +2,7 @@ node_modules
 html-src/node_modules
 addon
 html-src/build
+dist
 
+*.xpi
+MailMerge*.zip

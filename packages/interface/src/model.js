@@ -4,13 +4,13 @@
  */
 
 import { action, thunk } from "easy-peasy";
-import { messageParent } from "./service.js";
+import { messageParent } from "./service";
 import {
     fillTemplate,
     parseSpreadsheet,
     delay as delayPromise,
     formatTime
-} from "./utils.js";
+} from "./utils";
 
 export default {
     locale: {

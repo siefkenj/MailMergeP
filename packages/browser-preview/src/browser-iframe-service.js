@@ -2,13 +2,15 @@
  * provide a messaging api equivalent to what is supplied by Thunderbird when
  * running as an extension
  */
-"use strict";
+//import { iframeService } from "./iframe-service.js";
+import { iframeService } from "@mailmergep/iframe-service";
+//import interfaceHtml from "@mailmergep/interface/index.html?raw";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
 }
 
-(function() {
+(function () {
     // Log a message to #processing-log
     function log(message) {
         let { type, direction, ...rest } = message;
@@ -25,7 +27,7 @@ if (typeof iframeService === "undefined") {
         li.classList.add(direction);
         div1.classList.add("log-item");
 
-        // set it up so clicking on an item in the log with shrink or exapnd its contents
+        // set it up so clicking on an item in the log with shrink or expand its contents
         let hidden = false;
         function hideLogContents() {
             hidden = !hidden;
@@ -56,10 +58,10 @@ if (typeof iframeService === "undefined") {
             range: "",
             parser: "nunjucks",
             fileName: "",
-            fileContents: []
+            fileContents: [],
         };
     }
-    
+
     function getPreferences() {
         let prefs = getDefaultPreferences();
         try {
@@ -85,7 +87,7 @@ if (typeof iframeService === "undefined") {
             replyTo: "",
             attachment: "",
             subject: "Error processing template; this is a default template",
-            body: "Hi {{name}}.\n\nPlease ask me about our special offer."
+            body: "Hi {{name}}.\n\nPlease ask me about our special offer.",
         };
 
         let textarea = document.querySelector("#template-textarea");
@@ -142,7 +144,7 @@ if (typeof iframeService === "undefined") {
             progress: "Progress:",
             status: "Status:",
             sending: "Sending...",
-            waiting: "Waiting..."
+            waiting: "Waiting...",
         };
     }
 
@@ -183,10 +185,17 @@ if (typeof iframeService === "undefined") {
         sendEmails,
         sendEmail,
         openUrl,
-        cancel
+        cancel,
     });
 })();
 
 window.onload = () => {
+ //   const interfaceHtmlUrl = URL.createObjectURL(
+ //       new Blob([interfaceHtml], { type: "text/html" })
+ //   );
+
+ //   const iframe = window.document.getElementById("content-frame");
+ //   iframe.setAttribute("src", interfaceHtmlUrl);
+
     iframeService.init(window.document.getElementById("content-frame"));
 };

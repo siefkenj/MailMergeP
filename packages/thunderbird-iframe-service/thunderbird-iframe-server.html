@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="text/javascript" src="iframe-service.js"></script>
-        <script type="text/javascript" src="browser-iframe-service.js"></script>
+        <meta charset="utf-8"/>
+ <!--       <script type="text/javascript" src="iframe-content/iframe-service.js"></script> -->
+        <script type="module" src="./src/thunderbird-iframe-service.js"></script>
         <style>
             body {
                 background-color: white;
@@ -31,13 +32,16 @@
                 flex-direction: column;
                 border-right: 1px solid gray;
                 max-width: 50%;
+                /* Only show when debugging */
+                display: none;
             }
             #right {
-                background-color: #ddd;
+                background-color: #dfdfdf;
                 flex-grow: 2;
                 flex-basis: 0;
-                margin: 20px;
-                border: 1px dotted black;
+                margin: 0px;
+                overflow: hidden;
+
             }
             #template-textarea {
                 min-height: 200px;
@@ -94,7 +98,7 @@
                 cursor: pointer;
             }
         </style>
-        <title>Mail Merge P Testing Frame</title>
+        <title>Mail Merge P</title>
     </head>
     <body>
 <!--
@@ -127,7 +131,7 @@
                 <ul id="processing-log"></ul>
             </div>
             <div id="right">
-                <iframe id="content-frame" src="index.html"></iframe>
+                <iframe id="content-frame" src="interface/index.html"></iframe>
             </div>
         </div>
     </body>

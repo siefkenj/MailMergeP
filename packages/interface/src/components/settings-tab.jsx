@@ -1,8 +1,8 @@
 import React from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import classNames from "classnames";
-import { ClearableInput } from "./common.js";
-import { parseRange } from "../utils.js";
+import { ClearableInput } from "./common";
+import { parseRange } from "../utils";
 
 function SettingsTab() {
     const prefs = useStoreState((state) => state.prefs);

@@ -1,9 +1,13 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { StoreProvider, createStore } from "easy-peasy";
 
 import model from "./model";
 import App from "./components/app";
+
+import "./css/browser-style.css";
+import "./css/email-preview.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const store = createStore(model, { disableImmer: true });
 
@@ -16,4 +20,5 @@ function Root() {
 }
 
 const rootElement = document.getElementById("root");
-ReactDOM.render(<Root />, rootElement);
+
+ReactDOM.createRoot(rootElement).render(<Root />);

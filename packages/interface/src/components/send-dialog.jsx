@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { ProgressBar } from "./common.js";
+import { ProgressBar } from "./common";
 
 function SendDialog(props) {
     const { progress, total, current, time, status, abort } = useStoreState(
