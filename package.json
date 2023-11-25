@@ -17,7 +17,7 @@
         "bestzip": "^2.2.1",
         "classnames": "2.3.2",
         "easy-peasy": "3.3.0",
-        "handsontable": "10.0.0",
+        "handsontable": "13.1.0",
         "nunjucks": "3.2.4",
         "prettier": "^2.8.8",
         "react": "18.2.0",
