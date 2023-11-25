@@ -1,8 +1,15 @@
 {
-    "name": "thunderbird-mail-merge",
+    "name": "mailmergep",
     "version": "2.5.0",
     "description": "A Mail Merge extension for Thunderbird",
     "homepage": ".",
+    "private": "true",
+    "workspaces": [
+        "packages/iframe-service",
+        "packages/interface",
+        "packages/thunderbird-iframe-service",
+        "packages/thunderbird-extension"
+    ],
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.4.2",
         "@handsontable/react": "2.1.0",
@@ -18,17 +25,16 @@
         "react-localization": "1.0.19",
         "typescript": "^5.3.2",
         "vite": "^5.0.2",
+        "vite-plugin-dts": "^3.6.3",
+        "vite-plugin-singlefile": "^0.13.5",
         "vite-plugin-static-copy": "^1.0.0",
         "vite-plugin-svgr": "^4.2.0",
         "vite-tsconfig-paths": "^4.2.1",
         "xlsx": "0.18.5"
     },
     "scripts": {
-        "start": "cd html-src && react-scripts start",
-        "build": "cd html-src && react-app-rewired build",
-        "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject",
-        "build-addon": "rm -rf addon && cp -rL thunderbird-src addon && cd addon && rm -f content/iframe-content/static/js/*.map content/iframe-content/browser-iframe-service.* content/iframe-content/asset-manifest.json content/iframe-content/static/css/*.map && bestzip ../addon.zip *",
+        "build": "npm run build -ws",
+        "build-addon": "rm -rf addon && cp -rL packages/thunderbird-extension/dist addon && cd addon && bestzip ../addon.zip *",
         "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi"
     },
     "browserslist": [

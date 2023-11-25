@@ -1,0 +1,85 @@
+#preview-container {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 4px;
+    -moz-user-select: text;
+    user-select: text;
+}
+.to-header {
+    text-align: right;
+    padding-right: 0.5em;
+}
+.to-content {
+    font-family: monospace;
+    color: cadetblue;
+}
+#email-head {
+    margin-bottom: 0.25em;
+}
+#email-body {
+    background: white;
+    border: 1px solid black;
+    margin: 4px;
+}
+#email-subject {
+    padding: 4px;
+    margin-bottom: 0.15em;
+    font-weight: 600;
+}
+#email-content {
+    padding: 4px;
+    background: #f5f5f5;
+}
+
+.email-preview-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: auto;
+}
+.email-preview {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    overflow: hidden;
+}
+.email-preview-stats {
+    margin-bottom: 10px;
+    padding-left: 50px;
+}
+
+button.browser-style.email-preview-nav,
+button.browser-style.email-preview-nav:hover {
+    height: 100%;
+    border: none !important;
+}
+
+#send-dialog {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+#send-dialog .dialog-inner {
+    display: flex;
+    width: 100%;
+    background: #f5f5f5;
+    padding: 7px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.3);
+}
+#send-dialog .dialog-inner > div:first-child {
+    flex-grow: 1;
+    padding: 4px;
+    padding-right: 9px;
+}
+#send-dialog progress {
+    width: 100%;
+}

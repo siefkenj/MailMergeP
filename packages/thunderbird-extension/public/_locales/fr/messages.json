@@ -1,0 +1,57 @@
+{
+    "extensionDescription": {
+        "message": "Envoyer des messages personnalisés en masse"
+    },
+    "extensionName": {
+        "message": "Mail Merge P"
+    },
+    "next": { "message": "Suivant" },
+    "previous": { "message": "Précédent" },
+    "cancel": { "message": "Annuler" },
+    "send": { "message": "Envoyer" },
+    "data": { "message": "Données" },
+    "dataInfo": {
+        "message": "Ouvrir une feuille de calcul (.csv, .xlsx, .ods, etc.) ou copier/coller des données dans la grille ci-dessous."
+    },
+    "openAFile": { "message": "Ouvrir un fichier…" },
+    "settings": { "message": "Paramètres" },
+    "preview": { "message": "Aperçu" },
+    "sendMode": { "message": "Mode d'envoi:" },
+    "sendModeDesc": {
+        "message": "Définissez le mode de livraison des messages. Envoyer plus tard laissera les messages dans le dossier Brouillons."
+    },
+    "sendModeNow": { "message": "Envoyer maintenant" },
+    "sendModeLater": { "message": "Envoyer plus tard" },
+    "sendModeDraft": { "message": "Enregistrer en brouillon" },
+    "messageDelay": { "message": "Délai entre les messages:" },
+    "messageDelayDesc": {
+        "message": "Délai, en secondes, entre l'envoi de chaques messages."
+    },
+    "sendMessageRange": { "message": "Plage d'envoi de message:" },
+    "sendMessageRangeDesc": {
+        "message": "Envoyez uniquement des messages spécifiques comme spécifié par cette plage."
+    },
+    "parser": { "message": "Analyseur:" },
+    "parserDesc": {
+        "message": "Sélectionnez l'analyseur qui sera utilisé pour remplacer les variables dans le modèle d'e-mail."
+    },
+    "parserLegacy": { "message": "Hérité" },
+    "previewEmpty": {
+        "message": "Pas d'email à afficher. Essayer de charger des données sur l'onglet {0}."
+    },
+    "previewPreviewing": { "message": "Aperçu {0} de {1}" },
+    "about": { "message": "A propos" },
+    "developers": { "message": "Développeurs" },
+    "support": { "message": "Support" },
+    "license": { "message": "Licence" },
+    "donate": { "message": "Don" },
+    "euro": { "message": "{0} €" },
+    "dollar": { "message": "$ {0}" },
+    "current": { "message": "Actuel:" },
+    "total": { "message": "Total:" },
+    "time": { "message": "Temps:" },
+    "progress": { "message": "Progression:" },
+    "status": { "message": "Statut:" },
+    "sending": { "message": "Envoi…" },
+    "waiting": { "message": "En attente…" }
+}

@@ -1,0 +1,12 @@
+{
+    "name": "thunderbird-extension",
+    "version": "1.0.0",
+    "description": "The preview UI",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build"
+    },
+    "author": "",
+    "license": "LGPL-3.0-or-later"
+}

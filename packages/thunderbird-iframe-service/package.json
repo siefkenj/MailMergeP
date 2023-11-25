@@ -1,0 +1,18 @@
+{
+    "name": "@mailmergep/thunderbird-iframe-service",
+    "version": "1.0.0",
+    "description": "The iframe service for the thunderbird extension",
+    "private": true,
+    "type": "module",
+    "exports": {
+        "./*": {
+            "import": "./dist/*",
+            "require": "./dist/*"
+        }
+    },
+    "scripts": {
+        "build": "vite build"
+    },
+    "author": "",
+    "license": "LGPL-3.0-or-later"
+}

@@ -1,0 +1,15 @@
+{
+    "name": "@mailmergep/interface",
+    "version": "1.0.0",
+    "description": "The preview UI",
+    "exports": {
+        "./*": "./dist/*"
+    },
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build"
+    },
+    "author": "",
+    "license": "LGPL-3.0-or-later"
+}

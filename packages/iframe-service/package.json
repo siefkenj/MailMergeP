@@ -1,0 +1,13 @@
+{
+    "name": "@mailmergep/iframe-service",
+    "version": "1.0.0",
+    "description": "Abstracted service to let the UI run in an iframe",
+    "private": true,
+    "type": "module",
+    "main": "dist/iframe-service.js",
+    "scripts": {
+        "build": "vite build"
+    },
+    "author": "",
+    "license": "LGPL-3.0-or-later"
+}
