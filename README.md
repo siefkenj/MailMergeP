@@ -29,14 +29,26 @@ Mail Merge P is based off of Mail Merge by Alexander Bergmann https://addons.thu
 
 ## Building
 
-Build the entire extension with
+Build the entire extension, first run
 
-    npm install
-    npm run build
-    npm run build-addon
-    npm run package-addon
+```sh
+npm install
+```
+
+then either
+
+```sh
+npm run build-and-package
+```
+
+```sh
+npm run build
+npm run build-addon
+npm run package-addon
+```
 
 The extension will be located in the current directory and called `mailmergep@example.net-latest.xpi`.
+
 
 ## Development
 
