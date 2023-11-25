@@ -35,7 +35,8 @@
     "scripts": {
         "build": "npm run build -ws",
         "build-addon": "rm -rf addon && cp -rL packages/thunderbird-extension/dist addon && cd addon && bestzip ../addon.zip *",
-        "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi"
+        "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi",
+        "build-and-package": "npm run build && npm run build-addon && echo \"\" && echo BUNDLING $(cat addon/manifest.json |grep '\"version\"') && npm run package-addon"
     },
     "browserslist": [
         "firefox >= 91"
