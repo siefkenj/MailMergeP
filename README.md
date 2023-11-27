@@ -115,3 +115,8 @@ tab and click the gear icon and enable "Debug Mode". Then you can open a console
 in the context of mailmergep and the `browser.*` apis will be available. To manipulate
 a particular tab, you can use `browser.tabs.query({})` to get a list of all tabs and
 use the `id` of the tab you want.
+
+### Packaging
+
+Note that a version bump must take place in `packages/thunderbird-extension/public/manifest.json`. After that, run `npm run build-and-package`.
+The resulting `mailmergep@example.net-latest.xpi` is a bundle of the extension.
