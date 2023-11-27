@@ -12,19 +12,20 @@ class MailmergeWindow {
 
         // If we get a message, it means that the window has finished loading.
         // In that case, we are free to send messages to the window
-        browser.runtime.onMessage.addListener((message) => {
+        browser.runtime.onMessage.addListener(async (message) => {
             log("background.js got", message);
             if ((message || {}).status === "loaded") {
-                this._onWindowOpened();
+                await this._onWindowOpened();
             }
         });
     }
-    _onWindowOpened() {
+    async _onWindowOpened() {
         this.isReady = true;
-        for (const message of this._messageQueue) {
-            this.sendMessage(message);
-        }
+        const messagePromises = this._messageQueue.map((message) =>
+            this.sendMessage(message)
+        );
         this._messageQueue.length = 0;
+        await Promise.all(messagePromises);
     }
     async ensureWindowOpened() {
         let ret = null;
@@ -76,7 +77,7 @@ const mailmergeWindow = new MailmergeWindow();
 // Listen for when the "MailMerge P" button is pressed in the compose
 // window.
 browser.composeAction.onClicked.addListener(async (tabInfo) => {
-    mailmergeWindow.sendMessage({ activeTabId: tabInfo.id });
+    await mailmergeWindow.sendMessage({ activeTabId: tabInfo.id });
     await mailmergeWindow.ensureWindowOpened();
 });
 
