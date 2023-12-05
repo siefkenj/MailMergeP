@@ -20,16 +20,15 @@ function AboutTab() {
             <div className="captioned-separator">{strings.developers}</div>
             <ul>
                 <li>Jason Siefken</li>
-                <li>Alexander Bergmann</li>
             </ul>
             <div className="captioned-separator">{strings.support}</div>
             <ul>
                 <li>
                     <a
-                        href="https://github.com/siefkenj/MailMerge"
+                        href="https://github.com/siefkenj/MailMergeP"
                         onClick={linkClick}
                     >
-                        https://github.com/siefkenj/MailMerge
+                        https://github.com/siefkenj/MailMergeP
                     </a>
                 </li>
             </ul>
@@ -41,61 +40,6 @@ function AboutTab() {
                         onClick={linkClick}
                     >
                         GNU General Public License, Version 3.0
-                    </a>
-                </li>
-            </ul>
-            <div className="captioned-separator">{strings.donate}</div>
-            <ul>
-                <li>
-                    <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge+P&amp;amount=5&amp;currency_code=EUR"
-                        onClick={linkClick}
-                    >
-                        {formatString(strings.euro, 5)}
-                    </a>
-                    <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge+P&amp;amount=10&amp;currency_code=EUR"
-                        onClick={linkClick}
-                    >
-                        {formatString(strings.euro, 10)}
-                    </a>
-                    <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge+P&amp;amount=15&amp;currency_code=EUR"
-                        onClick={linkClick}
-                    >
-                        {formatString(strings.euro, 15)}
-                    </a>
-                    <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge+P&amp;amount=25&amp;currency_code=EUR"
-                        onClick={linkClick}
-                    >
-                        {formatString(strings.euro, 25)}
-                    </a>
-                </li>
-                <li>
-                    <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge+P&amp;amount=5&amp;currency_code=USD"
-                        onClick={linkClick}
-                    >
-                        {formatString(strings.dollar, 5)}
-                    </a>
-                    <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge+P&amp;amount=10&amp;currency_code=USD"
-                        onClick={linkClick}
-                    >
-                        {formatString(strings.dollar, 10)}
-                    </a>
-                    <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge+P&amp;amount=15&amp;currency_code=USD"
-                        onClick={linkClick}
-                    >
-                        {formatString(strings.dollar, 15)}
-                    </a>
-                    <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=myaddons@gmx.de&amp;lc=US&amp;item_name=Mail+Merge+P&amp;amount=25&amp;currency_code=USD"
-                        onClick={linkClick}
-                    >
-                        {formatString(strings.dollar, 25)}
                     </a>
                 </li>
             </ul>
