@@ -6,33 +6,28 @@ import { SettingsTab } from "./settings-tab";
 import { PreviewTab } from "./preview-tab";
 import { AboutTab } from "./about-tab";
 import { SendDialog } from "./send-dialog";
+import icon from "../../../thunderbird-extension/public/skin/icon64.png";
 
 export default function App() {
-    const strings = useStoreState(state => state.locale.strings);
+    const strings = useStoreState((state) => state.locale.strings);
 
-    const initialise = useStoreActions(actions => actions.initialise);
+    const initialise = useStoreActions((actions) => actions.initialise);
     useEffect(() => {
         initialise();
     }, [initialise]);
     const maxTab = 2;
-    const nextTab = useStoreActions(actions => actions.tabs.nextTab);
-    const prevTab = useStoreActions(actions => actions.tabs.prevTab);
-    const currTab = useStoreState(state => state.tabs.currTab);
-    const setTab = useStoreActions(actions => actions.tabs.setTab);
-    const cancel = useStoreActions(actions => actions.cancel);
-    const sendEmails = useStoreActions(actions => actions.sendEmails);
+    const nextTab = useStoreActions((actions) => actions.tabs.nextTab);
+    const prevTab = useStoreActions((actions) => actions.tabs.prevTab);
+    const currTab = useStoreState((state) => state.tabs.currTab);
+    const setTab = useStoreActions((actions) => actions.tabs.setTab);
+    const cancel = useStoreActions((actions) => actions.cancel);
+    const sendEmails = useStoreActions((actions) => actions.sendEmails);
 
     return (
         <>
             <header className="panel-section panel-section-header">
                 <div className="icon-section-header">
-                    <i
-                        className="fas fa-mail-bulk"
-                        style={{
-                            fontSize: "24pt",
-                            color: "rgba(97, 181, 255, 0.75)"
-                        }}
-                    />
+                    <img className="mailmergep-icon" src={icon} alt="Mail Merge P Icon" />
                 </div>
                 <div className="text-section-header">Mail Merge</div>
             </header>
@@ -44,8 +39,7 @@ export default function App() {
                         </>
                     }
                 >
-
-                    <DataTab /> 
+                    <DataTab />
                 </Tab>
                 <Tab
                     label={

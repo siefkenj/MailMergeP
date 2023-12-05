@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/siefkenj/MailMerge.svg?branch=master)](https://travis-ci.com/siefkenj/MailMerge)
+![Mail Merge P Icon](https://raw.githubusercontent.com/siefkenj/MailMergeP/master/packages/thunderbird-extension/public/skin/icon64.png)
 
 ## Mail Merge P
 
