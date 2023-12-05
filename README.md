@@ -1,4 +1,6 @@
-![Mail Merge P Icon](https://raw.githubusercontent.com/siefkenj/MailMergeP/master/packages/thunderbird-extension/public/skin/icon64.png)
+<p align="center">
+    <img src="https://raw.githubusercontent.com/siefkenj/MailMergeP/master/packages/thunderbird-extension/public/skin/icon64.png">
+</p>
 
 ## Mail Merge P
 
