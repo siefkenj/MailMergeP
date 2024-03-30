@@ -13,6 +13,9 @@
     "dataInfo": {
         "message": "Ouvrir une feuille de calcul (.csv, .xlsx, .ods, etc.) ou copier/coller des données dans la grille ci-dessous."
     },
+    "dataHeaderWarning": {
+        "message": "La première ligne des données agit comme des clés pour votre modèle d'e-mail. Les clés doivent être des mots simples sans espaces ni caractères spéciaux."
+    },
     "openAFile": { "message": "Ouvrir un fichier…" },
     "settings": { "message": "Paramètres" },
     "preview": { "message": "Aperçu" },

@@ -5,6 +5,8 @@ import Handsontable from "handsontable";
 import "handsontable/dist/handsontable.full.css";
 import { ClearableFileInput } from "./common";
 
+const isLetterRegex = /[A-Za-z]/gu;
+
 function DataTab() {
     const tableRef = useRef();
     const strings = useStoreState((state) => state.locale.strings);
@@ -50,6 +52,10 @@ function DataTab() {
         updateSpreadsheetHasManuallyUpdated(true);
     }
 
+    const hasNonLetterInFirstRow = data.spreadsheetData[0].some(
+        (w) => !isLetterRegex.test(w)
+    );
+
     return (
         <div style={{ width: "100%" }}>
             <p>{strings.dataInfo}</p>
@@ -62,6 +68,12 @@ function DataTab() {
                 />
             </div>
             <div className="captioned-separator">{strings.data}</div>
+            {hasNonLetterInFirstRow && (
+                <div className="warning">
+                    <i className="fas fa-warning fa-fw" />{" "}
+                    {strings.dataHeaderWarning}
+                </div>
+            )}
             <div style={{ width: "100%" }}>
                 <HotTable
                     licenseKey="non-commercial-and-evaluation"
