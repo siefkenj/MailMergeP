@@ -35,6 +35,19 @@ function parseSpreadsheet(data) {
     } catch (e) {
         console.warn("Error when parsing spreading; using fallback", e);
     }
+    // CSV parsing may fail for different file encodings. Assume that the encoding is UTF-8
+    // and try to parse the data again.
+    try {
+        let parsedStr = new TextDecoder("utf-8").decode(new Uint8Array(data));
+        let parsed = XLSX.read(parsedStr, { type: "string" });
+        let sheet = parsed.Sheets[parsed.SheetNames[0]];
+        let sheetArray = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        return sheetArray;
+    } catch (e) {
+        console.warn("Error when parsing spreading as unicode", e);
+    }
+
     // CSV parsing may fail when trying to process date cells, so we fall
     // back to not processing the date cells.
     try {

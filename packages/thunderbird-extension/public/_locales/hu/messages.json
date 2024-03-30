@@ -13,6 +13,9 @@
     "dataInfo": {
         "message": "Nyissa meg a táblázatfájlt (fájlkiterjesztés: csv, xlsx, ods, stb.) az adatok másolásához és beillesztéséhez az alábbi táblázatba."
     },
+    "dataHeaderWarning": {
+        "message": "Az adatok első sora kulcsként szolgál az e-mail sablonhoz. A kulcsoknak egyszerű szavaknak kell lenniük szóközök vagy speciális karakterek nélkül."
+    },
     "openAFile": { "message": "Fájl megnyitása…" },
     "settings": { "message": "Beállítások" },
     "preview": { "message": "Előnézet" },

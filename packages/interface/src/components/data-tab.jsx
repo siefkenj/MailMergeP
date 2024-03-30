@@ -5,6 +5,8 @@ import Handsontable from "handsontable";
 import "handsontable/dist/handsontable.full.css";
 import { ClearableFileInput } from "./common";
 
+const isLetterRegex = /^[A-Za-z0-9]*$/;
+
 function DataTab() {
     const tableRef = useRef();
     const strings = useStoreState((state) => state.locale.strings);
@@ -50,6 +52,14 @@ function DataTab() {
         updateSpreadsheetHasManuallyUpdated(true);
     }
 
+    const hasNonLetterInFirstRow = data.spreadsheetData[0].some(
+        // If it contains a non-letter and is not whitespace, we want to warn
+        (w) =>
+            typeof w === "string" && !isLetterRegex.test(w) && w.trim() !== ""
+    );
+
+    console.log({ hasNonLetterInFirstRow, firstRow: data.spreadsheetData[0] });
+
     return (
         <div style={{ width: "100%" }}>
             <p>{strings.dataInfo}</p>
@@ -62,6 +72,13 @@ function DataTab() {
                 />
             </div>
             <div className="captioned-separator">{strings.data}</div>
+            {hasNonLetterInFirstRow && (
+                <div className="warning">
+                    <i className="fas fa-warning fa-fw" />{" "}
+                    {strings.dataHeaderWarning ||
+                        'Items in the "Vars" header row must be single words with no special characters.'}
+                </div>
+            )}
             <div style={{ width: "100%" }}>
                 <HotTable
                     licenseKey="non-commercial-and-evaluation"

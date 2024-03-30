@@ -156,6 +156,7 @@ try {
                 "data",
                 "dataInfo",
                 "openAFile",
+                "dataHeaderWarning",
                 "settings",
                 "preview",
                 "sendMode",

@@ -110,6 +110,8 @@ if (typeof iframeService === "undefined") {
             data: "Data",
             dataInfo:
                 "Open a spreadsheet file (.csv, .xlsx, .ods, etc.) or copy-and-paste data into the spreadsheet below.",
+            dataHeaderWarning:
+                "The first row of the data act as keys for your email template. The keys must be single words without spaces or special characters.",
             openAFile: "Open a file...",
             settings: "Settings",
             preview: "Preview",
@@ -190,12 +192,12 @@ if (typeof iframeService === "undefined") {
 })();
 
 window.onload = () => {
- //   const interfaceHtmlUrl = URL.createObjectURL(
- //       new Blob([interfaceHtml], { type: "text/html" })
- //   );
+    //   const interfaceHtmlUrl = URL.createObjectURL(
+    //       new Blob([interfaceHtml], { type: "text/html" })
+    //   );
 
- //   const iframe = window.document.getElementById("content-frame");
- //   iframe.setAttribute("src", interfaceHtmlUrl);
+    //   const iframe = window.document.getElementById("content-frame");
+    //   iframe.setAttribute("src", interfaceHtmlUrl);
 
     iframeService.init(window.document.getElementById("content-frame"));
 };

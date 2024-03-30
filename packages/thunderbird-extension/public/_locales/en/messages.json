@@ -13,6 +13,9 @@
     "dataInfo": {
         "message": "Open a spreadsheet file (.csv, .xlsx, .ods, etc.) or copy-and-paste data into the spreadsheet below."
     },
+    "dataHeaderWarning": {
+        "message": "The first row of the data act as keys for your email template. The keys must be single words without spaces or special characters."
+    },
     "openAFile": { "message": "Open a file…" },
     "settings": { "message": "Settings" },
     "preview": { "message": "Preview" },
