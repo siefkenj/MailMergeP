@@ -58,8 +58,6 @@ function DataTab() {
             typeof w === "string" && !isLetterRegex.test(w) && w.trim() !== ""
     );
 
-    console.log({ hasNonLetterInFirstRow, firstRow: data.spreadsheetData[0] });
-
     return (
         <div style={{ width: "100%" }}>
             <p>{strings.dataInfo}</p>
