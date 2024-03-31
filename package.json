@@ -18,6 +18,7 @@
         "classnames": "2.5.1",
         "easy-peasy": "3.3.0",
         "handsontable": "10.0.0",
+        "jschardet": "^3.1.2",
         "nunjucks": "3.2.4",
         "react": "18.2.0",
         "react-dom": "18.2.0",

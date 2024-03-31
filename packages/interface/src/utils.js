@@ -1,5 +1,6 @@
 import nunjucks from "nunjucks";
 import * as XLSX from "xlsx";
+import jsCharDet from "jschardet";
 
 function zip(a, b) {
     // If `a` has a blank slot (e.g. a == [1,,2]), then
@@ -35,10 +36,22 @@ function parseSpreadsheet(data) {
     } catch (e) {
         console.warn("Error when parsing spreading; using fallback", e);
     }
-    // CSV parsing may fail for different file encodings. Assume that the encoding is UTF-8
-    // and try to parse the data again.
+    // CSV parsing may fail for different file encodings.
+    // Use jsCharDet to attempt to detect the encoding and try to parse the data again.
     try {
-        let parsedStr = new TextDecoder("utf-8").decode(new Uint8Array(data));
+        const dataArray = new Uint8Array(data);
+        const rawString = String.fromCharCode.apply(null, dataArray);
+        const detected = jsCharDet.detect(rawString);
+        const targetEncoding =
+            (detected.confidence > 0.9 && detected.encoding) || "utf-8";
+        console.log(
+            "Detected encoding",
+            detected,
+            "Trying encoding",
+            targetEncoding
+        );
+
+        let parsedStr = new TextDecoder(targetEncoding).decode(dataArray);
         let parsed = XLSX.read(parsedStr, { type: "string" });
         let sheet = parsed.Sheets[parsed.SheetNames[0]];
         let sheetArray = XLSX.utils.sheet_to_json(sheet, { header: 1 });
