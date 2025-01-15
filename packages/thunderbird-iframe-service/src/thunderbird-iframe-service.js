@@ -63,7 +63,8 @@ try {
                 return "";
             }
 
-            return identity.email;
+            const sender = identity.name ? `${identity.name} <${identity.email}>` : identity.email;
+            return sender;
         }
 
         /*
