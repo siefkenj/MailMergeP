@@ -24,7 +24,7 @@ function parseSpreadsheet(data) {
 
     try {
         // use xlsx.js to parse the spreadsheet data
-        let parsed = XLSX.read(data, {
+        let parsed = XLSX.read(data.slice(), {
             type: "array",
             dateNF: true,
             cellDates: true,
