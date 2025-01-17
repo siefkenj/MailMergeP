@@ -98,7 +98,7 @@ export default {
     parseSpreadsheet: thunk(
         async (actions, payload, { dispatch, getState }) => {
             // presuming raw data has been loaded into .prefs,
-            // prase with XLSX.js
+            // parse with XLSX.js
             const state = getState();
             const { fileContents } = state.prefs;
 
