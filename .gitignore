@@ -3,6 +3,7 @@ html-src/node_modules
 addon
 html-src/build
 dist
+launch.json
 
 *.xpi
 MailMerge*.zip
