@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { HotTable } from "@handsontable/react";
+import { HotTable } from "@handsontable/react-wrapper";
 import Handsontable from "handsontable";
 import "handsontable/dist/handsontable.full.css";
 import { ClearableFileInput } from "./common";
@@ -40,9 +40,9 @@ function DataTab() {
         updateSpreadsheetHasManuallyUpdated(false);
     }
 
-    function spreadsheetChanged(changes, source) {
+    function spreadsheetChanged(changes) {
         // Don't get stuck in a loop of loading and saving data!
-        if (source === "loadData") {
+        if (changes === null) {
             return;
         }
         const sheetArray = tableRef.current.hotInstance.getData();
@@ -83,37 +83,35 @@ function DataTab() {
                     ref={tableRef}
                     data={data.spreadsheetData}
                     afterChange={spreadsheetChanged}
-                    settings={{
-                        rowHeaders: (index) => (index === 0 ? "Vars:" : index),
-                        fixedRowsTop: 1,
-                        stretchH: "last",
-                        minSpareRows: 3,
-                        minSpareCols: 1,
-                        minCols: 5,
-                        cells: (row, col) => {
-                            let cellProperties = {};
-                            if (row === 0) {
-                                cellProperties.renderer = function (
-                                    instance,
-                                    td,
-                                    row,
-                                    col,
-                                    prop,
-                                    value,
-                                    cellProperties
-                                ) {
-                                    Handsontable.renderers.TextRenderer.apply(
-                                        this,
-                                        arguments
-                                    );
-                                    td.className += " spreadsheet-vars-row";
-                                };
-                            }
-                            return cellProperties;
-                        },
+                    rowHeaders={(index) => (index === 0 ? "Vars:" : index)}
+                    fixedRowsTop={1}
+                    stretchH={"last"}
+                    minSpareRows={3}
+                    minSpareCols={1}
+                    minCols={5}
+                    cells= {(row, col) => {
+                        let cellProperties = {};
+                        if (row === 0) {
+                            cellProperties.renderer = function (
+                                instance,
+                                td,
+                                row,
+                                col,
+                                prop,
+                                value,
+                                cellProperties
+                            ) {
+                                Handsontable.renderers.TextRenderer.apply(
+                                    this,
+                                    arguments
+                                );
+                                td.className += " spreadsheet-vars-row";
+                            };
+                        }
+                        return cellProperties;
                     }}
-                    height="300"
-                    width="100%"
+                    height={300}
+                    width={"100%"}
                 />
             </div>
         </div>
