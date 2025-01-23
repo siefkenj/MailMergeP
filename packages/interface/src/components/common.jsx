@@ -2,7 +2,7 @@
  * Common interface components
  */
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import classNames from "classnames";
 
 function TabStrip({ children, currTab, setTab }) {
@@ -56,14 +56,26 @@ function Tab({ children, selected, onclick }) {
 
 function ClearableInput(props) {
     let { value, onChange, className, ...otherProps } = props;
+    const [localValue, setLocalValue] = useState(value);
     onChange = onChange || function() {};
     const inputRef = useRef();
 
     function clearClicked() {
+        setLocalValue("")
         onChange("");
         inputRef.current.focus();
     }
     function inputChangeEvent(e) {
+        // Only allow numbers, hyphen, comma and period
+        const re = /^[\d-,.]+$/;
+
+        // Update local state if value is blank or matches the regex
+        if (e.target.value === '' || re.test(e.target.value)) {
+           setLocalValue(e.target.value);
+        }
+    }
+    // Update global state when input loses focus
+    function inputBlurEvent(e) {
         onChange(e.target.value);
     }
 
@@ -72,12 +84,13 @@ function ClearableInput(props) {
             <input
                 className={className + " form-control"}
                 type="text"
-                value={value}
+                value={localValue}
                 onChange={inputChangeEvent}
+                onBlur={inputBlurEvent}
                 ref={inputRef}
                 {...otherProps}
             />
-            {value && (
+            {localValue && (
                 <span className="form-control-feedback" onClick={clearClicked}>
                     <i className="fas fa-times-circle" />
                 </span>
