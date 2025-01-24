@@ -56,37 +56,32 @@ function Tab({ children, selected, onclick }) {
 
 function ClearableInput(props) {
     let { value, onChange, className, ...otherProps } = props;
-    const [localValue, setLocalValue] = useState(value);
     onChange = onChange || function() {};
     const inputRef = useRef();
+
+    // Use local state to avoid cursor jumping to end of input on changes
+    const [localValue, setLocalValue] = useState(value);
 
     function clearClicked() {
         setLocalValue("")
         onChange("");
         inputRef.current.focus();
     }
-    function inputChangeEvent(e) {
-        // Only allow numbers, hyphen, comma and period
-        const re = /^[\d-,.]+$/;
 
-        // Update local state if value is blank or matches the regex
-        if (e.target.value === '' || re.test(e.target.value)) {
-           setLocalValue(e.target.value);
-        }
+    function onChangeLocal(e) {
+        const value = e.target ? e.target.value : e;
+        setLocalValue(value);
     }
-    // Update global state when input loses focus
-    function inputBlurEvent(e) {
-        onChange(e.target.value);
-    }
-
+    
     return (
         <div className="browser-style form-group">
             <input
                 className={className + " form-control"}
                 type="text"
                 value={localValue}
-                onChange={inputChangeEvent}
-                onBlur={inputBlurEvent}
+                onChange={onChangeLocal}
+                // Update global state when input loses focus
+                onBlur={onChange}
                 ref={inputRef}
                 {...otherProps}
             />
