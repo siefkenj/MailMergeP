@@ -6,7 +6,7 @@ import React, { useRef } from "react";
 import classNames from "classnames";
 
 function TabStrip({ children, currTab, setTab }) {
-    // make a tabstrip consisting of children with a tab spacer inbtween
+    // make a tabstrip consisting of children with a tab spacer inbetween
     // connect a click listener to each <Tab />
     let tabstrip = [];
     let tabcontents = null;

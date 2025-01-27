@@ -20,14 +20,6 @@ function DataTab() {
         (actions) => actions.data.updateSpreadsheetHasManuallyUpdated
     );
 
-    const parseSpreadsheet = useStoreActions(
-        (actions) => actions.parseSpreadsheet
-    );
-
-    useEffect(() => {
-        parseSpreadsheet();
-    }, [prefs.fileName, parseSpreadsheet]);
-
     async function fileChanged({ name, data }) {
         name = name || "";
         data = data || [];

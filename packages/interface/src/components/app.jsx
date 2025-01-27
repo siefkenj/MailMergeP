@@ -23,6 +23,14 @@ export default function App() {
     const cancel = useStoreActions((actions) => actions.cancel);
     const sendEmails = useStoreActions((actions) => actions.sendEmails);
 
+    const prefs = useStoreState((state) => state.prefs);
+    const parseSpreadsheet = useStoreActions(
+        (actions) => actions.parseSpreadsheet
+    );
+    useEffect(() => {
+        parseSpreadsheet();
+    }, [prefs.fileName, parseSpreadsheet]);
+
     return (
         <>
             <header className="panel-section panel-section-header">
