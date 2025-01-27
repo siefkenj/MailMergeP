@@ -2,11 +2,11 @@
  * Common interface components
  */
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import classNames from "classnames";
 
 function TabStrip({ children, currTab, setTab }) {
-    // make a tabstrip consisting of children with a tab spacer inbtween
+    // make a tabstrip consisting of children with a tab spacer inbetween
     // connect a click listener to each <Tab />
     let tabstrip = [];
     let tabcontents = null;
@@ -59,25 +59,33 @@ function ClearableInput(props) {
     onChange = onChange || function() {};
     const inputRef = useRef();
 
+    // Use local state to avoid cursor jumping to end of input on changes
+    const [localValue, setLocalValue] = useState(value);
+
     function clearClicked() {
+        setLocalValue("")
         onChange("");
         inputRef.current.focus();
     }
-    function inputChangeEvent(e) {
-        onChange(e.target.value);
-    }
 
+    function onChangeLocal(e) {
+        const value = e.target ? e.target.value : e;
+        setLocalValue(value);
+    }
+    
     return (
         <div className="browser-style form-group">
             <input
                 className={className + " form-control"}
                 type="text"
-                value={value}
-                onChange={inputChangeEvent}
+                value={localValue}
+                onChange={onChangeLocal}
+                // Update global state when input loses focus
+                onBlur={onChange}
                 ref={inputRef}
                 {...otherProps}
             />
-            {value && (
+            {localValue && (
                 <span className="form-control-feedback" onClick={clearClicked}>
                     <i className="fas fa-times-circle" />
                 </span>
