@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import classNames from "classnames";
 import { ClearableInput } from "./common";
@@ -17,6 +17,14 @@ function SettingsTab() {
             }
         };
     }
+
+    // Use local state for delay value to avoid cursor jumping to end of input on changes
+    const [delayValue, setDelayValue] = useState(prefs.delay);
+    function onChangeDelayInput(e) {
+        const value = e.target ? e.target.value : e;
+        setDelayValue(value);
+    }
+
     // a range is invalid if it is non-empty and parseRange parses it
     // to an empty array
     const rangeValid =
@@ -48,8 +56,10 @@ function SettingsTab() {
             <input
                 id="pref-delay"
                 type="number"
-                value={prefs.delay}
-                onChange={generatePrefUpdate("delay")}
+                value={delayValue}
+                onChange={onChangeDelayInput}
+                // Update global state when delay input loses focus
+                onBlur={generatePrefUpdate("delay")}
                 className="browser-style settings-input"
                 title={strings.messageDelayDesc}
             />
