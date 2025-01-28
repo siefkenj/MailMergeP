@@ -29,7 +29,8 @@
         "vite-plugin-singlefile": "^2.1.0",
         "vite-plugin-static-copy": "^2.2.0",
         "vite-plugin-svgr": "^4.3.0",
-        "vite-tsconfig-paths": "^5.1.4"
+        "vite-tsconfig-paths": "^5.1.4",
+        "xlsx": "file:vendor/xlsx-0.20.3.tgz"
     },
     "scripts": {
         "build": "npm run build -ws",
