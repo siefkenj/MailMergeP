@@ -130,6 +130,9 @@ function ClearableFileInput(props) {
         //setFilename(file.name);
         let dat = await readFile(file);
         dat = new Uint8Array(dat);
+        // Opening the same file, e.g. after modifying its content, will not trigger
+        // useEffect with parseSpreadsheet unless there is a state change
+        onChange({ name: "", data: [] });
         onChange({ name: file.name, data: dat });
     }
     function clearClicked() {
@@ -160,6 +163,8 @@ function ClearableFileInput(props) {
                 id={id}
                 ref={fileRef}
                 onChange={fileChanged}
+                // Needed to trigger onChange when opening the same file
+                onClick={(e) => e.target.value = null}
             />
             <span
                 className="form-control-feedback-prefix"
