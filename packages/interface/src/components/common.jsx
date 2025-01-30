@@ -112,7 +112,6 @@ function ClearableFileInput(props) {
     // will attach to it instead of the display input
     let { accept, onChange, className, id, filename, ...otherProps } = props;
     onChange = onChange || function() {};
-    //const [filename, setFilename] = useState("")
     const inputRef = useRef();
     const fileRef = useRef();
 
@@ -127,7 +126,6 @@ function ClearableFileInput(props) {
         if (!file) {
             return;
         }
-        //setFilename(file.name);
         let dat = await readFile(file);
         dat = new Uint8Array(dat);
         // Opening the same file, e.g. after modifying its content, will not trigger
@@ -136,7 +134,6 @@ function ClearableFileInput(props) {
         onChange({ name: file.name, data: dat });
     }
     function clearClicked() {
-        //setFilename("");
         onChange({ name: null, data: null });
         inputRef.current.focus();
     }
