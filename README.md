@@ -23,7 +23,7 @@ from a spreadsheet is interpreted as a string.
 
 ## Install
 
-You can play around with the main ui-component in the browser: https://siefkenj.github.io/MailMerge/browser-iframe-server.html
+You can play around with the main ui-component in the browser: https://siefkenj.github.io/MailMergeP/browser-iframe-server.html
 
 Mail Merge P is based off of Mail Merge by Alexander Bergmann https://addons.thunderbird.net/en-US/thunderbird/addon/mail-merge/
 
