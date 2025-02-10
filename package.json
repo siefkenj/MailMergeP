@@ -1,6 +1,6 @@
 {
     "name": "mailmergep",
-    "version": "2.6.2",
+    "version": "2.7.0",
     "description": "A Mail Merge extension for Thunderbird",
     "homepage": ".",
     "private": "true",
@@ -24,7 +24,7 @@
         "react-dom": "18.3.1",
         "react-localization": "1.0.19",
         "typescript": "^5.7.3",
-        "vite": "^6.0.11",
+        "vite": "^6.1.0",
         "vite-plugin-dts": "^4.5.0",
         "vite-plugin-singlefile": "^2.1.0",
         "vite-plugin-static-copy": "^2.2.0",
