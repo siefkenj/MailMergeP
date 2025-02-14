@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { parseRange } from "../utils.js";
+import { parseRange } from "../utils/parseRange";
 
 import LocalizedStrings from "react-localization";
 const formatString = LocalizedStrings.prototype.formatString;
