@@ -40,5 +40,9 @@
     },
     "browserslist": [
         "firefox >= 91"
-    ]
+    ],
+    "devDependencies": {
+        "@types/node": "^22.13.4",
+        "vitest": "^3.0.5"
+    }
 }

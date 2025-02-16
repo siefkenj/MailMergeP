@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import classNames from "classnames";
 import { ClearableInput } from "./common";
-import { parseRange } from "../utils";
+import { parseRange } from "../utils/parseRange";
 
 function SettingsTab() {
     const prefs = useStoreState((state) => state.prefs);
