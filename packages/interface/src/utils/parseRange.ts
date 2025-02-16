@@ -3,21 +3,21 @@
  * all parsed values. E.g. "3,4,6-9" will return [3,4,6,7,8,9].
  *
  * An incomplete range will assume `minVal` and `maxVal` are to
- * be used. E.g., "3-" == "3-<maxVal>".
+ * be used. E.g., "3-" == "3-<maxVal>" and "-5" == "<minVal>-5"
  *
  * Based off of https://github.com/euank/node-parse-numeric-range
  */
-export function parseRange(range: string, minVal = 0, maxVal = 100): number[] {
+export function parseRange(range: string, minVal = 1, maxVal = 100): number[] {
     function parsePart(part: string) {
-        // just a number
+        // Just a number
         if (/^-?\d+$/.test(part)) {
+            const num = parseInt(part, 10);
+            // Negative value signify a range without start specified e.g. "-5" is parsed as "<minVal>-5"
+            if (num < 0) return parsePart(`${minVal}-${Math.abs(num)}`);
             return [parseInt(part, 10)];
         }
-        let m: RegExpMatchArray | null;
-        // 1-5 or 1..5 (equivilant) or 1...5 (doesn't include 5)
-        if (
-            (m = part.match(/^(-?\d*)(-|\.\.\.?|\u2025|\u2026|\u22EF)(-?\d*)$/))
-        ) {
+        const m = part.match(/^(-?\d*)(-)(-?\d*)$/);
+        if (m) {
             const lhs = parseInt(m[1]) || minVal;
             const sep = m[2];
             let rhs = parseInt(m[3]) || maxVal;
@@ -26,7 +26,7 @@ export function parseRange(range: string, minVal = 0, maxVal = 100): number[] {
                 const incr = lhs < rhs ? 1 : -1;
 
                 // Make it inclusive by moving the right 'stop-point' away by one.
-                if (sep === "-" || sep === ".." || sep === "\u2025") {
+                if (sep === "-") {
                     rhs += incr;
                 }
 
