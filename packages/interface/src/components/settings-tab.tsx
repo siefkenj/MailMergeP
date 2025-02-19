@@ -1,34 +1,37 @@
-import React, { useState } from "react";
-import { useStoreState, useStoreActions } from "easy-peasy";
 import classNames from "classnames";
-import { ClearableInput } from "./common";
-import { parseRange } from "../utils/parseRange";
+import { type ChangeEvent, useState } from "react";
+import { useStoreActions, useStoreState } from "../hooks/storeHooks.ts";
+import type { Prefs } from "../types/modelTypes.ts";
+import type { UpdatePrefEvent } from "../types/types.ts";
+import { parseRange } from "../utils/parseRange.ts";
+import { ClearableInput } from "./common.tsx";
 
 function SettingsTab() {
     const prefs = useStoreState((state) => state.prefs);
     const strings = useStoreState((state) => state.locale.strings);
     const updatePref = useStoreActions((actions) => actions.prefs.updatePref);
-    function generatePrefUpdate(pref) {
-        return (e) => {
-            if (e.target) {
-                updatePref({ [pref]: e.target.value });
-            } else {
-                updatePref({ [pref]: e });
+    const generatePrefUpdate = (pref: keyof Prefs) => {
+        return (e: UpdatePrefEvent) => {
+            if (e.currentTarget) {
+                updatePref({ [pref]: e.currentTarget.value });
             }
         };
-    }
+    };
 
     // Use local state for delay value to avoid cursor jumping to end of input on changes
     const [delayValue, setDelayValue] = useState(prefs.delay);
-    function onChangeDelayInput(e) {
-        const value = e.target ? e.target.value : e;
-        setDelayValue(value);
+    function onChangeDelayInput(e: ChangeEvent<HTMLInputElement>) {
+        const value = e.currentTarget.value;
+        const numberValue = Number(value);
+        setDelayValue(numberValue);
+        // To remove any leading zeros in the delay input
+        e.currentTarget.value = numberValue.toString();
     }
 
-    // a range is invalid if it is non-empty and parseRange parses it
-    // to an empty array
+    // A range is invalid if it is non-empty and parseRange parses it to an empty array
     const rangeValid =
-        prefs.range.trim().length === 0 || parseRange(prefs.range).length > 0;
+        prefs.range?.trim().length === 0 ||
+        parseRange(prefs.range || "").length > 0;
 
     return (
         <div className="browser-style settings-panel">
@@ -68,14 +71,14 @@ function SettingsTab() {
                 {strings.sendMessageRange}
             </label>
             <ClearableInput
-                value={prefs.range}
+                value={prefs.range || ""}
                 id="pref-range"
                 className={classNames({
                     invalid: !rangeValid,
                     "settings-input": true,
                 })}
                 onChange={generatePrefUpdate("range")}
-                placeholder="3,4,9-14"
+                placeholder="3,4,9-14,22-"
                 title={strings.sendMessageRangeDesc}
             />
 

@@ -1,18 +1,17 @@
-import React from "react";
-import { useStoreState, useStoreActions } from "easy-peasy";
+// import LocalizedStrings from "react-localization";
+// const formatString = LocalizedStrings.prototype.formatString;
 
-import LocalizedStrings from "react-localization";
-const formatString = LocalizedStrings.prototype.formatString;
+import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 
 function AboutTab() {
-    const strings = useStoreState(state => state.locale.strings);
-    const openUrl = useStoreActions(action => action.openUrl);
+    const strings = useStoreState((state) => state.locale.strings);
+    const openUrl = useStoreActions((action) => action.openUrl);
 
     // By default, links will open in the iframe. We don't wan't that,
     // so send a message to the server to open the link for us.
-    function linkClick(e) {
+    function linkClick(e: React.MouseEvent<HTMLAnchorElement>) {
         e.preventDefault();
-        openUrl(e.target.getAttribute("href"));
+        openUrl(e.currentTarget?.getAttribute("href") || "");
     }
 
     return (

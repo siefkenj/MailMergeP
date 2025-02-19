@@ -2,28 +2,46 @@
  * Common interface components
  */
 
-import React, { useRef, useState } from "react";
 import classNames from "classnames";
+import React, {
+    type ChangeEvent,
+    type FocusEvent,
+    type FocusEventHandler,
+    type KeyboardEvent,
+    type MouseEvent,
+    type MouseEventHandler,
+    type ReactElement,
+    type ReactNode,
+    useRef,
+    useState,
+} from "react";
+import type { UpdatePrefEvent } from "../types/types";
 
-function TabStrip({ children, currTab, setTab }) {
+type TabStripProps = {
+    currTab: number;
+    setTab: (tab: number) => void;
+    children: ReactElement[];
+};
+
+function TabStrip({ children, currTab, setTab }: TabStripProps) {
     // make a tabstrip consisting of children with a tab spacer inbetween
     // connect a click listener to each <Tab />
-    let tabstrip = [];
+    const tabstrip: ReactElement[] = [];
     let tabcontents = null;
-    React.Children.forEach(children, (tab, key) => {
+    React.Children.forEach<ReactElement>(children, (tab, key) => {
         // save the contents of the selected tag for later
         if (key === currTab) {
             tabcontents = tab.props.children;
         }
         // prepare the tab, setting it's "label" attribute as its children
-        let newtab = React.cloneElement(tab, {
-            children: tab.props.label,
+        const newtab = React.cloneElement(tab, {
+            children: tab?.props.label,
             key: key,
             selected: key === currTab,
-            onclick: e => {
+            onClick: (e: MouseEvent | FocusEvent) => {
                 e.preventDefault();
                 setTab(key);
-            }
+            },
         });
         tabstrip.push(newtab);
         tabstrip.push(
@@ -34,7 +52,7 @@ function TabStrip({ children, currTab, setTab }) {
 
     return (
         <>
-            <div className={["panel-section-tabs"]}>{tabstrip}</div>
+            <div className={"panel-section-tabs"}>{tabstrip}</div>
             <div className="panel-section panel-section-body">
                 {tabcontents}
             </div>
@@ -42,37 +60,59 @@ function TabStrip({ children, currTab, setTab }) {
     );
 }
 
-function Tab({ children, selected, onclick }) {
+type TabProps = {
+    selected?: boolean;
+    onClick?: MouseEventHandler;
+    children: ReactNode;
+    label: ReactElement; // Not used in Tab component, but picked up in TabStrip
+};
+
+function Tab({ children, selected, onClick }: TabProps) {
     const classes = {
         "panel-section-tabs-button": true,
-        selected: selected
+        selected: selected,
     };
     return (
-        <div className={classNames(classes)} onClick={onclick}>
+        <div className={classNames(classes)} onClick={onClick}>
             {children}
         </div>
     );
 }
 
-function ClearableInput(props) {
-    let { value, onChange, className, ...otherProps } = props;
-    onChange = onChange || function() {};
-    const inputRef = useRef();
+type ClearableInputProps = {
+    value: string;
+    id: string;
+    className: string;
+    onChange: (
+        event: UpdatePrefEvent
+    ) => void | FocusEventHandler<HTMLInputElement>;
+    placeholder: string;
+    title: string;
+    children?: ReactNode;
+};
+
+export function ClearableInput(props: ClearableInputProps) {
+    const { value, onChange = () => {}, className, ...otherProps } = props;
+    const inputRef = useRef<HTMLInputElement>(null);
 
     // Use local state to avoid cursor jumping to end of input on changes
     const [localValue, setLocalValue] = useState(value);
 
     function clearClicked() {
-        setLocalValue("")
-        onChange("");
-        inputRef.current.focus();
+        setLocalValue("");
+        onChange({
+            currentTarget: { value: "" },
+        } as FocusEvent<HTMLInputElement>);
+        inputRef.current?.focus();
     }
 
-    function onChangeLocal(e) {
-        const value = e.target ? e.target.value : e;
-        setLocalValue(value);
+    function onChangeLocal(e: ChangeEvent<HTMLInputElement>) {
+        const value = e.currentTarget.value;
+        if (typeof value === "string") {
+            setLocalValue(value);
+        }
     }
-    
+
     return (
         <div className="browser-style form-group">
             <input
@@ -80,8 +120,7 @@ function ClearableInput(props) {
                 type="text"
                 value={localValue}
                 onChange={onChangeLocal}
-                // Update global state when input loses focus
-                onBlur={onChange}
+                onBlur={onChange} // Update global state when input loses focus
                 ref={inputRef}
                 {...otherProps}
             />
@@ -96,33 +135,55 @@ function ClearableInput(props) {
 
 // helper function to read a file (from an input)
 // using a promise
-async function readFile(file) {
-    return new Promise((resolve, reject) => {
-        var fr = new FileReader();
+async function readFile(filename: Blob) {
+    return new Promise<ArrayBuffer>((resolve) => {
+        const fr = new FileReader();
         fr.onload = () => {
-            resolve(fr.result);
+            resolve(fr.result as ArrayBuffer);
         };
-        fr.readAsArrayBuffer(file);
+
+        fr.readAsArrayBuffer(filename);
     });
 }
 
-function ClearableFileInput(props) {
+export type FileInputOnChangeValue = {
+    name: string | null;
+    data: ArrayBuffer | null;
+};
+
+type ClearableFileInputProps = {
+    id?: string;
+    accept: string;
+    onChange: ({ name, data }: FileInputOnChangeValue) => void;
+    filename: string;
+    placeholder: string;
+    className?: string;
+};
+
+function ClearableFileInput(props: ClearableFileInputProps) {
     // if an `id` prop is passed in, it gets assigned
     // to the file input. That way a label with "for=..."
     // will attach to it instead of the display input
-    let { accept, onChange, className, id, filename, ...otherProps } = props;
-    onChange = onChange || function() {};
-    const inputRef = useRef();
-    const fileRef = useRef();
+    const {
+        accept,
+        onChange = () => {},
+        className,
+        id,
+        filename,
+        ...otherProps
+    } = props;
+    const inputRef = useRef<HTMLInputElement>(null);
+    const fileRef = useRef<HTMLInputElement>(null);
 
-    function openClicked(e) {
+    function openClicked(e?: MouseEvent) {
         if (e) {
             e.preventDefault();
         }
-        fileRef.current.click();
+        fileRef.current?.click();
     }
-    async function fileChanged(e) {
-        const file = fileRef.current.files[0];
+
+    async function fileChanged() {
+        const file = fileRef.current?.files ? fileRef.current?.files[0] : "";
         if (!file) {
             return;
         }
@@ -130,26 +191,30 @@ function ClearableFileInput(props) {
         dat = new Uint8Array(dat);
         // Opening the same file, e.g. after modifying its content, will not trigger
         // useEffect with parseSpreadsheet unless there is a state change
-        onChange({ name: "", data: [] });
+        onChange({ name: "", data: new ArrayBuffer() });
         onChange({ name: file.name, data: dat });
     }
     function clearClicked() {
         onChange({ name: null, data: null });
-        inputRef.current.focus();
+        inputRef.current?.focus();
     }
-    function inputKeyDown(e) {
+    function inputKeyDown(e: KeyboardEvent) {
         if ([" ", "Enter"].includes(e.key)) {
             e.preventDefault();
             openClicked();
         }
     }
-    function inputClicked(e) {
+    function inputClicked() {
         // if no file is loaded, a click
         // will open the file dialog
         if (!filename) {
             openClicked();
         }
     }
+
+    const onClickFileInput = (e: MouseEvent<HTMLInputElement>) => {
+        e.currentTarget.value = "";
+    };
 
     return (
         <div className="browser-style form-group">
@@ -161,7 +226,7 @@ function ClearableFileInput(props) {
                 ref={fileRef}
                 onChange={fileChanged}
                 // Needed to trigger onChange when opening the same file
-                onClick={(e) => e.target.value = null}
+                onClick={onClickFileInput}
             />
             <span
                 className="form-control-feedback-prefix"
@@ -174,7 +239,7 @@ function ClearableFileInput(props) {
                 style={{ caretColor: "transparent" }}
                 type="text"
                 value={filename}
-                onChange={function() {}}
+                onChange={function () {}}
                 onKeyDown={inputKeyDown}
                 onClick={inputClicked}
                 ref={inputRef}
@@ -189,7 +254,13 @@ function ClearableFileInput(props) {
     );
 }
 
-function ProgressBar(props) {
+type ProgressBarProps = {
+    min?: number;
+    max?: number;
+    progress: number | null | undefined;
+};
+
+function ProgressBar(props: ProgressBarProps) {
     const { min = 0, max = 1, progress: _progress } = props;
     const range = max - min;
     if (_progress == null) {
@@ -200,4 +271,4 @@ function ProgressBar(props) {
     return <progress max={100 * range} value={100 * (progress - min)} />;
 }
 
-export { TabStrip, Tab, ClearableInput, ClearableFileInput, ProgressBar };
+export { ClearableFileInput, ProgressBar, Tab, TabStrip };
