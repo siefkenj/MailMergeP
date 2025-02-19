@@ -1,8 +1,7 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
-import { StoreProvider, createStore } from "easy-peasy";
+import { createStore, StoreProvider } from "easy-peasy";
 
-import model from "./model";
+import { model } from "./model";
 import App from "./components/app";
 
 import "./css/browser-style.css";
@@ -21,4 +20,4 @@ function Root() {
 
 const rootElement = document.getElementById("root");
 
-ReactDOM.createRoot(rootElement).render(<Root />);
+ReactDOM.createRoot(rootElement!).render(<Root />);
