@@ -83,7 +83,9 @@ export const iframeService: IframeService = {
         const payload = e.data || {};
         const { type, id, source, data } = payload;
 
-        if (!data) return;
+        if (!data) {
+            return;
+        }
 
         if (source !== "CHILD") {
             // We got a message that wasn't from our child iframe.
@@ -145,20 +147,24 @@ export const iframeService: IframeService = {
                 });
                 break;
             case "SEND_EMAILS":
-                if (data.emails)
+                if (data.emails) {
                     await iframeService.commands.sendEmails(data.emails);
+                }
                 iframeService.messageChild({ type, id });
                 break;
             case "SEND_EMAIL":
-                if (data.email)
+                if (data.email) {
                     await iframeService.commands.sendEmail(
                         data.email,
                         data.sendmode
                     );
+                }
                 iframeService.messageChild({ type, id });
                 break;
             case "OPEN_URL":
-                if (data.url) iframeService.commands.openUrl(data.url);
+                if (data.url) {
+                    iframeService.commands.openUrl(data.url);
+                }
                 break;
             case "CANCEL":
                 iframeService.commands.cancel();

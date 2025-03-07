@@ -45,7 +45,9 @@ export const model: Model = {
         fetchPrefs: thunk(async (actions) => {
             // send a signal to get the preferences
             const data = await messageParent({ type: "GET_PREFERENCES" });
-            if (data?.prefs) actions.updatePrefNosync(data.prefs);
+            if (data?.prefs) {
+                actions.updatePrefNosync(data.prefs);
+            }
         }),
     },
     data: {
@@ -65,7 +67,9 @@ export const model: Model = {
             // grab the template from the parent window
             const data = await messageParent({ type: "GET_TEMPLATE" });
             // save the template
-            if (data?.template) actions.updateTemplate(data.template);
+            if (data?.template) {
+                actions.updateTemplate(data.template);
+            }
         }),
         emails: [],
         updateEmails: action((state, payload) => {
@@ -91,7 +95,9 @@ export const model: Model = {
         const data = await messageParent({
             type: "GET_LOCALIZED_STRINGS",
         });
-        if (data?.strings) dispatch.locale.updateStrings(data.strings);
+        if (data?.strings) {
+            dispatch.locale.updateStrings(data.strings);
+        }
     }),
     cancel: thunk(async () => {
         await messageParent({ type: "CANCEL" });
