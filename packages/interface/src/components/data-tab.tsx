@@ -1,14 +1,17 @@
-import React, { useRef, useEffect } from "react";
-import { useStoreState, useStoreActions } from "easy-peasy";
-import { HotTable } from "@handsontable/react-wrapper";
+import { useRef } from "react";
+import { HotTable, type HotTableRef } from "@handsontable/react-wrapper";
 import Handsontable from "handsontable";
+import { BaseRenderer } from "handsontable/renderers";
 import "handsontable/dist/handsontable.full.css";
-import { ClearableFileInput } from "./common";
+import { ClearableFileInput, type FileInputOnChangeValue } from "./common";
+import { useStoreActions, useStoreState } from "../hooks/storeHooks";
+
+type CellProperties = Partial<Handsontable.CellProperties>;
 
 const isLetterRegex = /^[A-Za-z0-9]*$/;
 
 function DataTab() {
-    const tableRef = useRef();
+    const tableRef = useRef<HotTableRef>(null);
     const strings = useStoreState((state) => state.locale.strings);
     const prefs = useStoreState((state) => state.prefs);
     const updatePref = useStoreActions((actions) => actions.prefs.updatePref);
@@ -20,25 +23,26 @@ function DataTab() {
         (actions) => actions.data.updateSpreadsheetHasManuallyUpdated
     );
 
-    async function fileChanged({ name, data }) {
+    async function fileChanged({ name, data }: FileInputOnChangeValue) {
         name = name || "";
-        data = data || [];
+        data = data || new ArrayBuffer();
         // because this data will be saved as JSON, we have to convert
         // it to a regular array
-        let datAsArray = Array.from(data);
+        const datAsArray = Array.from(new Uint8Array(data));
         updatePref({ fileName: name, fileContents: datAsArray });
         // If we've loaded a file, we want to forget any manual changes
         // we made to the spreadsheet data
         updateSpreadsheetHasManuallyUpdated(false);
     }
 
-    function spreadsheetChanged(changes) {
+    function spreadsheetChanged(changes: Handsontable.CellChange[] | null) {
         // Don't get stuck in a loop of loading and saving data!
         if (changes === null) {
             return;
         }
-        const sheetArray = tableRef.current.hotInstance.getData();
-        updateData(sheetArray);
+        const sheetArray: string[] =
+            tableRef.current?.hotInstance?.getData() || [];
+        updateData([sheetArray]);
         // If we changed data manually, we don't want to reload it from
         // the file buffer
         updateSpreadsheetHasManuallyUpdated(true);
@@ -57,7 +61,7 @@ function DataTab() {
                 <ClearableFileInput
                     accept=".csv,.xlsx,.ods,.xls"
                     onChange={fileChanged}
-                    filename={prefs.fileName}
+                    filename={prefs.fileName || ""}
                     placeholder={strings.openAFile}
                 />
             </div>
@@ -75,29 +79,26 @@ function DataTab() {
                     ref={tableRef}
                     data={data.spreadsheetData}
                     afterChange={spreadsheetChanged}
-                    rowHeaders={(index) => (index === 0 ? "Vars:" : index)}
+                    rowHeaders={(index) =>
+                        index === 0 ? "Vars:" : index.toString()
+                    }
                     fixedRowsTop={1}
                     stretchH={"last"}
                     minSpareRows={3}
                     minSpareCols={1}
                     minCols={5}
-                    cells= {(row, col) => {
-                        let cellProperties = {};
+                    cells={(row) => {
+                        const cellProperties: CellProperties = {};
+
                         if (row === 0) {
                             cellProperties.renderer = function (
-                                instance,
-                                td,
-                                row,
-                                col,
-                                prop,
-                                value,
-                                cellProperties
+                                ...args: Parameters<BaseRenderer>
                             ) {
                                 Handsontable.renderers.TextRenderer.apply(
                                     this,
-                                    arguments
+                                    [...args]
                                 );
-                                td.className += " spreadsheet-vars-row";
+                                args[1].className += " spreadsheet-vars-row";
                             };
                         }
                         return cellProperties;

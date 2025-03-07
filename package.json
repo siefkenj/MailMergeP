@@ -13,8 +13,6 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.7.2",
         "@handsontable/react-wrapper": "^15.0.0",
-        "@vitejs/plugin-react": "^4.3.4",
-        "bestzip": "^2.2.1",
         "classnames": "2.5.1",
         "easy-peasy": "^6.0.5",
         "handsontable": "^15.0.0",
@@ -23,14 +21,30 @@
         "react": "18.3.1",
         "react-dom": "18.3.1",
         "react-localization": "1.0.19",
+        "xlsx": "file:vendor/xlsx-0.20.3.tgz"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.19.0",
+        "@types/handsontable": "^0.31.2",
+        "@types/node": "^22.13.4",
+        "@types/nunjucks": "^3.2.6",
+        "@types/react": "^18.3.1",
+        "@types/react-dom": "^18.3.1",
+        "@vitejs/plugin-react": "^4.3.4",
+        "bestzip": "^2.2.1",
+        "eslint": "^9.19.0",
+        "eslint-plugin-react-hooks": "^5.0.0",
+        "eslint-plugin-react-refresh": "^0.4.18",
+        "globals": "^15.14.0",
         "typescript": "^5.7.3",
+        "typescript-eslint": "^8.22.0",
         "vite": "^6.1.0",
         "vite-plugin-dts": "^4.5.0",
         "vite-plugin-singlefile": "^2.1.0",
         "vite-plugin-static-copy": "^2.2.0",
         "vite-plugin-svgr": "^4.3.0",
         "vite-tsconfig-paths": "^5.1.4",
-        "xlsx": "file:vendor/xlsx-0.20.3.tgz"
+        "vitest": "^3.0.5"
     },
     "scripts": {
         "build": "npm run build -ws",
@@ -40,9 +54,5 @@
     },
     "browserslist": [
         "firefox >= 91"
-    ],
-    "devDependencies": {
-        "@types/node": "^22.13.4",
-        "vitest": "^3.0.5"
-    }
+    ]
 }

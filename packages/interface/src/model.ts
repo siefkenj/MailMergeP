@@ -2,22 +2,22 @@
  * A model for a Redux store (using easy-peasy) for all mailmerge code.
  * All persistent state is stored via this model.
  */
-
 import { action, thunk } from "easy-peasy";
 import { messageParent } from "./service";
+import type { Model } from "./types/modelTypes";
 import {
-    fillTemplate,
-    parseSpreadsheet,
     delay as delayPromise,
-    formatTime
+    fillTemplate,
+    formatTime,
+    parseSpreadsheet,
 } from "./utils";
 
-export default {
+export const model: Model = {
     locale: {
         strings: {},
         updateStrings: action((state, payload) => {
             return { ...state, strings: { ...payload } };
-        })
+        }),
     },
     prefs: {
         delay: 0,
@@ -32,7 +32,9 @@ export default {
             // first send an update to the host window, then update the state.
             await messageParent({
                 type: "SET_PREFERENCES",
-                prefs: newPrefs
+                data: {
+                    prefs: newPrefs,
+                },
             });
 
             actions.updatePrefNosync(newPrefs);
@@ -40,16 +42,18 @@ export default {
         updatePrefNosync: action((state, payload) => {
             return { ...state, ...payload };
         }),
-        fetchPrefs: thunk(async actions => {
+        fetchPrefs: thunk(async (actions) => {
             // send a signal to get the preferences
             const data = await messageParent({ type: "GET_PREFERENCES" });
-            actions.updatePrefNosync(data.prefs);
-        })
+            if (data?.prefs) {
+                actions.updatePrefNosync(data.prefs);
+            }
+        }),
     },
     data: {
         spreadsheetData: [[]],
         updateSpreadsheetData: action((state, payload) => {
-            return { ...state, spreadsheetData: payload };
+            return { ...state, spreadsheetData: [...payload] };
         }),
         spreadsheetHasManuallyUpdated: false,
         updateSpreadsheetHasManuallyUpdated: action((state, payload) => {
@@ -59,44 +63,47 @@ export default {
         updateTemplate: action((state, payload) => {
             return { ...state, template: { ...payload } };
         }),
-        fetchTemplate: thunk(async actions => {
+        fetchTemplate: thunk(async (actions) => {
             // grab the template from the parent window
             const data = await messageParent({ type: "GET_TEMPLATE" });
             // save the template
-            actions.updateTemplate(data.template);
+            if (data?.template) {
+                actions.updateTemplate(data.template);
+            }
         }),
         emails: [],
         updateEmails: action((state, payload) => {
             return { ...state, emails: payload };
-        })
+        }),
     },
     tabs: {
         currTab: 0,
         setTab: action((state, payload) => {
             return { ...state, currTab: payload };
         }),
-        prevTab: action((state, payload) => ({
+        prevTab: action((state) => ({
             ...state,
-            currTab: Math.max(state.currTab - 1, 0)
+            currTab: Math.max(state.currTab - 1, 0),
         })),
-        nextTab: action((state, payload) => ({
+        nextTab: action((state) => ({
             ...state,
-            currTab: state.currTab + 1
-        }))
+            currTab: state.currTab + 1,
+        })),
     },
-    // effects
-    initialise: thunk(async (actions, payload, { dispatch }) => {
+    initialise: thunk(async (_actions, _payload, { dispatch }) => {
         await dispatch.prefs.fetchPrefs();
-        const { strings } = await messageParent({
-            type: "GET_LOCALIZED_STRINGS"
+        const data = await messageParent({
+            type: "GET_LOCALIZED_STRINGS",
         });
-        dispatch.locale.updateStrings(strings);
+        if (data?.strings) {
+            dispatch.locale.updateStrings(data.strings);
+        }
     }),
     cancel: thunk(async () => {
         await messageParent({ type: "CANCEL" });
     }),
     parseSpreadsheet: thunk(
-        async (actions, payload, { dispatch, getState }) => {
+        async (_actions, _payload, { dispatch, getState }) => {
             // presuming raw data has been loaded into .prefs,
             // parse with XLSX.js
             const state = getState();
@@ -105,12 +112,12 @@ export default {
             // if we have manually updated spreadsheet data, don't override
             // the spreadsheet contents with the file's contents
             if (!state.data.spreadsheetHasManuallyUpdated) {
-                let sheetArray = parseSpreadsheet(fileContents);
-                await dispatch.data.updateSpreadsheetData(sheetArray);
+                const sheetArray = parseSpreadsheet(fileContents || []);
+                dispatch.data.updateSpreadsheetData(sheetArray);
             }
         }
     ),
-    renderEmails: thunk(async (actions, payload, { dispatch, getState }) => {
+    renderEmails: thunk(async (_actions, payload, { dispatch, getState }) => {
         await dispatch.data.fetchTemplate();
         const { data, prefs } = getState();
 
@@ -120,28 +127,32 @@ export default {
         if (!payload || payload.length === 0) {
             spreadsheetData = data.spreadsheetData;
         } else {
-            for (let i of payload) {
+            for (const i of payload) {
                 if (data.spreadsheetData[i]) {
                     spreadsheetData.push(data.spreadsheetData[i]);
                 }
             }
         }
-        let emails = fillTemplate(data.template, spreadsheetData, prefs.parser);
+        const emails = fillTemplate(
+            data.template,
+            spreadsheetData,
+            prefs.parser
+        );
         dispatch.data.updateEmails(emails);
     }),
-    sendEmails: thunk(async (actions, payload, { getState }) => {
+    sendEmails: thunk(async (actions, _payload, { getState }) => {
         const {
             data,
             prefs: { delay, sendmode },
-            locale: { strings }
+            locale: { strings },
         } = getState();
 
         // Start a timer that updates the time throughout the whole process
-        const startTime = new Date();
+        const startTime = Date.now();
         const intervalHandle = window.setInterval(
             () =>
                 actions.sendDialog.update({
-                    time: formatTime(new Date() - startTime)
+                    time: formatTime(Date.now() - startTime),
                 }),
             500
         );
@@ -154,15 +165,15 @@ export default {
             progress: 0,
             current,
             total: data.emails.length,
-            time: 0
+            time: "",
         });
 
         try {
             function shouldAbort() {
                 const {
-                    sendDialog: { abort }
+                    sendDialog: { abort },
                 } = getState();
-                return abort;
+                return abort || false;
             }
             for (const email of data.emails) {
                 // Check for the abort state before we send an email
@@ -173,16 +184,17 @@ export default {
                 actions.sendDialog.update({
                     current,
                     progress: current / (data.emails.length + 1),
-                    status: strings.sending
+                    status: strings.sending,
                 });
                 await actions.sendEmail({ email, sendmode });
                 actions.sendDialog.update({
-                    status: strings.waiting
+                    status: strings.waiting,
                 });
 
                 // Compute how long to wait before sending the next email
-                const waitTime =
-                    1000 * delay * current - (new Date() - startTime);
+                const waitTime = delay
+                    ? 1000 * delay * current - (Date.now() - startTime)
+                    : 0;
                 await delayPromise(waitTime, shouldAbort);
             }
         } catch (e) {
@@ -192,11 +204,11 @@ export default {
         // cleanup
         clearTimeout(intervalHandle);
         actions.sendDialog.update({
-            open: false
+            open: false,
         });
     }),
-    sendEmail: thunk(async (actions, payload) => {
-        await messageParent({ type: "SEND_EMAIL", ...payload });
+    sendEmail: thunk(async (_actions, payload) => {
+        await messageParent({ type: "SEND_EMAIL", data: { ...payload } });
     }),
     // Everything associated with an email being sent
     sendDialog: {
@@ -204,17 +216,18 @@ export default {
         abort: false,
         progress: 0,
         current: 1,
-        time: 0,
+        time: "",
+        total: 0,
+        status: "",
         update: action((state, payload) => ({
             ...state,
-            ...payload
+            ...payload,
         })),
-        cancel: thunk(actions => {
+        cancel: thunk((actions) => {
             actions.update({ abort: true });
-        })
+        }),
     },
-
-    openUrl: thunk(async (actions, payload) => {
-        await messageParent({ type: "OPEN_URL", url: payload });
-    })
+    openUrl: thunk(async (_actions, payload) => {
+        await messageParent({ type: "OPEN_URL", data: { url: payload } });
+    }),
 };

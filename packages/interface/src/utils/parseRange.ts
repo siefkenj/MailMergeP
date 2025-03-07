@@ -13,7 +13,9 @@ export function parseRange(range: string, minVal = 1, maxVal = 100): number[] {
         if (/^-?\d+$/.test(part)) {
             const num = parseInt(part, 10);
             // Negative value signify a range without start specified e.g. "-5" is parsed as "<minVal>-5"
-            if (num < 0) return parsePart(`${minVal}-${Math.abs(num)}`);
+            if (num < 0) {
+                return parsePart(`${minVal}-${Math.abs(num)}`);
+            }
             return [parseInt(part, 10)];
         }
         const m = part.match(/^(-?\d*)(-)(-?\d*)$/);
