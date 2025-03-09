@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { useStoreState, useStoreActions } from "easy-peasy";
+import { useState, useEffect } from "react";
+import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { parseRange } from "../utils/parseRange";
 
 import LocalizedStrings from "react-localization";
 const formatString = LocalizedStrings.prototype.formatString;
 
 function PreviewTab() {
-    const strings = useStoreState(state => state.locale.strings);
-    const data = useStoreState(state => state.data);
-    const prefs = useStoreState(state => state.prefs);
+    const strings = useStoreState((state) => state.locale.strings);
+    const data = useStoreState((state) => state.data);
+    const prefs = useStoreState((state) => state.prefs);
     const [previewItem, setPreviewItem] = useState(0);
     const email = data.emails[previewItem] || {};
     const numEmails = data.emails.length;
 
     // The email.body contains full HTML, including the <html> and <body> tags.
     // Parse it so we can grab just the body.
-    const emailBody = new DOMParser().parseFromString(email.body, "text/html")
+    const emailBody = new DOMParser().parseFromString(email.body || "", "text/html")
         .body.innerHTML;
 
-    const renderEmails = useStoreActions(actions => actions.renderEmails);
+    const renderEmails = useStoreActions((actions) => actions.renderEmails);
     useEffect(() => {
         renderEmails(
-            parseRange(prefs.range, 1, data.spreadsheetData.length - 1)
+            parseRange(prefs.range || "", 1, data.spreadsheetData.length - 1)
         );
     }, [data.spreadsheetData, prefs.parser, prefs.range, renderEmails]);
 

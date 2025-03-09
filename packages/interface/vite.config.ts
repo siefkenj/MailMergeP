@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 import svgrPlugin from "vite-plugin-svgr";
-import { viteSingleFile } from "vite-plugin-singlefile";
+// import { viteSingleFile } from "vite-plugin-singlefile";
 
 // https://vitejs.dev/config/
 export default defineConfig({
