@@ -1,12 +1,26 @@
 import { createServer, defineConfig, type Plugin } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import path from "node:path";
+import { randomBytes } from "node:crypto";
 
 const INTERFACE_ROOT = path.resolve(import.meta.dirname, "../interface");
 const IFRAME_SERVICE_SRC = path.resolve(
     import.meta.dirname,
     "../iframe-service/src/iframe-service.ts"
 );
+
+/**
+ * Thunderbird's default Content Security Policy for extension pages (Manifest V2).
+ * The add-on is served under it, so test against it here; in particular, `eval` and
+ * `new Function` are blocked. The add-on's manifest currently loosens this with
+ * `'unsafe-eval'`, which addons.thunderbird.net no longer accepts.
+ */
+const THUNDERBIRD_CSP = "script-src 'self'; object-src 'self';";
+
+// In dev mode Vite and the React plugin inject inline scripts (e.g. for hot reloading).
+// Vite tags them with this nonce, and the dev CSP allows only those inline scripts.
+const DEV_NONCE = randomBytes(16).toString("base64");
+const DEV_CSP = `script-src 'self' 'nonce-${DEV_NONCE}'; object-src 'self';`;
 
 /**
  * A `viteStaticCopy` target that copies everything inside `dir` (including
@@ -31,10 +45,15 @@ function interfaceDevServer(): Plugin {
         name: "mailmergep-interface-dev-server",
         apply: "serve",
         async configureServer(server) {
+            server.middlewares.use((_req, res, next) => {
+                res.setHeader("Content-Security-Policy", DEV_CSP);
+                next();
+            });
             const interfaceServer = await createServer({
                 configFile: path.join(INTERFACE_ROOT, "vite.config.ts"),
                 root: INTERFACE_ROOT,
                 base: "/interface/",
+                html: { cspNonce: DEV_NONCE },
                 server: {
                     middlewareMode: true,
                     // Share our HTTP server for the interface's HMR websocket. The two websockets
@@ -80,9 +99,13 @@ export default defineConfig(({ command }) => ({
                 ? { "@mailmergep/iframe-service": IFRAME_SERVICE_SRC }
                 : undefined,
     },
+    html: command === "serve" ? { cspNonce: DEV_NONCE } : undefined,
     // Listen on all interfaces so the server is reachable from outside the dev container
     server: { host: "0.0.0.0" },
-    preview: { host: "0.0.0.0" },
+    preview: {
+        host: "0.0.0.0",
+        headers: { "Content-Security-Policy": THUNDERBIRD_CSP },
+    },
     build: {
         sourcemap: true,
         minify: true,
