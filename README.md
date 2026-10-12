@@ -29,7 +29,7 @@ Mail Merge P is based off of Mail Merge by Alexander Bergmann https://addons.thu
 
 ## Building
 
-Build the entire extension, first run
+Building requires Node.js 22.12 or newer. To build the entire extension, first run
 
 ```sh
 npm install

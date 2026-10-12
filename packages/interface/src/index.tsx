@@ -10,14 +10,10 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const store = createStore(model, { disableImmer: true });
 
-function Root() {
-    return (
-        <StoreProvider store={store}>
-            <App />
-        </StoreProvider>
-    );
-}
-
 const rootElement = document.getElementById("root");
 
-ReactDOM.createRoot(rootElement!).render(<Root />);
+ReactDOM.createRoot(rootElement!).render(
+    <StoreProvider store={store}>
+        <App />
+    </StoreProvider>
+);

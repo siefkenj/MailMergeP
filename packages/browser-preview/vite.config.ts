@@ -1,15 +1,26 @@
 import { createServer, defineConfig, type Plugin } from "vite";
-import react from "@vitejs/plugin-react";
-import viteTsconfigPaths from "vite-tsconfig-paths";
-import svgrPlugin from "vite-plugin-svgr";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import path from "node:path";
 
-const INTERFACE_ROOT = path.resolve(__dirname, "../interface");
+const INTERFACE_ROOT = path.resolve(import.meta.dirname, "../interface");
 const IFRAME_SERVICE_SRC = path.resolve(
-    __dirname,
+    import.meta.dirname,
     "../iframe-service/src/iframe-service.ts"
 );
+
+/**
+ * A `viteStaticCopy` target that copies everything inside `dir` (including
+ * subdirectories) into `dest`, without recreating the path to `dir` itself.
+ */
+function copyDirContents(dir: string, dest: string) {
+    // `stripBase` counts the segments of the source path relative to this package,
+    // ignoring leading `..` segments.
+    const segments = path
+        .relative(import.meta.dirname, dir)
+        .split(path.sep)
+        .filter((segment) => segment !== "..");
+    return { src: dir, dest, rename: { stripBase: segments.length } };
+}
 
 /**
  * In dev mode, serve the interface package's source (with HMR) at `/interface/`
@@ -51,17 +62,14 @@ function interfaceDevServer(): Plugin {
 export default defineConfig(({ command }) => ({
     base: "./",
     plugins: [
-        react(),
-        viteTsconfigPaths(),
-        svgrPlugin(),
         interfaceDevServer(),
         command === "build" &&
             viteStaticCopy({
                 targets: [
-                    {
-                        src: path.join(INTERFACE_ROOT, "dist/*"),
-                        dest: "interface",
-                    },
+                    copyDirContents(
+                        path.join(INTERFACE_ROOT, "dist"),
+                        "interface"
+                    ),
                 ],
             }),
     ],
