@@ -22,6 +22,66 @@ function zip<T, U>(a: Array<T | undefined>, b: Array<U>) {
     });
 }
 
+// Returns true if `bytes` look like a binary spreadsheet (e.g. .xlsx, .ods, .xls)
+// rather than a text format like CSV.
+function isBinarySpreadsheet(bytes: Uint8Array): boolean {
+    const startsWith = (sig: number[]) => sig.every((b, i) => bytes[i] === b);
+    // UTF-16 text (e.g. Excel's "Unicode Text" export) contains NUL bytes but is still text
+    if (startsWith([0xff, 0xfe]) || startsWith([0xfe, 0xff])) {
+        return false;
+    }
+    // ZIP (.xlsx, .ods, .xlsb, ...) or CFB (.xls, ...) containers
+    if (
+        startsWith([0x50, 0x4b, 0x03, 0x04]) ||
+        startsWith([0xd0, 0xcf, 0x11, 0xe0])
+    ) {
+        return true;
+    }
+    // Other binary formats almost always contain NUL bytes near the start; text does not
+    return bytes.subarray(0, 1024).includes(0);
+}
+
+// Decode text whose encoding is unknown. Valid UTF-8 is assumed to be UTF-8 (this also
+// covers plain ASCII). Otherwise use jsCharDet to guess the encoding.
+function decodeText(bytes: Uint8Array): string {
+    try {
+        return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+    } catch {
+        // Not valid UTF-8
+    }
+    // UTF-16 with a BOM; TextDecoder strips the BOM
+    if (bytes[0] === 0xff && bytes[1] === 0xfe) {
+        return new TextDecoder("utf-16le").decode(bytes);
+    }
+    if (bytes[0] === 0xfe && bytes[1] === 0xff) {
+        return new TextDecoder("utf-16be").decode(bytes);
+    }
+
+    // jsCharDet expects a "binary string" with one character per byte
+    let rawString = "";
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+        rawString += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+    }
+    const detected = jsCharDet.detect(rawString);
+    const targetEncoding =
+        (detected.confidence > 0.9 && detected.encoding) || "windows-1252";
+    console.log(
+        "Detected encoding",
+        detected,
+        "Using encoding",
+        targetEncoding
+    );
+    try {
+        return new TextDecoder(targetEncoding).decode(bytes);
+    } catch {
+        // TextDecoder doesn't support every encoding that jsCharDet can detect
+        console.warn(
+            `Encoding ${targetEncoding} not supported; using windows-1252`
+        );
+        return new TextDecoder("windows-1252").decode(bytes);
+    }
+}
+
 // parse an array containing raw bytes from a spreadsheet of some
 // format. XLSX will auto-detect the format
 function parseSpreadsheet(data: FileContent): SpreadsheetData {
@@ -29,17 +89,20 @@ function parseSpreadsheet(data: FileContent): SpreadsheetData {
         return [[]];
     }
 
+    const bytes = new Uint8Array(data);
     try {
-        // use xlsx.js to parse the spreadsheet data
-        const parsed = XLSX.read(data.slice(), {
-            type: "array",
-            // According to the docs dateNF can be set to a string value to specify date format.
-            // See https://docs.sheetjs.com/docs/api/parse-options#parsing-options and https://github.com/SheetJS/sheetjs/issues/718
-            // Changing to date format string caused issues with parsing non-english charaters for some reason. Keeping it as is to not change runtime behaviour.
-            // @ts-expect-error: see comment above.
-            dateNF: true,
-            cellDates: true,
-        });
+        let parsed: XLSX.WorkBook;
+        if (isBinarySpreadsheet(bytes)) {
+            parsed = XLSX.read(bytes, { type: "array", cellDates: true });
+        } else {
+            // Text formats like CSV are decoded ourselves since XLSX does not detect
+            // the encoding. `raw` keeps every value exactly as written, so dates are
+            // not turned into serial numbers and leading zeros are not dropped.
+            parsed = XLSX.read(decodeText(bytes), {
+                type: "string",
+                raw: true,
+            });
+        }
         const sheet = parsed.Sheets[parsed.SheetNames[0]];
         const sheetArray = XLSX.utils.sheet_to_json<string[]>(sheet, {
             header: 1,
@@ -47,40 +110,10 @@ function parseSpreadsheet(data: FileContent): SpreadsheetData {
 
         return sheetArray;
     } catch (e) {
-        console.warn("Error when parsing spreading; using fallback", e);
-    }
-    // CSV parsing may fail for different file encodings.
-    // Use jsCharDet to attempt to detect the encoding and try to parse the data again.
-    try {
-        const dataArray = new Uint8Array(data);
-        const rawString = String.fromCharCode.apply(
-            null,
-            Array.from(dataArray)
-        );
-        const detected = jsCharDet.detect(rawString);
-        const targetEncoding =
-            (detected.confidence > 0.9 && detected.encoding) || "utf-8";
-        console.log(
-            "Detected encoding",
-            detected,
-            "Trying encoding",
-            targetEncoding
-        );
-
-        const parsedStr = new TextDecoder(targetEncoding).decode(dataArray);
-        const parsed = XLSX.read(parsedStr, { type: "string" });
-        const sheet = parsed.Sheets[parsed.SheetNames[0]];
-        const sheetArray = XLSX.utils.sheet_to_json<string[]>(sheet, {
-            header: 1,
-        });
-
-        return sheetArray;
-    } catch (e) {
-        console.warn("Error when parsing spreading as unicode", e);
+        console.warn("Error when parsing spreadsheet; using fallback", e);
     }
 
-    // CSV parsing may fail when trying to process date cells, so we fall
-    // back to not processing the date cells.
+    // Let XLSX try to auto-detect everything
     try {
         const parsed = XLSX.read(data, {
             type: "array",
