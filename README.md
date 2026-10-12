@@ -59,6 +59,15 @@ Mail Merge P is divided into _npm workspaces_ located in the `packages/` directo
 -   `packages/thunderbird-iframe-service` the connection between the real thunderbird API and `iframe-service`.
 -   `packages/thunderbird-extension` the actual extension's `background.js` script.
 
+To develop the interface in the browser with hot-reloading, run
+
+```sh
+npm run dev
+```
+
+and open the URL that is printed (usually http://localhost:5173/). This serves `packages/browser-preview`
+with the source of `packages/interface` loaded in its iframe.
+
 Most UI and backend work is handled by the html components. The `thunderbird-extension` runs the html
 component in an iframe and uses message passing to communicate with the iframe.
 

@@ -1,0 +1,38 @@
+{
+    "name": "DoenetML Node & Rust DevContainer",
+    // 2026-05-18: Playwright doesn't currently support Ubuntu 26.04. When it does, this can be updated.
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+    "remoteEnv": {
+        "DISPLAY": ""
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        },
+        "ghcr.io/devcontainers/features/rust:1": {
+            "version": "latest"
+        },
+        // Install vim from apt using an existing community feature.
+        "ghcr.io/devcontainers-extra/features/apt-packages:1": {
+            "packages": "vim"
+        },
+        // Avoid erroneous connections to the host's debug environment.
+        "./features/shell-init-rc": {}
+    },
+    "containerEnv": {
+        "NODE_OPTIONS": " --max-old-space-size=6144 "
+    },
+    "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+    "hostRequirements": {
+        "cpus": 4,
+        "memory": "16gb"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "esbenp.prettier-vscode",
+                "dbaeumer.vscode-eslint"
+            ]
+        }
+    }
+}

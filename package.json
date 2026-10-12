@@ -8,7 +8,8 @@
         "packages/iframe-service",
         "packages/interface",
         "packages/thunderbird-iframe-service",
-        "packages/thunderbird-extension"
+        "packages/thunderbird-extension",
+        "packages/browser-preview"
     ],
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.7.2",
@@ -47,6 +48,7 @@
         "vitest": "^3.0.5"
     },
     "scripts": {
+        "dev": "npm run dev -w browser-preview",
         "build": "npm run build -ws",
         "build-addon": "rm -rf addon && cp -rL packages/thunderbird-extension/dist addon && cd addon && bestzip ../addon.zip *",
         "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi",
