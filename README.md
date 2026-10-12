@@ -68,6 +68,11 @@ npm run dev
 and open the URL that is printed (usually http://localhost:5173/). This serves `packages/browser-preview`
 with the source of `packages/interface` loaded in its iframe.
 
+Run the unit tests with `npm test`. `npm run test:e2e` builds the extension and runs a mail merge
+in Firefox, with the same Content Security Policy that Thunderbird applies to the add-on; it fails
+if anything is blocked by that policy (e.g. `eval`). The dev container installs the browser it needs;
+elsewhere, run `npx playwright install --with-deps firefox` first.
+
 Most UI and backend work is handled by the html components. The `thunderbird-extension` runs the html
 component in an iframe and uses message passing to communicate with the iframe.
 

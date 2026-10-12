@@ -7,3 +7,7 @@ launch.json
 
 *.xpi
 MailMerge*.zip
+
+# Playwright
+test-results
+playwright-report
