@@ -31,7 +31,7 @@ function collectCspViolations(page: Page) {
     return violations;
 }
 
-for (const parser of ["nunjucks", "legacy"]) {
+for (const parser of ["jinja", "legacy"]) {
     test(`fills templates with the ${parser} parser without CSP violations`, async ({
         page,
     }) => {

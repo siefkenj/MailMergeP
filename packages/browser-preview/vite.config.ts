@@ -10,10 +10,10 @@ const IFRAME_SERVICE_SRC = path.resolve(
 );
 
 /**
- * Thunderbird's default Content Security Policy for extension pages (Manifest V2).
- * The add-on is served under it, so test against it here; in particular, `eval` and
- * `new Function` are blocked. The add-on's manifest currently loosens this with
- * `'unsafe-eval'`, which addons.thunderbird.net no longer accepts.
+ * Thunderbird's default Content Security Policy for extension pages (Manifest V2),
+ * which the add-on uses (see `content_security_policy` in its manifest.json). Test
+ * against it here; in particular, `eval` and `new Function` are blocked.
+ * addons.thunderbird.net doesn't accept add-ons that loosen this with `'unsafe-eval'`.
  */
 const THUNDERBIRD_CSP = "script-src 'self'; object-src 'self';";
 

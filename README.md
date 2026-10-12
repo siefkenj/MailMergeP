@@ -7,8 +7,9 @@
 Mail Merge P (_Mail Merge with Preview_)
 is a Thunderbird add-on to send bulk emails based off information provided in a spreadsheet.
 
-Mail Merge P uses the [nunjucks](https://mozilla.github.io/nunjucks/) templating engine to
-fill email templates based on data provided by a spreadsheet.
+Mail Merge P uses [Jinja](https://jinja.palletsprojects.com/en/stable/templates/) templates
+(via [@huggingface/jinja](https://github.com/huggingface/huggingface.js/tree/main/packages/jinja))
+to fill email templates based on data provided by a spreadsheet.
 
 ## Usage
 
@@ -18,8 +19,13 @@ spreadsheet has headers `name` and `email`, you can use `{{name}}` and `{{email}
 the body/subject/to/cc/bcc fields of your email. Mail Merge P will then substitute data from
 the spreadsheet into these fields.
 
-You can use the full power of the _nunjucks_ templating engine, but be aware that all data
-from a spreadsheet is interpreted as a string.
+You can use Jinja's conditionals, loops, filters and expressions, for example
+`{% if title %}{{ title }} {% endif %}{{ last }}` or `{{ nickname | default(first) }}`, but be
+aware that all data from a spreadsheet is interpreted as a string (use `| int` or `| float` to
+do arithmetic). Most templates written for earlier versions of Mail Merge P, which used
+[nunjucks](https://mozilla.github.io/nunjucks/), work unchanged. The exceptions are `{% raw %}`
+blocks, the `escape`, `first`, `reverse`, `truncate` and `wordcount` filters, and arithmetic on
+spreadsheet values without `| int` or `| float`.
 
 ## Install
 

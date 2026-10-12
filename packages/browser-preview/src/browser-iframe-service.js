@@ -56,7 +56,7 @@ if (typeof iframeService === "undefined") {
             delay: 0,
             sendmode: "now",
             range: "",
-            parser: "nunjucks",
+            parser: "jinja",
             fileName: "",
             fileContents: [],
         };

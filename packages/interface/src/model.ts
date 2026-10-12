@@ -23,7 +23,7 @@ export const model: Model = {
         delay: 0,
         sendmode: "now",
         range: "",
-        parser: "nunjucks",
+        parser: "jinja",
         fileName: "",
         fileContents: [],
         updatePref: thunk(async (actions, payload, { getState }) => {

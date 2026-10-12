@@ -1,13 +1,9 @@
 import jsCharDet from "jschardet";
-import nunjucks from "nunjucks";
+import { Template, parse, tokenize } from "@huggingface/jinja";
 import * as XLSX from "xlsx";
 import { objectEntries } from "./helpers/objectHelpers";
 import type { Email } from "./types/modelTypes";
-import type {
-    FileContent,
-    NunjucksTemplate,
-    SpreadsheetData,
-} from "./types/types";
+import type { FileContent, SpreadsheetData } from "./types/types";
 
 function zip<T, U>(a: Array<T | undefined>, b: Array<U>) {
     // If `a` has a blank slot (e.g. a == [1,,2]), then
@@ -142,7 +138,7 @@ type Subs = Record<string, string>;
 function fillTemplate(
     template: Email,
     spreadsheet: SpreadsheetData,
-    method = "nunjucks"
+    method = "jinja"
 ) {
     // create an array of substitutions
     const [header, ...rows] = spreadsheet;
@@ -182,56 +178,62 @@ function fillTemplate(
     switch (method) {
         case "legacy":
             return fillTemplateLegacy(template, subsArray);
-        case "nunjucks":
+        case "jinja":
         default:
-            return fillTemplateNunjucks(template, subsArray);
+            // Preferences saved by older versions may have "nunjucks", which used the same syntax
+            return fillTemplateJinja(template, subsArray);
     }
 }
 
-function fillTemplateNunjucks(template: Email, subsArray: Subs[]) {
-    const ret: Email[] = [];
-    const compiled: Partial<Record<keyof Email, NunjucksTemplate>> = {};
-    // If auto-escaping is turned on, then emails with `<...>` will become `&lt;...&gt;`
-    const env = nunjucks.configure({ autoescape: false });
+/**
+ * A Jinja template parsed with Jinja's default whitespace handling (the same as
+ * nunjucks, which MailMergeP used before). `@huggingface/jinja`'s `Template` enables
+ * the `trim_blocks` and `lstrip_blocks` options and drops a trailing newline, which
+ * would change the line breaks in emails.
+ */
+class MailMergeTemplate extends Template {
+    constructor(source: string) {
+        super("");
+        // `tokenize` always strips one trailing newline, so add one to keep the template's own
+        this.parsed = parse(tokenize(source + "\n", {}));
+    }
+}
 
-    // pre-compile the template for efficiency
+function fillTemplateJinja(template: Email, subsArray: Subs[]) {
+    // Parse each field once. A field that can't be parsed or rendered is left as-is.
+    const parsed: Partial<Record<keyof Email, MailMergeTemplate>> = {};
     objectEntries(template).forEach(([key, val]) => {
+        if (!val) {
+            return;
+        }
         try {
-            if (val) {
-                compiled[key] = nunjucks.compile(val, env);
-            }
+            parsed[key] = new MailMergeTemplate(val);
         } catch (e) {
-            console.warn("Failed to compile template", { [key]: val }, e);
+            console.warn("Failed to parse template", { [key]: val }, e);
         }
     });
 
-    // populate template for each row
-    for (const subs of subsArray) {
+    return subsArray.map((subs) => {
         const subbed: Email = {};
-        objectEntries(compiled).forEach(([key, val]) => {
+        objectEntries(template).forEach(([key, val]) => {
+            if (!val) {
+                return;
+            }
             try {
-                if (val) {
-                    subbed[key] = val.render(subs);
-                }
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (_e) {
-                if (val) {
-                    console.warn(
-                        "Failed to render template '",
-                        val.tmplStr,
-                        "' with substitutions",
-                        subs
-                    );
-                }
-                if (val && typeof val.tmplStr === "string") {
-                    subbed[key] = val.tmplStr || "";
-                }
+                subbed[key] = parsed[key] ? parsed[key].render(subs) : val;
+            } catch (e) {
+                console.warn(
+                    "Failed to render template",
+                    { [key]: val },
+                    "with substitutions",
+                    subs,
+                    e
+                );
+                subbed[key] = val;
             }
         });
-        ret.push(subbed);
-    }
-
-    return ret;
+        return subbed;
+    });
 }
 
 function fillTemplateLegacy(template: Email, subsArray: Subs[]) {

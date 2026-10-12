@@ -35,7 +35,7 @@ export interface Prefs {
     delay: number;
     sendmode: "now" | "later";
     range: string;
-    parser: "nunjucks" | "legacy";
+    parser: "jinja" | "legacy";
     fileName: string;
     fileContents: number[];
     fetchPrefs: Thunk<Prefs>;
