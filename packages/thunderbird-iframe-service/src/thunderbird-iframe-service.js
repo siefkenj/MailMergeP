@@ -63,7 +63,9 @@ try {
                 return "";
             }
 
-            const sender = identity.name ? `${identity.name} <${identity.email}>` : identity.email;
+            const sender = identity.name
+                ? `${identity.name} <${identity.email}>`
+                : identity.email;
             return sender;
         }
 
@@ -101,9 +103,8 @@ try {
 
         async function getTemplate() {
             if (composeTabId != null) {
-                const composeDetails = await browser.compose.getComposeDetails(
-                    composeTabId
-                );
+                const composeDetails =
+                    await browser.compose.getComposeDetails(composeTabId);
 
                 return {
                     from: await getSenderFromComposeDetails(composeDetails),
@@ -174,6 +175,9 @@ try {
                 "parserLegacy",
                 "previewEmpty",
                 "previewPreviewing",
+                "previewErrorsSummary",
+                "previewEmailErrors",
+                "sendBlockedByErrors",
                 "about",
                 "developers",
                 "support",
@@ -202,9 +206,8 @@ try {
             // That way we don't need to an experiments API.
 
             // Create a compose window that more-or-less duplicates the active compose window
-            let previousDetails = await browser.compose.getComposeDetails(
-                composeTabId
-            );
+            let previousDetails =
+                await browser.compose.getComposeDetails(composeTabId);
             // Needed because of https://bugzilla.mozilla.org/show_bug.cgi?id=1747408
             if (previousDetails.isPlainText) {
                 delete previousDetails.body;
@@ -220,11 +223,11 @@ try {
             }
             // Copy the attachments from the old message
             const attachments = await Promise.all(
-                (
-                    await browser.compose.listAttachments(composeTabId)
-                ).map(async (attachment) => ({
-                    file: await attachment.getFile(),
-                }))
+                (await browser.compose.listAttachments(composeTabId)).map(
+                    async (attachment) => ({
+                        file: await attachment.getFile(),
+                    })
+                )
             );
             previousDetails.attachments = attachments;
 
@@ -280,11 +283,11 @@ try {
 window.onload = () => {
     // We make a blob URL directly from the source code of the worker. This way we don't
     // need to load any other files
- //   const interfaceHtmlUrl = URL.createObjectURL(
- //       new Blob([interfaceHtml], { type: "text/html" })
- //   );
+    //   const interfaceHtmlUrl = URL.createObjectURL(
+    //       new Blob([interfaceHtml], { type: "text/html" })
+    //   );
 
     const iframe = window.document.getElementById("content-frame");
- //   iframe.setAttribute("src", interfaceHtmlUrl);
+    //   iframe.setAttribute("src", interfaceHtmlUrl);
     iframeService.init(iframe);
 };

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { parseRange } from "../utils/parseRange";
+import { objectEntries } from "../helpers/objectHelpers";
 
 import LocalizedStrings from "react-localization";
 const formatString = LocalizedStrings.prototype.formatString;
@@ -11,12 +12,18 @@ function PreviewTab() {
     const prefs = useStoreState((state) => state.prefs);
     const [previewItem, setPreviewItem] = useState(0);
     const email = data.emails[previewItem] || {};
+    const emailErrors = data.templateErrors[previewItem] || {};
     const numEmails = data.emails.length;
+    const numEmailsWithErrors = data.templateErrors.filter(
+        (errors) => Object.keys(errors).length > 0
+    ).length;
 
     // The email.body contains full HTML, including the <html> and <body> tags.
     // Parse it so we can grab just the body.
-    const emailBody = new DOMParser().parseFromString(email.body || "", "text/html")
-        .body.innerHTML;
+    const emailBody = new DOMParser().parseFromString(
+        email.body || "",
+        "text/html"
+    ).body.innerHTML;
 
     const renderEmails = useStoreActions((actions) => actions.renderEmails);
     useEffect(() => {
@@ -51,6 +58,16 @@ function PreviewTab() {
                     numEmails
                 )}
             </div>
+            {numEmailsWithErrors > 0 && (
+                <div className="warning" id="template-errors-summary">
+                    <i className="fas fa-warning fa-fw" />{" "}
+                    {formatString(
+                        strings.previewErrorsSummary ||
+                            "{0} of the emails can't be filled in. Fix the template or the data before sending.",
+                        numEmailsWithErrors
+                    )}
+                </div>
+            )}
             <div className="email-preview">
                 <button
                     className="browser-style email-preview-nav"
@@ -60,6 +77,21 @@ function PreviewTab() {
                     <i className="fas fa-chevron-left" />
                 </button>
                 <div id="preview-container">
+                    {Object.keys(emailErrors).length > 0 && (
+                        <div className="warning" id="template-errors">
+                            {strings.previewEmailErrors ||
+                                "This email can't be filled in:"}
+                            <ul>
+                                {objectEntries(emailErrors).map(
+                                    ([field, error]) => (
+                                        <li key={field}>
+                                            {field}: {error}
+                                        </li>
+                                    )
+                                )}
+                            </ul>
+                        </div>
+                    )}
                     <div id="email-head">
                         <table>
                             <tbody>

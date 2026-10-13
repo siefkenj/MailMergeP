@@ -9,6 +9,8 @@ import {
     delay as delayPromise,
     fillTemplate,
     formatTime,
+    hasTemplateErrors,
+    normalizePrefs,
     parseSpreadsheet,
 } from "./utils";
 
@@ -46,7 +48,7 @@ export const model: Model = {
             // send a signal to get the preferences
             const data = await messageParent({ type: "GET_PREFERENCES" });
             if (data?.prefs) {
-                actions.updatePrefNosync(data.prefs);
+                actions.updatePrefNosync(normalizePrefs(data.prefs));
             }
         }),
     },
@@ -72,8 +74,9 @@ export const model: Model = {
             }
         }),
         emails: [],
+        templateErrors: [],
         updateEmails: action((state, payload) => {
-            return { ...state, emails: payload };
+            return { ...state, ...payload };
         }),
     },
     tabs: {
@@ -133,12 +136,12 @@ export const model: Model = {
                 }
             }
         }
-        const emails = fillTemplate(
+        const { emails, errors } = fillTemplate(
             data.template,
             spreadsheetData,
             prefs.parser
         );
-        dispatch.data.updateEmails(emails);
+        dispatch.data.updateEmails({ emails, templateErrors: errors });
     }),
     sendEmails: thunk(async (actions, _payload, { getState }) => {
         const {
@@ -146,6 +149,12 @@ export const model: Model = {
             prefs: { delay, sendmode },
             locale: { strings },
         } = getState();
+
+        // Never send emails that weren't filled in correctly. (The Send button is
+        // disabled in this case too.)
+        if (hasTemplateErrors(data.templateErrors)) {
+            return;
+        }
 
         // Start a timer that updates the time throughout the whole process
         const startTime = Date.now();

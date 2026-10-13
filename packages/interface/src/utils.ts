@@ -2,7 +2,7 @@ import jsCharDet from "jschardet";
 import { Template, parse, tokenize } from "@huggingface/jinja";
 import * as XLSX from "xlsx";
 import { objectEntries } from "./helpers/objectHelpers";
-import type { Email } from "./types/modelTypes";
+import type { Email, Prefs, TemplateErrors } from "./types/modelTypes";
 import type { FileContent, SpreadsheetData } from "./types/types";
 
 function zip<T, U>(a: Array<T | undefined>, b: Array<U>) {
@@ -134,12 +134,19 @@ function parseSpreadsheet(data: FileContent): SpreadsheetData {
 
 type Subs = Record<string, string>;
 
+type FilledTemplates = {
+    emails: Email[];
+    // The errors for each email, if any of its fields couldn't be filled in. Those fields
+    // are left as they are in the template.
+    errors: TemplateErrors[];
+};
+
 // Fill every item in template with data from spreadsheet
 function fillTemplate(
     template: Email,
     spreadsheet: SpreadsheetData,
-    method = "jinja"
-) {
+    method: Prefs["parser"] = "jinja"
+): FilledTemplates {
     // create an array of substitutions
     const [header, ...rows] = spreadsheet;
     const subsArray = rows
@@ -180,7 +187,6 @@ function fillTemplate(
             return fillTemplateLegacy(template, subsArray);
         case "jinja":
         default:
-            // Preferences saved by older versions may have "nunjucks", which used the same syntax
             return fillTemplateJinja(template, subsArray);
     }
 }
@@ -190,18 +196,65 @@ function fillTemplate(
  * nunjucks, which MailMergeP used before). `@huggingface/jinja`'s `Template` enables
  * the `trim_blocks` and `lstrip_blocks` options and drops a trailing newline, which
  * would change the line breaks in emails.
+ *
+ * This relies on `tokenize` always stripping one trailing newline (as Jinja does by
+ * default), so the library is pinned to an exact version and the whitespace handling
+ * is covered by tests. (The `super("")` call parses an empty template, which is cheap.)
+ * `tokenize` also removes the Transformers-specific `{% generation %}` tags, which
+ * aren't otherwise meaningful in an email.
  */
 class MailMergeTemplate extends Template {
     constructor(source: string) {
         super("");
-        // `tokenize` always strips one trailing newline, so add one to keep the template's own
         this.parsed = parse(tokenize(source + "\n", {}));
     }
 }
 
-function fillTemplateJinja(template: Email, subsArray: Subs[]) {
-    // Parse each field once. A field that can't be parsed or rendered is left as-is.
+const reservedNames = new Map<string, boolean>();
+
+/**
+ * Whether `name` is defined by `@huggingface/jinja` itself (e.g. `range`, `none`, `true`).
+ * Rendering fails if a variable with one of these names is passed in, so such spreadsheet
+ * columns can't be used in templates.
+ */
+function isReservedName(name: string) {
+    let reserved = reservedNames.get(name);
+    if (reserved === undefined) {
+        try {
+            new Template("").render({ [name]: "" });
+            reserved = false;
+        } catch {
+            reserved = true;
+        }
+        reservedNames.set(name, reserved);
+    }
+    return reserved;
+}
+
+// The names of all variables, functions and filters used in a parsed template
+function identifiersIn(node: unknown, found = new Set<string>()) {
+    if (Array.isArray(node)) {
+        node.forEach((child) => identifiersIn(child, found));
+    } else if (node && typeof node === "object") {
+        const { type, value } = node as { type?: unknown; value?: unknown };
+        if (type === "Identifier" && typeof value === "string") {
+            found.add(value);
+        }
+        Object.values(node).forEach((child) => identifiersIn(child, found));
+    }
+    return found;
+}
+
+function fillTemplateJinja(
+    template: Email,
+    subsArray: Subs[]
+): FilledTemplates {
+    const columns = new Set(subsArray.flatMap((subs) => Object.keys(subs)));
+    const reservedColumns = [...columns].filter(isReservedName);
+
+    // Parse each field once. A field with an error is left as it is in the template.
     const parsed: Partial<Record<keyof Email, MailMergeTemplate>> = {};
+    const fieldErrors: TemplateErrors = {};
     objectEntries(template).forEach(([key, val]) => {
         if (!val) {
             return;
@@ -209,35 +262,57 @@ function fillTemplateJinja(template: Email, subsArray: Subs[]) {
         try {
             parsed[key] = new MailMergeTemplate(val);
         } catch (e) {
-            console.warn("Failed to parse template", { [key]: val }, e);
+            fieldErrors[key] = String((e as Error)?.message ?? e);
+            return;
+        }
+        const used = identifiersIn(parsed[key].parsed);
+        const usedReserved = reservedColumns.filter((name) => used.has(name));
+        if (usedReserved.length > 0) {
+            fieldErrors[key] =
+                `The column name${usedReserved.length > 1 ? "s" : ""} ${usedReserved
+                    .map((name) => `"${name}"`)
+                    .join(
+                        ", "
+                    )} can't be used in templates. Rename the column.`;
         }
     });
 
-    return subsArray.map((subs) => {
-        const subbed: Email = {};
+    const emails: Email[] = [];
+    const errors: TemplateErrors[] = [];
+    for (const subs of subsArray) {
+        const variables = Object.fromEntries(
+            Object.entries(subs).filter(([key]) => !isReservedName(key))
+        );
+        const email: Email = {};
+        const emailErrors: TemplateErrors = {};
         objectEntries(template).forEach(([key, val]) => {
             if (!val) {
                 return;
             }
+            const fieldTemplate = parsed[key];
+            if (fieldErrors[key] || !fieldTemplate) {
+                emailErrors[key] = fieldErrors[key];
+                email[key] = val;
+                return;
+            }
             try {
-                subbed[key] = parsed[key] ? parsed[key].render(subs) : val;
+                email[key] = fieldTemplate.render(variables);
             } catch (e) {
-                console.warn(
-                    "Failed to render template",
-                    { [key]: val },
-                    "with substitutions",
-                    subs,
-                    e
-                );
-                subbed[key] = val;
+                emailErrors[key] = String((e as Error)?.message ?? e);
+                email[key] = val;
             }
         });
-        return subbed;
-    });
+        emails.push(email);
+        errors.push(emailErrors);
+    }
+    return { emails, errors };
 }
 
-function fillTemplateLegacy(template: Email, subsArray: Subs[]) {
-    const ret = [];
+function fillTemplateLegacy(
+    template: Email,
+    subsArray: Subs[]
+): FilledTemplates {
+    const ret: Email[] = [];
 
     // recursively apply substitutions
     function substitute(string: string, object: Record<string, string>) {
@@ -410,7 +485,8 @@ function fillTemplateLegacy(template: Email, subsArray: Subs[]) {
         ret.push(subbed);
     }
 
-    return ret;
+    // The legacy parser never fails; unknown syntax is left as-is
+    return { emails: ret, errors: ret.map(() => ({})) };
 }
 
 /**
@@ -448,4 +524,30 @@ function formatTime(time: number) {
     return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
-export { delay, fillTemplate, formatTime, parseSpreadsheet };
+// Whether any field of any email couldn't be filled in
+function hasTemplateErrors(errors: TemplateErrors[]) {
+    return errors.some((emailErrors) => Object.keys(emailErrors).length > 0);
+}
+
+/**
+ * Update preferences saved by older versions of MailMergeP. They may have `parser: "nunjucks"`,
+ * which used the same template syntax as `"jinja"`.
+ */
+function normalizePrefs<T extends object>(
+    prefs: T
+): Omit<T, "parser"> & { parser?: Prefs["parser"] } {
+    const { parser } = prefs as { parser?: unknown };
+    if (parser === undefined || parser === "legacy") {
+        return prefs as Omit<T, "parser"> & { parser?: Prefs["parser"] };
+    }
+    return { ...prefs, parser: "jinja" };
+}
+
+export {
+    delay,
+    fillTemplate,
+    formatTime,
+    hasTemplateErrors,
+    normalizePrefs,
+    parseSpreadsheet,
+};

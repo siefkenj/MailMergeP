@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
-import { fillTemplate } from "../utils";
-import type { Email } from "../types/modelTypes";
+import { describe, expect, it } from "vitest";
+import { fillTemplate, hasTemplateErrors, normalizePrefs } from "../utils";
+import type { Email, Prefs } from "../types/modelTypes";
 
 const SPREADSHEET = [
     ["first", "last", "title", "email", "paid", "amount", "items", "html"],
@@ -16,9 +16,17 @@ const SPREADSHEET = [
     ],
 ];
 
-function render(subject: string, method?: string) {
-    const [email] = fillTemplate({ subject }, SPREADSHEET, method);
-    return email.subject;
+// Render `subject` for the first row, expecting no errors
+function render(subject: string, method?: Prefs["parser"]) {
+    const { emails, errors } = fillTemplate({ subject }, SPREADSHEET, method);
+    expect(errors).toEqual([{}]);
+    return emails[0].subject;
+}
+
+// Render `subject` for a row of `spreadsheet`, returning the result and any error
+function renderWithError(subject: string, spreadsheet = SPREADSHEET) {
+    const { emails, errors } = fillTemplate({ subject }, spreadsheet);
+    return { subject: emails[0].subject, error: errors[0].subject };
 }
 
 describe("fillTemplate", () => {
@@ -78,22 +86,62 @@ describe("fillTemplate", () => {
         expect(render(template)).toBe(expected);
     });
 
-    it("leaves a field unchanged if it can't be rendered", () => {
-        const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-        expect(render("Hi {{ first")).toBe("Hi {{ first");
-        expect(render("{{ first | nosuchfilter }}")).toBe(
-            "{{ first | nosuchfilter }}"
+    it.each([
+        // Can't be parsed
+        ["Hi {{ first", /./],
+        ["{{ first | nosuchfilter }}", /nosuchfilter/],
+        // Uses a column that doesn't exist. (nunjucks rendered these as if the column
+        // were empty, which hides typos.)
+        ["Dear {{ title2 ~ ' ' ~ last }}", /undefined/],
+        ["Hi {{ nickname | trim }}", /UndefinedValue/],
+    ])(
+        "reports an error and leaves the field unchanged for %s",
+        (template, message) => {
+            const { subject, error } = renderWithError(template);
+            expect(subject).toBe(template);
+            expect(error).toMatch(message);
+        }
+    );
+
+    it("ignores columns whose names Jinja reserves, unless they're used", () => {
+        const spreadsheet = [
+            ["first", "range", "none", "True", "namespace"],
+            ["Alice", "1-5", "x", "y", "z"],
+        ];
+        // These names make @huggingface/jinja throw if passed as variables
+        expect(renderWithError("Hi {{ first }}", spreadsheet)).toEqual({
+            subject: "Hi Alice",
+            error: undefined,
+        });
+        // A template using one would get Jinja's `range` function, not the column
+        expect(
+            renderWithError("{{ first }}: {{ range }}", spreadsheet)
+        ).toEqual({
+            subject: "{{ first }}: {{ range }}",
+            error: 'The column name "range" can\'t be used in templates. Rename the column.',
+        });
+    });
+
+    it("reports errors per email, so other emails are still filled in", () => {
+        const { emails, errors } = fillTemplate(
+            { subject: "{{ amount | int + 1 }}" },
+            [["amount"], ["1"], ["x"]]
         );
-        expect(warn).toHaveBeenCalled();
-        warn.mockRestore();
+        expect(emails).toEqual([{ subject: "2" }, { subject: "1" }]);
+        expect(errors).toEqual([{}, {}]);
+
+        const result = fillTemplate({ subject: "Hi {{ name | trim }}" }, [
+            ["name", "other"],
+            ["Alice", ""],
+            ["", "x"],
+        ]);
+        expect(result.emails[0]).toEqual({ subject: "Hi Alice" });
+        expect(hasTemplateErrors(result.errors)).toBe(false);
     });
 
-    it("treats the old 'nunjucks' preference as Jinja", () => {
-        expect(render("{{ first | upper }}", "nunjucks")).toBe("ALICE");
-    });
-
-    it("supports the legacy parser", () => {
+    it("supports the legacy parser, which never reports errors", () => {
         expect(render("Hi {{first}}", "legacy")).toBe("Hi Alice");
+        expect(render("Hi {{ first", "legacy")).toBe("Hi {{ first");
     });
 
     it("fills every field for every row, skipping blank rows", () => {
@@ -102,7 +150,7 @@ describe("fillTemplate", () => {
             subject: "Hi {{first}}",
             body: "",
         };
-        const emails = fillTemplate(template, [
+        const { emails, errors } = fillTemplate(template, [
             ["first", "email"],
             ["Alice", "alice@example.com"],
             ["", ""],
@@ -112,5 +160,27 @@ describe("fillTemplate", () => {
             { to: "alice@example.com", subject: "Hi Alice" },
             { to: "bob@example.com", subject: "Hi Bob" },
         ]);
+        expect(errors).toEqual([{}, {}]);
+    });
+});
+
+describe("hasTemplateErrors", () => {
+    it("is true if any field of any email has an error", () => {
+        expect(hasTemplateErrors([])).toBe(false);
+        expect(hasTemplateErrors([{}, {}])).toBe(false);
+        expect(hasTemplateErrors([{}, { body: "oops" }])).toBe(true);
+    });
+});
+
+describe("normalizePrefs", () => {
+    it("treats the 'nunjucks' parser saved by older versions as Jinja", () => {
+        expect(normalizePrefs({ parser: "nunjucks", delay: 1 })).toEqual({
+            parser: "jinja",
+            delay: 1,
+        });
+        expect(normalizePrefs({ parser: "legacy" })).toEqual({
+            parser: "legacy",
+        });
+        expect(normalizePrefs({ delay: 1 })).toEqual({ delay: 1 });
     });
 });

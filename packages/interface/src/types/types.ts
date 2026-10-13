@@ -5,8 +5,7 @@ export type FileContent = number[];
 export type ParseRangeReturnType = number[];
 
 export type UpdatePrefEvent =
-    | ChangeEvent<HTMLSelectElement>
-    | FocusEvent<HTMLInputElement>;
+    ChangeEvent<HTMLSelectElement> | FocusEvent<HTMLInputElement>;
 
 // An array of arrays of cell values, which can be anything to support custom cell data types, but by default is `string | number | boolean | undefined`.
 // See /node_modules/handsontable/common.d.ts

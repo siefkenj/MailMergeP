@@ -11,17 +11,9 @@ export interface Model {
     initialise: Thunk<Model, undefined, never, Model>;
     cancel: Thunk<Model>;
     parseSpreadsheet: Thunk<Model, undefined, never, Model>;
-    renderEmails: Thunk<
-        Model,
-        ParseRangeReturnType,
-        unknown,
-        Model
-    >;
+    renderEmails: Thunk<Model, ParseRangeReturnType, unknown, Model>;
     sendEmails: Thunk<Model, undefined, never, Model>;
-    sendEmail: Thunk<
-        Model,
-        { email: Email; sendmode: Prefs["sendmode"] }
-    >;
+    sendEmail: Thunk<Model, { email: Email; sendmode: Prefs["sendmode"] }>;
     sendDialog: SendDialog;
     openUrl: Thunk<Model, string>;
 }
@@ -55,7 +47,12 @@ interface Data {
     updateTemplate: Action<Data, Email>;
     fetchTemplate: Thunk<Data>;
     emails: Email[];
-    updateEmails: Action<Data, Email[]>;
+    // For each email, the fields that couldn't be filled in and why
+    templateErrors: TemplateErrors[];
+    updateEmails: Action<
+        Data,
+        { emails: Email[]; templateErrors: TemplateErrors[] }
+    >;
 }
 
 interface Tabs {
@@ -88,3 +85,5 @@ export type Email = {
     subject?: string;
     body?: string;
 };
+
+export type TemplateErrors = Partial<Record<keyof Email, string>>;

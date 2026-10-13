@@ -20,12 +20,23 @@ the body/subject/to/cc/bcc fields of your email. Mail Merge P will then substitu
 the spreadsheet into these fields.
 
 You can use Jinja's conditionals, loops, filters and expressions, for example
-`{% if title %}{{ title }} {% endif %}{{ last }}` or `{{ nickname | default(first) }}`, but be
-aware that all data from a spreadsheet is interpreted as a string (use `| int` or `| float` to
-do arithmetic). Most templates written for earlier versions of Mail Merge P, which used
+`{% if title %}{{ title }} {% endif %}{{ last }}` or `{{ nickname | default(first) }}`. Some things
+to be aware of:
+
+-   All data from a spreadsheet is text. Use `| int` or `| float` to do arithmetic, e.g.
+    `{{ amount | int + 1 }}`. Decimals are shown as `3.5` or `200.0`, and there's no way to round
+    them, so keep values that need formatting (like prices) as text in the spreadsheet.
+-   A variable that isn't a column in the spreadsheet is empty when used on its own (`{{ typo }}`),
+    but is an error when used with a filter or operator (`{{ typo | trim }}`).
+-   Columns named `true`, `false`, `none`, `range`, `namespace` and a few other names reserved by
+    the template engine can't be used in templates. Rename them.
+-   If an email can't be filled in, the Preview tab shows why and the emails can't be sent.
+
+Most templates written for earlier versions of Mail Merge P, which used
 [nunjucks](https://mozilla.github.io/nunjucks/), work unchanged. The exceptions are `{% raw %}`
-blocks, the `escape`, `first`, `reverse`, `truncate` and `wordcount` filters, and arithmetic on
-spreadsheet values without `| int` or `| float`.
+blocks, the `escape`, `first`, `reverse`, `truncate` and `wordcount` filters, arithmetic on
+spreadsheet values without `| int` or `| float`, and variables that aren't spreadsheet columns
+used with filters or operators (nunjucks treated these as empty).
 
 ## Install
 

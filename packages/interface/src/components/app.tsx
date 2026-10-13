@@ -7,6 +7,7 @@ import { PreviewTab } from "./preview-tab";
 import { AboutTab } from "./about-tab";
 import { SendDialog } from "./send-dialog";
 import icon from "../../../thunderbird-extension/public/skin/icon64.png";
+import { hasTemplateErrors } from "../utils";
 
 export default function App() {
     const strings = useStoreState((state) => state.locale.strings);
@@ -24,6 +25,9 @@ export default function App() {
     const sendEmails = useStoreActions((actions) => actions.sendEmails);
 
     const prefs = useStoreState((state) => state.prefs);
+    const canSend = !useStoreState((state) =>
+        hasTemplateErrors(state.data.templateErrors)
+    );
     const parseSpreadsheet = useStoreActions(
         (actions) => actions.parseSpreadsheet
     );
@@ -115,6 +119,13 @@ export default function App() {
                     <button
                         className="panel-section-footer-button default browser-style"
                         onClick={() => sendEmails()}
+                        disabled={!canSend}
+                        title={
+                            canSend
+                                ? undefined
+                                : strings.sendBlockedByErrors ||
+                                  "Some emails can't be filled in. See the Preview tab."
+                        }
                     >
                         {strings.send}{" "}
                         <i className="far fa-paper-plane fa-fw" />

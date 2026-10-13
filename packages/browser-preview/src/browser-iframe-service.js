@@ -133,6 +133,11 @@ if (typeof iframeService === "undefined") {
             previewEmpty:
                 "No emails to preview. Try loading data in the {0} tab.",
             previewPreviewing: "Previewing {0} of {1}",
+            previewErrorsSummary:
+                "{0} of the emails can't be filled in. Fix the template or the data before sending.",
+            previewEmailErrors: "This email can't be filled in:",
+            sendBlockedByErrors:
+                "Some emails can't be filled in. See the Preview tab.",
             about: "About",
             developers: "Developers",
             support: "Support",

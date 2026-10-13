@@ -8,8 +8,8 @@ export default defineConfig({
         minify: false,
         rollupOptions: {
             input: {
-                "thunderbird-iframe-server": "thunderbird-iframe-server.html"
-            }
+                "thunderbird-iframe-server": "thunderbird-iframe-server.html",
+            },
         },
         lib: {
             entry: "src/thunderbird-iframe-service.js",

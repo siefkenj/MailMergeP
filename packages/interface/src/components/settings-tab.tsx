@@ -88,8 +88,7 @@ function SettingsTab() {
             <select
                 className="browser-style settings-input"
                 id="pref-parser"
-                // Preferences saved by older versions may have "nunjucks", which is now "jinja"
-                value={prefs.parser === "legacy" ? "legacy" : "jinja"}
+                value={prefs.parser}
                 onChange={generatePrefUpdate("parser")}
                 title={strings.parserDesc}
             >
