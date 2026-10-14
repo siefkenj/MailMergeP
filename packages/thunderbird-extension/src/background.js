@@ -21,11 +21,13 @@ class MailmergeWindow {
     }
     async _onWindowOpened() {
         this.isReady = true;
-        const messagePromises = this._messageQueue.map((message) =>
-            this.sendMessage(message)
+        // Send the queued messages directly. The window can report that it has loaded
+        // before `browser.windows.create` resolves (and sets `openWindowId`), so
+        // `sendMessage` would think the window is closed and queue them again.
+        const messages = this._messageQueue.splice(0);
+        await Promise.all(
+            messages.map((message) => browser.runtime.sendMessage(message))
         );
-        this._messageQueue.length = 0;
-        await Promise.all(messagePromises);
     }
     async ensureWindowOpened() {
         let ret = null;

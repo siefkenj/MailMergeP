@@ -28,5 +28,12 @@ export default tseslint.config(
                 { allowConstantExport: true },
             ],
         },
+    },
+    {
+        // Playwright's fixtures call `use()`, which isn't a React hook
+        files: ["**/e2e/**/*.ts"],
+        rules: {
+            "react-hooks/rules-of-hooks": "off",
+        },
     }
 );

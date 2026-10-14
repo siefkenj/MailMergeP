@@ -25,6 +25,8 @@ export type MessagePayload = {
     data?: {
         prefs?: Partial<Prefs>;
         template?: Email;
+        // Whether the template's body is plain text rather than HTML
+        templateIsPlainText?: boolean;
         strings?: Strings;
         emails?: Email[];
         email?: Email;
@@ -46,7 +48,7 @@ export type IframeService = {
         getDefaultPreferences: () => Promise<Prefs>;
         getPreferences: () => Promise<Prefs>;
         getLocalizedStrings: () => Promise<Strings>;
-        getTemplate: () => Promise<Email>;
+        getTemplate: () => Promise<Email & { isPlainText?: boolean }>;
         setPreferences: (_prefs?: Partial<Prefs>) => Promise<void>;
         sendEmails: (_emails: Email[]) => Promise<void>;
         sendEmail: (
@@ -127,15 +129,16 @@ export const iframeService: IframeService = {
                     },
                 });
                 break;
-            case "GET_TEMPLATE":
+            case "GET_TEMPLATE": {
+                const { isPlainText, ...template } =
+                    await iframeService.commands.getTemplate();
                 iframeService.messageChild({
                     type,
                     id,
-                    data: {
-                        template: await iframeService.commands.getTemplate(),
-                    },
+                    data: { template, templateIsPlainText: !!isPlainText },
                 });
                 break;
+            }
             case "GET_LOCALIZED_STRINGS":
                 iframeService.messageChild({
                     type,

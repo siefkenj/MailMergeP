@@ -62,15 +62,23 @@ export const model: Model = {
             return { ...state, spreadsheetHasManuallyUpdated: payload };
         }),
         template: {},
-        updateTemplate: action((state, payload) => {
-            return { ...state, template: { ...payload } };
+        templateIsPlainText: false,
+        updateTemplate: action((state, { template, isPlainText }) => {
+            return {
+                ...state,
+                template: { ...template },
+                templateIsPlainText: isPlainText,
+            };
         }),
         fetchTemplate: thunk(async (actions) => {
             // grab the template from the parent window
             const data = await messageParent({ type: "GET_TEMPLATE" });
             // save the template
             if (data?.template) {
-                actions.updateTemplate(data.template);
+                actions.updateTemplate({
+                    template: data.template,
+                    isPlainText: !!data.templateIsPlainText,
+                });
             }
         }),
         emails: [],

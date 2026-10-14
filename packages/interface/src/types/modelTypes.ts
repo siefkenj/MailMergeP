@@ -44,7 +44,9 @@ interface Data {
         SpreadsheetHasManuallyUpdated
     >;
     template: Email;
-    updateTemplate: Action<Data, Email>;
+    // Whether the template's body is plain text rather than HTML
+    templateIsPlainText: boolean;
+    updateTemplate: Action<Data, { template: Email; isPlainText: boolean }>;
     fetchTemplate: Thunk<Data>;
     emails: Email[];
     // For each email, the fields that couldn't be filled in and why

@@ -11,3 +11,6 @@ MailMerge*.zip
 # Playwright
 test-results
 playwright-report
+test-results-thunderbird
+playwright-report-thunderbird
+tmp/

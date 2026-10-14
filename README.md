@@ -11,6 +11,17 @@ Mail Merge P uses [Jinja](https://jinja.palletsprojects.com/en/stable/templates/
 (via [@huggingface/jinja](https://github.com/huggingface/huggingface.js/tree/main/packages/jinja))
 to fill email templates based on data provided by a spreadsheet.
 
+## Screenshots
+
+Write your email in Thunderbird, with `{{...}}` where values from the spreadsheet should go, then
+click **Mail Merge P**:
+
+<img src="docs/screenshots/1-compose.png" alt="A Thunderbird compose window with {{email}} in the To field, Hi {{first}} as the subject, and a message using {{first}}, {{last}} and {{url}}" width="600">
+
+| Load a spreadsheet                                                                                       | Choose how to send                                                                                   | Preview each email, then send                                                                                  |
+| -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/screenshots/2-data.png" alt="The Data tab, showing a spreadsheet with email, first, last and url columns" width="260"> | <img src="docs/screenshots/3-settings.png" alt="The Settings tab, with the send mode, message delay, message range and parser" width="260"> | <img src="docs/screenshots/4-preview.png" alt="The Preview tab, showing the email to a@a.com with the subject Hi Tom and the message filled in" width="260"> |
+
 ## Usage
 
 Prepare a spreadsheet with a single header row.
@@ -89,6 +100,17 @@ Run the unit tests with `npm test`. `npm run test:e2e` builds the extension and 
 in Firefox, with the same Content Security Policy that Thunderbird applies to the add-on; it fails
 if anything is blocked by that policy (e.g. `eval`). The dev container installs the browser it needs;
 elsewhere, run `npx playwright install --with-deps firefox` first.
+
+`npm run test:thunderbird` builds the add-on and tests it in a real Thunderbird, running on a virtual
+display and sending mail to a local test server ([Mailpit](https://mailpit.axllent.org/)), then checks
+the emails that arrive. It also saves screenshots to `test-results-thunderbird/screenshots/`, including
+the ones for the add-on's listing on addons.thunderbird.net. The dev container installs Thunderbird and
+Mailpit (see `.devcontainer/install-thunderbird.sh`); elsewhere, set the `THUNDERBIRD` and `MAILPIT`
+environment variables to their paths. CI uploads the screenshots and the packaged add-on as artifacts.
+
+To prepare a release, run `npm run prepare-release`. It type checks, lints and runs all the tests (which
+builds and packages the add-on), then copies the listing screenshots to `docs/screenshots/`, which
+this README shows. `npm run screenshots` updates just those screenshots.
 
 Most UI and backend work is handled by the html components. The `thunderbird-extension` runs the html
 component in an iframe and uses message passing to communicate with the iframe.

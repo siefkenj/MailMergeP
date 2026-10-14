@@ -122,7 +122,12 @@ try {
                         .join(", "),
                     attachment: "",
                     subject: composeDetails.subject,
-                    body: composeDetails.body,
+                    // For a plain text message, `body` is an HTML version of the text.
+                    // Use the text itself, since that is what will be sent.
+                    body: composeDetails.isPlainText
+                        ? composeDetails.plainTextBody
+                        : composeDetails.body,
+                    isPlainText: composeDetails.isPlainText,
                 };
             }
 

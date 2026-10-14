@@ -51,6 +51,10 @@
         "format": "prettier --write packages \"*.{ts,mts,mjs}\"",
         "test": "vitest run",
         "test:e2e": "playwright test",
+        "test:thunderbird": "npm run build-and-package && playwright test -c playwright.thunderbird.config.ts",
+        "screenshots": "npm run test:thunderbird -- --grep store && npm run copy-screenshots",
+        "copy-screenshots": "ls test-results-thunderbird/screenshots/store/*.png > /dev/null && mkdir -p docs/screenshots && rm -f docs/screenshots/*.png && cp test-results-thunderbird/screenshots/store/*.png docs/screenshots/",
+        "prepare-release": "npm run typecheck && npm run lint && npm test && npm run test:e2e && npm run test:thunderbird && npm run copy-screenshots",
         "build-addon": "rm -rf addon && cp -rL packages/thunderbird-extension/dist addon && cd addon && bestzip ../addon.zip *",
         "package-addon": "mv addon.zip mailmergep@example.net-latest.xpi",
         "build-and-package": "npm run build && npm run build-addon && echo \"\" && echo BUNDLING $(cat addon/manifest.json |grep '\"version\"') && npm run package-addon"

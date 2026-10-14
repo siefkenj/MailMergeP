@@ -18,12 +18,12 @@ function PreviewTab() {
         (errors) => Object.keys(errors).length > 0
     ).length;
 
-    // The email.body contains full HTML, including the <html> and <body> tags.
+    // An HTML email.body contains full HTML, including the <html> and <body> tags.
     // Parse it so we can grab just the body.
-    const emailBody = new DOMParser().parseFromString(
-        email.body || "",
-        "text/html"
-    ).body.innerHTML;
+    const emailBody = data.templateIsPlainText
+        ? ""
+        : new DOMParser().parseFromString(email.body || "", "text/html").body
+              .innerHTML;
 
     const renderEmails = useStoreActions((actions) => actions.renderEmails);
     useEffect(() => {
@@ -118,10 +118,16 @@ function PreviewTab() {
                     </div>
                     <div id="email-body">
                         <div id="email-subject">{email.subject}</div>
-                        <div
-                            id="email-content"
-                            dangerouslySetInnerHTML={{ __html: emailBody }}
-                        />
+                        {data.templateIsPlainText ? (
+                            <div id="email-content" className="plain-text">
+                                {email.body}
+                            </div>
+                        ) : (
+                            <div
+                                id="email-content"
+                                dangerouslySetInnerHTML={{ __html: emailBody }}
+                            />
+                        )}
                     </div>
                 </div>
                 <button
