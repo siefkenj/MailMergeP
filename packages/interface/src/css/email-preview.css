@@ -30,6 +30,11 @@
     padding: 4px;
     background: #f5f5f5;
 }
+/* Plain text emails are shown as Thunderbird shows them */
+#email-content.plain-text {
+    font-family: monospace;
+    white-space: pre-wrap;
+}
 
 .email-preview-wrapper {
     display: flex;

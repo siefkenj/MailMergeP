@@ -92,7 +92,7 @@ function SettingsTab() {
                 onChange={generatePrefUpdate("parser")}
                 title={strings.parserDesc}
             >
-                <option value="nunjucks">Nunjucks</option>
+                <option value="jinja">Jinja</option>
                 <option value="legacy">{strings.parserLegacy}</option>
             </select>
         </div>

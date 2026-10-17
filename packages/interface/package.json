@@ -8,6 +8,7 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "dev": "vite",
         "build": "vite build"
     },
     "author": "",

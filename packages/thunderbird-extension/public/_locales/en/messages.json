@@ -43,6 +43,13 @@
         "message": "No emails to preview. Try loading data in the {0} tab."
     },
     "previewPreviewing": { "message": "Previewing {0} of {1}" },
+    "previewErrorsSummary": {
+        "message": "{0} of the emails can't be filled in. Fix the template or the data before sending."
+    },
+    "previewEmailErrors": { "message": "This email can't be filled in:" },
+    "sendBlockedByErrors": {
+        "message": "Some emails can't be filled in. See the Preview tab."
+    },
     "about": { "message": "About" },
     "developers": { "message": "Developers" },
     "support": { "message": "Support" },

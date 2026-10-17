@@ -4,13 +4,13 @@ import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 
 function SendDialog() {
     const { progress, total, current, time, status, abort } = useStoreState(
-        state => state.sendDialog
+        (state) => state.sendDialog
     );
-    const open = useStoreState(state => state.sendDialog.open);
+    const open = useStoreState((state) => state.sendDialog.open);
 
-    const cancel = useStoreActions(state => state.sendDialog.cancel);
+    const cancel = useStoreActions((state) => state.sendDialog.cancel);
 
-    const strings = useStoreState(state => state.locale.strings);
+    const strings = useStoreState((state) => state.locale.strings);
 
     if (!open) {
         return null;

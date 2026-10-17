@@ -7,8 +7,20 @@
 Mail Merge P (_Mail Merge with Preview_)
 is a Thunderbird add-on to send bulk emails based off information provided in a spreadsheet.
 
-Mail Merge P uses the [nunjucks](https://mozilla.github.io/nunjucks/) templating engine to
-fill email templates based on data provided by a spreadsheet.
+Mail Merge P uses [Jinja](https://jinja.palletsprojects.com/en/stable/templates/) templates
+(via [@huggingface/jinja](https://github.com/huggingface/huggingface.js/tree/main/packages/jinja))
+to fill email templates based on data provided by a spreadsheet.
+
+## Screenshots
+
+Write your email in Thunderbird, with `{{...}}` where values from the spreadsheet should go, then
+click **Mail Merge P**:
+
+<img src="docs/screenshots/1-compose.png" alt="A Thunderbird compose window with {{email}} in the To field, Hi {{first}} as the subject, and a message using {{first}}, {{last}} and {{url}}" width="600">
+
+| Load a spreadsheet                                                                                       | Choose how to send                                                                                   | Preview each email, then send                                                                                  |
+| -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/screenshots/2-data.png" alt="The Data tab, showing a spreadsheet with email, first, last and url columns" width="260"> | <img src="docs/screenshots/3-settings.png" alt="The Settings tab, with the send mode, message delay, message range and parser" width="260"> | <img src="docs/screenshots/4-preview.png" alt="The Preview tab, showing the email to a@a.com with the subject Hi Tom and the message filled in" width="260"> |
 
 ## Usage
 
@@ -18,8 +30,24 @@ spreadsheet has headers `name` and `email`, you can use `{{name}}` and `{{email}
 the body/subject/to/cc/bcc fields of your email. Mail Merge P will then substitute data from
 the spreadsheet into these fields.
 
-You can use the full power of the _nunjucks_ templating engine, but be aware that all data
-from a spreadsheet is interpreted as a string.
+You can use Jinja's conditionals, loops, filters and expressions, for example
+`{% if title %}{{ title }} {% endif %}{{ last }}` or `{{ nickname | default(first) }}`. Some things
+to be aware of:
+
+-   All data from a spreadsheet is text. Use `| int` or `| float` to do arithmetic, e.g.
+    `{{ amount | int + 1 }}`. Decimals are shown as `3.5` or `200.0`, and there's no way to round
+    them, so keep values that need formatting (like prices) as text in the spreadsheet.
+-   A variable that isn't a column in the spreadsheet is empty when used on its own (`{{ typo }}`),
+    but is an error when used with a filter or operator (`{{ typo | trim }}`).
+-   Columns named `true`, `false`, `none`, `range`, `namespace` and a few other names reserved by
+    the template engine can't be used in templates. Rename them.
+-   If an email can't be filled in, the Preview tab shows why and the emails can't be sent.
+
+Most templates written for earlier versions of Mail Merge P, which used
+[nunjucks](https://mozilla.github.io/nunjucks/), work unchanged. The exceptions are `{% raw %}`
+blocks, the `escape`, `first`, `reverse`, `truncate` and `wordcount` filters, arithmetic on
+spreadsheet values without `| int` or `| float`, and variables that aren't spreadsheet columns
+used with filters or operators (nunjucks treated these as empty).
 
 ## Install
 
@@ -29,7 +57,7 @@ Mail Merge P is based off of Mail Merge by Alexander Bergmann https://addons.thu
 
 ## Building
 
-Build the entire extension, first run
+Building requires Node.js 22.12 or newer. To build the entire extension, first run
 
 ```sh
 npm install
@@ -58,6 +86,31 @@ Mail Merge P is divided into _npm workspaces_ located in the `packages/` directo
 -   `packages/browser-preview` a browser-based implementation of the thunderbird API, so that the UI can be developed more quickly (with technology like hot-reloading)
 -   `packages/thunderbird-iframe-service` the connection between the real thunderbird API and `iframe-service`.
 -   `packages/thunderbird-extension` the actual extension's `background.js` script.
+
+To develop the interface in the browser with hot-reloading, run
+
+```sh
+npm run dev
+```
+
+and open the URL that is printed (usually http://localhost:5173/). This serves `packages/browser-preview`
+with the source of `packages/interface` loaded in its iframe.
+
+Run the unit tests with `npm test`. `npm run test:e2e` builds the extension and runs a mail merge
+in Firefox, with the same Content Security Policy that Thunderbird applies to the add-on; it fails
+if anything is blocked by that policy (e.g. `eval`). The dev container installs the browser it needs;
+elsewhere, run `npx playwright install --with-deps firefox` first.
+
+`npm run test:thunderbird` builds the add-on and tests it in a real Thunderbird, running on a virtual
+display and sending mail to a local test server ([Mailpit](https://mailpit.axllent.org/)), then checks
+the emails that arrive. It also saves screenshots to `test-results-thunderbird/screenshots/`, including
+the ones for the add-on's listing on addons.thunderbird.net. The dev container installs Thunderbird and
+Mailpit (see `.devcontainer/install-thunderbird.sh`); elsewhere, set the `THUNDERBIRD` and `MAILPIT`
+environment variables to their paths. CI uploads the screenshots and the packaged add-on as artifacts.
+
+To prepare a release, run `npm run prepare-release`. It type checks, lints and runs all the tests (which
+builds and packages the add-on), then copies the listing screenshots to `docs/screenshots/`, which
+this README shows. `npm run screenshots` updates just those screenshots.
 
 Most UI and backend work is handled by the html components. The `thunderbird-extension` runs the html
 component in an iframe and uses message passing to communicate with the iframe.

@@ -11,17 +11,9 @@ export interface Model {
     initialise: Thunk<Model, undefined, never, Model>;
     cancel: Thunk<Model>;
     parseSpreadsheet: Thunk<Model, undefined, never, Model>;
-    renderEmails: Thunk<
-        Model,
-        ParseRangeReturnType,
-        unknown,
-        Model
-    >;
+    renderEmails: Thunk<Model, ParseRangeReturnType, unknown, Model>;
     sendEmails: Thunk<Model, undefined, never, Model>;
-    sendEmail: Thunk<
-        Model,
-        { email: Email; sendmode: Prefs["sendmode"] }
-    >;
+    sendEmail: Thunk<Model, { email: Email; sendmode: Prefs["sendmode"] }>;
     sendDialog: SendDialog;
     openUrl: Thunk<Model, string>;
 }
@@ -35,7 +27,7 @@ export interface Prefs {
     delay: number;
     sendmode: "now" | "later";
     range: string;
-    parser: "nunjucks" | "legacy";
+    parser: "jinja" | "legacy";
     fileName: string;
     fileContents: number[];
     fetchPrefs: Thunk<Prefs>;
@@ -52,10 +44,17 @@ interface Data {
         SpreadsheetHasManuallyUpdated
     >;
     template: Email;
-    updateTemplate: Action<Data, Email>;
+    // Whether the template's body is plain text rather than HTML
+    templateIsPlainText: boolean;
+    updateTemplate: Action<Data, { template: Email; isPlainText: boolean }>;
     fetchTemplate: Thunk<Data>;
     emails: Email[];
-    updateEmails: Action<Data, Email[]>;
+    // For each email, the fields that couldn't be filled in and why
+    templateErrors: TemplateErrors[];
+    updateEmails: Action<
+        Data,
+        { emails: Email[]; templateErrors: TemplateErrors[] }
+    >;
 }
 
 interface Tabs {
@@ -88,3 +87,5 @@ export type Email = {
     subject?: string;
     body?: string;
 };
+
+export type TemplateErrors = Partial<Record<keyof Email, string>>;

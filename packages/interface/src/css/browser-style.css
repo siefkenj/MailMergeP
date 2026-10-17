@@ -275,7 +275,9 @@ button.browser-style.default:hover:not(.pressed):not(:disabled):not(.focused) {
     border-color: #005bab;
 }
 
-button.browser-style.default:hover:active:not(.hover):not(:disabled):not(.focused) {
+button.browser-style.default:hover:active:not(.hover):not(:disabled):not(
+        .focused
+    ) {
     background-color: #005bab;
     border-color: #004480;
 }
@@ -556,7 +558,9 @@ textarea.browser-style:focus:hover {
     text-align: center;
     border-right: 1px solid rgba(0, 0, 0, 0);
     border-left: 1px solid rgba(0, 0, 0, 0);
-    transition: color 0.2s, background-color 0.2s;
+    transition:
+        color 0.2s,
+        background-color 0.2s;
     position: relative;
 }
 
@@ -569,7 +573,8 @@ textarea.browser-style:focus:hover {
 }
 
 .panel-section-tabs-button.selected {
-    box-shadow: 0 1px 0 var(--primary-accent) inset,
+    box-shadow:
+        0 1px 0 var(--primary-accent) inset,
         0px 4px 0px var(--primary) inset;
     color: var(--primary);
 }

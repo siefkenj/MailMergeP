@@ -20,7 +20,7 @@ import type { UpdatePrefEvent } from "../types/types";
 type TabStripProps = {
     currTab: number;
     setTab: (tab: number) => void;
-    children: ReactElement[];
+    children: ReactElement<TabProps>[];
 };
 
 function TabStrip({ children, currTab, setTab }: TabStripProps) {
@@ -28,14 +28,14 @@ function TabStrip({ children, currTab, setTab }: TabStripProps) {
     // connect a click listener to each <Tab />
     const tabstrip: ReactElement[] = [];
     let tabcontents = null;
-    React.Children.forEach<ReactElement>(children, (tab, key) => {
+    React.Children.forEach<ReactElement<TabProps>>(children, (tab, key) => {
         // save the contents of the selected tag for later
         if (key === currTab) {
             tabcontents = tab.props.children;
         }
         // prepare the tab, setting it's "label" attribute as its children
         const newtab = React.cloneElement(tab, {
-            children: tab?.props.label,
+            children: tab.props.label,
             key: key,
             selected: key === currTab,
             onClick: (e: MouseEvent | FocusEvent) => {
@@ -187,8 +187,7 @@ function ClearableFileInput(props: ClearableFileInputProps) {
         if (!file) {
             return;
         }
-        let dat = await readFile(file);
-        dat = new Uint8Array(dat);
+        const dat = await readFile(file);
         // Opening the same file, e.g. after modifying its content, will not trigger
         // useEffect with parseSpreadsheet unless there is a state change
         onChange({ name: "", data: new ArrayBuffer() });
